@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------------------
 # CMake setup.
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -72,7 +72,6 @@ add_definitions(
 if(WINDOWS)
     add_definitions(
         -D_CRT_RAND_S
-        -D_WINSOCKAPI_=
         -DNOMINMAX=
         -DUNICODE
         -DWIN32_LEAN_AND_MEAN
@@ -426,6 +425,9 @@ if(NOT compilerMsvc)
     elseif(compilerGcc)
         add_compile_options(
             -Wno-error=maybe-uninitialized
+            -Wno-error=unused-result
+            -Wno-error=ignored-attributes
+            -Wno-error=deprecated-declarations
             -Wno-missing-field-initializers
             -Wno-psabi
         )

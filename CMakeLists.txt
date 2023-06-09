@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 3.20.0 FATAL_ERROR) #< This version is bundled with MSVC 2019.
 
-set(open_source_root "${CMAKE_SOURCE_DIR}")
+set(open_source_root "${CMAKE_CURRENT_SOURCE_DIR}")
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -15,10 +15,19 @@ include(cmake/customization_package.cmake)
 include(cmake/default_target.cmake)
 set(targetDevice ${default_target_device} CACHE STRING
     "Target device. For the list see cmake/toolchains.")
-if(NOT clangDir STREQUAL "")
-    set(ENV{CLANG_DIR} ${clangDir})
+
+if(targetDevice MATCHES "^linux")
+    option(useCurrentOsComponents
+        "Build using current OS development files."
+        OFF)
 endif()
-include(cmake/open_source/toolchain_detection.cmake)
+
+if(NOT useCurrentOsComponents)
+    if(NOT clangDir STREQUAL "")
+        set(ENV{CLANG_DIR} ${clangDir})
+    endif()
+    include(cmake/open_source/toolchain_detection.cmake)
+endif()
 
 include(cmake/option.cmake)
 nx_option(developerBuild
@@ -116,6 +125,8 @@ add_subdirectory(libs)
 
 include(cmake/distribution/common.cmake)
 add_subdirectory(vms)
+
+add_subdirectory("${CMAKE_SOURCE_DIR}/src" "${CMAKE_BINARY_DIR}/src")
 
 if(WINDOWS)
     include(windows_utils)

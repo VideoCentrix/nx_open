@@ -16,7 +16,7 @@
 #include <utils/common/synctime.h>
 #include <utils/common/util.h>
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 static const qint64 TIME_RESYNC_THRESHOLD = 15'000'000ll;
 static const qint64 kMinFrameDurationUsec = 1'000;

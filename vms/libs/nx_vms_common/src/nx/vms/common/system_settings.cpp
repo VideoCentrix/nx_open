@@ -28,7 +28,7 @@
 #include <utils/email/email.h>
 
 using namespace std::chrono;
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 namespace {
 
@@ -1526,6 +1526,7 @@ bool SystemSettings::takeFromSettings(QSettings* settings, const QnResourcePtr& 
 
 bool SystemSettings::isUpdateNotificationsEnabled() const
 {
+    return true;
     return d->updateNotificationsEnabledAdaptor->value();
 }
 
@@ -1953,6 +1954,7 @@ void SystemSettings::setEdgeRecordingEnabled(bool enabled)
 
 nx::utils::Url SystemSettings::customReleaseListUrl() const
 {
+    return {};
     return d->customReleaseListUrlAdaptor->value();
 }
 
@@ -2025,7 +2027,9 @@ void SystemSettings::setdDownloaderPeers(const FileToPeerList& downloaderPeers)
 
 api::ClientUpdateSettings SystemSettings::clientUpdateSettings() const
 {
-    return d->clientUpdateSettingsAdaptor->value();
+    auto res = d->clientUpdateSettingsAdaptor->value();
+    res.enabled = true;
+    return res;
 }
 
 void SystemSettings::setClientUpdateSettings(const api::ClientUpdateSettings& settings)
@@ -2487,7 +2491,13 @@ void SystemSettings::update(const vms::api::SystemSettings& value)
     d->useStorageEncryptionAdaptor->setValue(value.storageEncryption);
     d->showServersInTreeForNonAdminsAdaptor->setValue(value.showServersInTreeForNonAdmins);
     d->updateNotificationsEnabledAdaptor->setValue(value.updateNotificationsEnabled);
-    d->emailSettingsAdaptor->setValue(value.emailSettings);
+
+    // VX fix: we moved from alphavs customization to videocentrix, and support address changed. And it's already saved in system info, and is considered
+    // invalid by the checks in setValue. So we work just hack it here.
+    auto emailSettings = value.emailSettings;
+    emailSettings.supportAddress = nx::branding::supportAddress();
+
+    d->emailSettingsAdaptor->setValue(emailSettings);
     d->timeSynchronizationEnabledAdaptor->setValue(value.timeSynchronizationEnabled);
     d->primaryTimeServerAdaptor->setValue(value.primaryTimeServer);
     d->customReleaseListUrlAdaptor->setValue(value.customReleaseListUrl);

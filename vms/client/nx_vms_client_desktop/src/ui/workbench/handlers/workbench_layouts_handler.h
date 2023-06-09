@@ -13,12 +13,23 @@
 class QnWorkbenchLayout;
 typedef QList<QnWorkbenchLayout *> QnWorkbenchLayoutList;
 
+namespace vx {
+class MonitoringActionHandler;
+class ReportUiHandler;
+} // namespace vx
+
 namespace nx::vms::client::desktop {
 
 struct StreamSynchronizationState;
 
 namespace ui {
 namespace workbench {
+
+LayoutResourceList alreadyExistingLayouts(
+    QnResourcePool* resourcePool,
+    const QString& name,
+    const nx::Uuid& parentId,
+    const LayoutResourcePtr& layout = LayoutResourcePtr());
 
 class LayoutsHandler: public QObject, public QnSessionAwareDelegate
 {
@@ -67,7 +78,7 @@ private:
 
     void convertLayoutToShared(const LayoutResourcePtr& layout);
 
-    void removeLayoutItems(const LayoutItemIndexList& items, bool autoSave);
+    void removeLayoutItems(const LayoutItemIndexList& items, bool autoSave, bool force);
 
     struct LayoutChange
     {
@@ -102,6 +113,9 @@ private:
         const StreamSynchronizationState& playbackState);
 
     QString generateUniqueLayoutName(const QnUserResourcePtr& user) const;
+
+    friend class vx::MonitoringActionHandler;
+    friend class vx::ReportUiHandler;
 };
 
 } // namespace workbench

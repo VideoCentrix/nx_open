@@ -43,6 +43,7 @@ public:
     Q_ENUM(Status);
 
     Status status() const;
+    bool valid() const noexcept { return d.get() != nullptr; }
 
     /** Returns whether the system the context belongs is connected and online. */
     bool isSystemReadyToUse() const;

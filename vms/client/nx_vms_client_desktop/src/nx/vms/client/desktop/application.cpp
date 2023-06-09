@@ -85,6 +85,11 @@
     #include <QtGui/qpa/qplatformwindow_p.h>
 #endif
 
+#if defined(Q_OS_WIN) || defined(Q_OS_WINDOWS)
+    #include <QtWidgets/QDialogButtonBox>
+    #include <ui/dialogs/common/message_box.h>
+#endif
+
 namespace nx::vms::client::desktop {
 
 namespace {
@@ -193,7 +198,7 @@ void initQmlGlyphCacheWorkaround()
 void askForGraphicsApiSubstitution()
 {
     #if defined (Q_OS_WINDOWS)
-        const QDialogButtonBox::StandardButton selectedButton = QnMessageBox::question(
+        const auto selectedButton = QnMessageBox::question(
             nullptr,
             QCoreApplication::translate(
                 "runApplication",

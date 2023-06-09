@@ -224,45 +224,26 @@ void UdpChannel::setRcvBufSize(int size)
 
 detail::SocketAddress UdpChannel::getSockAddr() const
 {
-    detail::SocketAddress socketAddress;
-    ::getsockname(m_iSocket, socketAddress.get(), &socketAddress.length());
-    return socketAddress;
+    sockaddr_storage addr;
+    socklen_t addrlen = sizeof(addr);
+    return ::getsockname(m_iSocket, reinterpret_cast<sockaddr*>(&addr), &addrlen) == -1
+        ? detail::SocketAddress()
+        : detail::SocketAddress(&addr, addrlen);
 }
 
-Result<int> UdpChannel::sendto(const detail::SocketAddress& addr, CPacket packet)
+Result<int> UdpChannel::sendto(const detail::SocketAddress& addr, std::unique_ptr<CPacket> packet)
 {
     assert(m_iSocket != INVALID_UDP_SOCKET);
 
     // converting packet into network order
-    encodePacket(&packet);
+    encodePacket(packet.get());
 
-    auto [bufs, bufsCount] = packet.ioBufs();
-
-#ifndef _WIN32
-    detail::SocketAddress localAddr(addr);
-
-    msghdr mh;
-    mh.msg_name = localAddr.get();
-    mh.msg_namelen = localAddr.size();
-    mh.msg_iov = bufs;
-    mh.msg_iovlen = bufsCount;
-    mh.msg_control = NULL;
-    mh.msg_controllen = 0;
-    mh.msg_flags = 0;
-
-    int res = ::sendmsg(m_iSocket, &mh, 0);
-#else
-    DWORD size = kPacketHeaderSize + packet.getLength();
-    int res = ::WSASendTo(
+    int res = ::sendto(
         m_iSocket,
-        (LPWSABUF) bufs, bufsCount, &size, 0,
-        addr.get(), addr.size(),
-        NULL, NULL);
-    res = (0 == res) ? size : -1;
-#endif
-
-    // converting packet back into host order
-    decodePacket(&packet);
+        (const char*) packet->buffer(),
+        kPacketHeaderSize + packet->getLength(),
+        0 /*flags*/,
+        addr.get(), addr.size());
 
     if (res < 0)
         return OsError();
@@ -270,61 +251,28 @@ Result<int> UdpChannel::sendto(const detail::SocketAddress& addr, CPacket packet
     return success(res);
 }
 
-Result<int> UdpChannel::recvfrom(detail::SocketAddress& addr, CPacket& packet)
+std::optional<detail::SocketAddress> UdpChannel::recvfrom(CPacket* packet)
 {
     assert(m_iSocket != INVALID_UDP_SOCKET);
 
-    // Reserving size for any address.
-    addr = detail::SocketAddress(AF_INET6);
+    sockaddr_storage addr;  // Large enough for both IPv4 and IPv6
+    socklen_t addr_len = sizeof(addr);
 
-    auto [bufs, bufsCount] = packet.ioBufs();
-
-#ifndef _WIN32
-    msghdr mh;
-    mh.msg_name = addr.get();
-    mh.msg_namelen = addr.size();
-    mh.msg_iov = bufs;
-    mh.msg_iovlen = bufsCount;
-    mh.msg_control = NULL;
-    mh.msg_controllen = 0;
-    mh.msg_flags = 0;
-
-#ifdef UNIX
-    fd_set set;
-    timeval tv;
-    FD_ZERO(&set);
-    FD_SET(m_iSocket, &set);
-    tv.tv_sec = 0;
-    tv.tv_usec = 10000;
-    ::select(m_iSocket + 1, &set, NULL, &set, &tv);
-#endif
-
-    int res = ::recvmsg(m_iSocket, &mh, 0);
-#else
-    DWORD size = kPacketHeaderSize + packet.getLength();
-    DWORD flag = 0;
-
-    int res = ::WSARecvFrom(
+    int res = ::recvfrom(
         m_iSocket,
-        (LPWSABUF) bufs, bufsCount,
-        &size, &flag,
-        addr.get(), &addr.length(),
-        NULL, NULL);
-    res = (0 == res) ? size : -1;
-#endif
+        packet->buffer(), packet->bufferSize(),
+        0 /*flags*/,
+        reinterpret_cast<struct sockaddr*> (&addr), &addr_len);
 
-    if (res <= 0)
-    {
-        packet.setLength(-1);
-        return OsError();
-    }
+    if (res < kPacketHeaderSize)
+        return std::nullopt;
 
-    packet.setLength(res - kPacketHeaderSize);
+    packet->setLength(res - kPacketHeaderSize);
 
     // convert into local host order
-    decodePacket(&packet);
+    decodePacket(packet);
 
-    return success(packet.getLength());
+    return detail::SocketAddress(&addr, addr_len);
 }
 
 Result<void> UdpChannel::shutdown()
@@ -377,8 +325,8 @@ void UdpChannel::convertPayload(CPacket* packet, Func func)
     {
         for (int i = 0, n = packet->getLength() / 4; i < n; ++i)
         {
-            *((uint32_t*)packet->payload().data() + i) =
-                func(*((uint32_t*)packet->payload().data() + i));
+            *((uint32_t*)packet->payload() + i) =
+                func(*((uint32_t*)packet->payload() + i));
         }
     }
 }

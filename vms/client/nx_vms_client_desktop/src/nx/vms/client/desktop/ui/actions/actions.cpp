@@ -25,6 +25,7 @@
 #include <nx/vms/client/desktop/ui/actions/menu_factory.h>
 #include <nx/vms/client/desktop/workbench/timeline/timeline_actions_factory.h>
 #include <ui/workbench/workbench_layout.h>
+#include <vx/client/hooks/action_registration.h>
 
 #include "actions.h"
 
@@ -315,6 +316,8 @@ void initialize(Manager* manager, Action* root)
 
     /* Context menu actions. */
 
+    vx::registerArrangeInGridAction(factory);
+
     factory(FitInViewAction)
         .flags(Scene | NoTarget)
         .text(ContextMenu::tr("Fit in View"))
@@ -375,10 +378,7 @@ void initialize(Manager* manager, Action* root)
             .pulledText(ContextMenu::tr("New Layout"))
             .shortcut("Ctrl+T")
             .condition(!condition::showreelIsRunning())
-            .icon(qnSkin->icon("titlebar/plus_16.svg",
-                nullptr,
-                nullptr,
-                kTitleBarIconSubstitutions));
+            .icon(qnSkin->icon("titlebar/plus_16.svg", nullptr, nullptr, kTitleBarIconSubstitutions));
 
         factory(OpenNewWindowAction)
             .flags(Main | GlobalHotkey)
@@ -386,8 +386,7 @@ void initialize(Manager* manager, Action* root)
             .text(ContextMenu::tr("Window"))
             .pulledText(ContextMenu::tr("New Window"))
             .shortcut("Ctrl+N")
-            .condition(condition::isLoggedIn()
-                 && ConditionWrapper(new LightModeCondition(Qn::LightModeNoNewWindow)));
+            .condition(condition::isLoggedIn() && ConditionWrapper(new LightModeCondition(Qn::LightModeNoNewWindow)));
 
         factory(OpenWelcomeScreenAction)
             .flags(Main | GlobalHotkey)
@@ -402,9 +401,7 @@ void initialize(Manager* manager, Action* root)
     factory(NewUserLayoutAction)
         .flags(Tree | SingleTarget | ResourceTarget | NoTarget)
         .text(ContextMenu::tr("New Layout..."))
-        .condition(
-            ConditionWrapper(new NewUserLayoutCondition())
-        );
+        .condition(ConditionWrapper(new NewUserLayoutCondition()));
 
     factory(OpenCurrentUserLayoutMenu)
         .flags(TitleBar | SingleTarget | NoTarget)
@@ -424,9 +421,8 @@ void initialize(Manager* manager, Action* root)
         .text(ContextMenu::tr("Show Servers"))
         .checkable()
         .checked(false) //< This action will be kept in unchecked state.
-        .condition(condition::isLoggedIn()
-            && condition::treeNodeType({ResourceTree::NodeType::camerasAndDevices})
-            && condition::allowedToShowServersInResourceTree());
+        .condition(condition::isLoggedIn() && condition::treeNodeType(ResourceTree::NodeType::camerasAndDevices) &&
+                   condition::allowedToShowServersInResourceTree());
 
     factory(HideServersInTreeAction)
         .flags(Tree | NoTarget | SingleTarget | ResourceTarget)
@@ -665,10 +661,17 @@ void initialize(Manager* manager, Action* root)
             condition::isDeviceAccessRelevant(nx::vms::api::AccessRight::viewBookmarks)
             && !condition::showreelIsRunning());
 
-    factory(LoginToCloud)
-        .flags(NoTarget)
-        .text(ContextMenu::tr("Log in to %1...", "Log in to Nx Cloud")
-            .arg(nx::branding::cloudName()));
+    factory()
+        .flags(Main)
+        .separator();
+
+    // factory()
+    //    .flags(Main | Tree)
+    //    .text(ContextMenu::tr("Video Centrix"));
+    //factory.beginSubMenu();
+    // factory.endSubMenu();
+
+    factory(LoginToCloud).flags(NoTarget).text(ContextMenu::tr("Log in to %1...", "Log in to Nx Cloud").arg(nx::branding::cloudName()));
 
     factory(LogoutFromCloud)
         .flags(NoTarget)
@@ -734,19 +737,14 @@ void initialize(Manager* manager, Action* root)
 
     factory.beginSubMenu();
     {
-        factory(MainMenuAddDeviceManuallyAction)
-            .flags(Main)
-            .text(ContextMenu::tr("Device..."))
-            .requiredPowerUserPermissions();
+        factory(MainMenuAddDeviceManuallyAction).flags(Main).text(ContextMenu::tr("Device...")).requiredPowerUserPermissions();
 
         factory(NewUserAction)
             .flags(Main | Tree)
             .requiredPowerUserPermissions()
             .text(ContextMenu::tr("User..."))
             .pulledText(ContextMenu::tr("Add User..."))
-            .condition(
-                condition::treeNodeType(ResourceTree::NodeType::users)
-            );
+            .condition(condition::treeNodeType(ResourceTree::NodeType::users));
 
         factory(NewVideoWallAction)
             .flags(Main)
@@ -787,6 +785,8 @@ void initialize(Manager* manager, Action* root)
             .requiredPowerUserPermissions()
             .text(ContextMenu::tr("Virtual Camera..."))
             .pulledText(ContextMenu::tr("Add Virtual Camera..."));
+
+        vx::registerNewMonitoringLayoutAction(factory);
     }
     factory.endSubMenu();
 
@@ -1113,6 +1113,9 @@ void initialize(Manager* manager, Action* root)
         .flags(Scene | Tree | SingleTarget | ResourceTarget | LayoutItemTarget)
         .text(ContextMenu::tr("Open Containing Folder"))
         .condition(new OpenInFolderCondition());
+
+    vx::registerOpenReportLayoutForCameraAction(factory);
+    vx::registerOpenReportLayoutForLocationAction(factory);
 
     factory(IdentifyVideoWallAction)
         .flags(Tree | Scene | SingleTarget | MultiTarget | ResourceTarget | VideoWallItemTarget)
@@ -1692,6 +1695,8 @@ void initialize(Manager* manager, Action* root)
         .requiredTargetPermissions(Qn::EditLayoutSettingsPermission)
         .condition(ConditionWrapper(new LightModeCondition(Qn::LightModeNoLayoutBackground))
             && !condition::showreelIsRunning());
+
+    vx::registerMonitoringLayoutSettingsAction(factory);
 
     factory(VideowallSettingsAction)
         .flags(Tree | SingleTarget | ResourceTarget)
@@ -2314,6 +2319,11 @@ void initialize(Manager* manager, Action* root)
             .condition(ConditionWrapper(new RequiresAdministratorCondition()));
     }
     factory.endSubMenu();
+
+    vx::registerDebugVxActions(factory);
+    vx::registerDismissSystemAlertAction(factory);
+    vx::registerPrioritizeAlertAction(factory);
+    vx::registerOpenReportLayoutAction(factory);
 
     // -- Developer mode actions end. Please do not add real actions afterwards.
 }

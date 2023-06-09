@@ -179,6 +179,7 @@
 #include <utils/connection_diagnostics_helper.h>
 #include <utils/email/email.h>
 #include <utils/unity_launcher_workaround.h>
+#include <vx/client/hooks/action_hooks.h>
 
 #if defined(Q_OS_MACX)
     #include <utils/mac_utils.h>
@@ -1645,8 +1646,10 @@ void ActionHandler::at_dropResourcesAction_triggered()
         {
             if (parameters.widgets().isEmpty()) //< Triggered by resources tree view
                 parameters.setResources(resources);
-            if (!menu()->triggerIfPossible(action::OpenInCurrentLayoutAction, parameters))
-                menu()->triggerIfPossible(action::OpenInNewTabAction, parameters);
+
+            if (!vx::overrideDropIntoCurrentLayoutAction(parameters, context()))
+                if (!menu()->triggerIfPossible(action::OpenInCurrentLayoutAction, parameters))
+                    menu()->triggerIfPossible(action::OpenInNewTabAction, parameters);
         }
 
         if (!layouts.empty())
@@ -2819,6 +2822,12 @@ void ActionHandler::at_createZoomWindowAction_triggered() {
     addParams.displayRoi = widget->item()->displayRoi();
     addParams.displayAnalyticsObjects = widget->item()->displayAnalyticsObjects();
     addParams.displayHotspots = widget->item()->displayHotspots();
+
+    action::Parameters actionParams = action::Parameters(widget->resource()->toResourcePtr())
+        .withArgument(Qn::LayoutResourceRole, workbench()->currentLayoutResource());
+    if (!menu()->canTrigger(action::OpenInLayoutAction, actionParams))
+        return; // TODO(elric): gdm will implement this one properly, merge the fix from master.
+
     addToLayout(
         workbench()->currentLayoutResource(),
         widget->resource()->toResourcePtr(),

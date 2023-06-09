@@ -483,7 +483,10 @@ vms::api::PeerDataEx MessageBus::localPeerEx() const
     nx::vms::api::PeerDataEx result;
     result.assign(localPeer());
 
-    result.systemId = globalSettings()->localSystemId();
+    // Note: this one was set to globalSettings()->localSystemId() before, for VX we need to set it to QnUuid().
+    // This disables the systemId check on the server and lets the client connect to several systems simultaneously.
+    result.systemId = nx::Uuid();
+
     result.cloudHost = nx::network::SocketGlobals::cloud().cloudHost().c_str();
     result.aliveUpdateIntervalMs = std::chrono::duration_cast<std::chrono::milliseconds>
         (globalSettings()->aliveUpdateInterval()).count();

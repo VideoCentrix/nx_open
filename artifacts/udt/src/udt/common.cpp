@@ -67,6 +67,8 @@ Yunhong Gu, last updated 07/25/2010
 #include "md5.h"
 #include "common.h"
 
+#include <iostream>
+
 #ifndef _WIN32
 int pthread_cond_init_monotonic(pthread_cond_t* condition)
 {
@@ -326,48 +328,8 @@ void CTimer::tick()
 
 std::chrono::microseconds CTimer::getTime()
 {
-    //For Cygwin and other systems without microsecond level resolution, uncomment the following three lines
-    //uint64_t x;
-    //rdtsc(x);
-    //return x / s_ullCPUFrequency;
-    //Specific fix may be necessary if rdtsc is not available either.
-
-#ifndef _WIN32
-#ifdef __APPLE__
-    clock_serv_t clock;
-    host_get_clock_service(mach_host_self(), REALTIME_CLOCK, &clock);
-
-    mach_timespec_t t;
-    clock_get_time(clock, &t);
-
-    mach_port_deallocate(mach_task_self(), clock);
-#else
-    timespec t;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-#endif
-
-    return std::chrono::microseconds((uint64_t)t.tv_sec * (uint64_t)1000000 + (uint64_t)(t.tv_nsec / 1000));
-#else
-    LARGE_INTEGER ccf;
-    HANDLE hCurThread = ::GetCurrentThread();
-    //DWORD_PTR dwOldMask = 0;
-    //if (m_winVersion.dwMajorVersion < 6)
-    //  dwOldMask = ::SetThreadAffinityMask(hCurThread, 1);
-    if (QueryPerformanceFrequency(&ccf))
-    {
-        LARGE_INTEGER cc;
-        if (QueryPerformanceCounter(&cc))
-        {
-            //if (m_winVersion.dwMajorVersion < 6)
-            //    SetThreadAffinityMask(hCurThread, dwOldMask);
-            return std::chrono::microseconds((cc.QuadPart * 1000000ULL / ccf.QuadPart));
-        }
-    }
-
-    //if (m_winVersion.dwMajorVersion < 6)
-    //    SetThreadAffinityMask(hCurThread, dwOldMask);
-    return std::chrono::microseconds(GetTickCount() * 1000ULL);
-#endif
+    auto now = std::chrono::steady_clock::now();
+    return std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch());
 }
 
 void CTimer::triggerEvent()
@@ -453,14 +415,15 @@ void CIPAddress::ntop(const sockaddr* addr, uint32_t ip[4], int ver)
 
 void CIPAddress::pton(detail::SocketAddress* addr, const uint32_t ip[4], int ver)
 {
+    addr->setFamily(ver);
     if (AF_INET == ver)
     {
-        sockaddr_in* a = &addr->v4();
+        sockaddr_in* a = addr->v4();
         a->sin_addr.s_addr = ip[0];
     }
     else
     {
-        sockaddr_in6* a = &addr->v6();
+        sockaddr_in6* a = addr->v6();
         for (int i = 0; i < 4; ++i)
         {
             a->sin6_addr.s6_addr[i * 4] = ip[i] & 0xFF;

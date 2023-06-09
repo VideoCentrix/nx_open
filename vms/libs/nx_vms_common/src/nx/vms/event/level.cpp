@@ -4,21 +4,23 @@
 
 #include "actions/abstract_action.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+
 namespace nx::vms::event {
 
-Level levelOf(const AbstractActionPtr& action)
-{
-    if (action->actionType() == ActionType::playSoundAction)
-        return Level::common;
-
-    if (action->actionType() == ActionType::showOnAlarmLayoutAction)
-        return Level::critical;
-
-    return levelOf(action->getRuntimeParams());
+TLevelExtended levelOf(const AbstractActionPtr &action) {
+    switch (action->actionType()) {
+    case ActionType::playSoundAction:
+        return {Level::common};
+    case ActionType::showOnAlarmLayoutAction:
+        return {Level::critical};
+    default:
+        return {levelOf(action->getRuntimeParams())};
+    }
 }
 
-Level levelOf(const EventParameters& params)
-{
+Level levelOf(const EventParameters &params) {
     EventType eventType = params.eventType;
 
     if (eventType >= EventType::userDefinedEvent)

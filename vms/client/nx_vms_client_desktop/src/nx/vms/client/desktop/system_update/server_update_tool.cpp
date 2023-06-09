@@ -125,8 +125,7 @@ ServerUpdateTool::~ServerUpdateTool()
 void ServerUpdateTool::onConnectToSystem(nx::Uuid systemId)
 {
     m_systemId = systemId;
-    if (!branding::customReleaseListUrl().isEmpty())
-    {
+    if (false && !branding::customReleaseListUrl().isEmpty()) {
         auto callback =
             [this](bool /*success*/, rest::Handle requestId, rest::ServerConnection::ErrorOrEmpty)
             {

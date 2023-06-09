@@ -40,6 +40,10 @@
 struct QnMetaDataV1;
 using QnMetaDataV1Ptr = std::shared_ptr<QnMetaDataV1>;
 
+namespace vx {
+class MonitoringResourceWidgetBase;
+}
+
 namespace nx::vms::client::desktop {
 
 class VoiceSpectrumPainter;
@@ -93,7 +97,8 @@ public:
         nx::vms::client::desktop::SystemContext* systemContext,
         nx::vms::client::desktop::WindowContext* windowContext,
         QnWorkbenchItem* item,
-        QGraphicsItem* parent = nullptr);
+        QGraphicsItem* parent = nullptr,
+        bool needSoftwareTriggers = true);
     virtual ~QnMediaResourceWidget();
 
     /**
@@ -399,6 +404,8 @@ private slots:
         nx::vms::client::core::SoftwareTriggersWatcher::TriggerFields fields);
 
 private:
+    friend class vx::MonitoringResourceWidgetBase;
+
     void handleItemDataChanged(const nx::Uuid& id, Qn::ItemDataRole role, const QVariant& data);
     void handleDewarpingParamsChanged();
 
@@ -444,9 +451,10 @@ private:
         const QRectF& sourceSubRect,
         const QRectF& targetRect);
 
-    bool capabilityButtonsAreVisible() const;
+protected:
+    virtual bool capabilityButtonsAreVisible() const;
     void updateCapabilityButtons() const;
-    void updateTwoWayAudioButton() const;
+    virtual void updateTwoWayAudioButton() const;
     void updateIntercomButtons();
 
 private:
@@ -568,4 +576,5 @@ private:
     QAction* const m_toggleImageEnhancementAction;
 
     bool m_muted = false;
+    const bool m_needSoftwareTriggers;
 };

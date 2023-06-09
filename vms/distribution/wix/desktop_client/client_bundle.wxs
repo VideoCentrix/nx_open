@@ -34,6 +34,15 @@
         <Variable Name="InstallerTitle" Value="!(loc.ClientOnly)" />
 
         <Chain DisableSystemRestore="no">
+            <!-- Install MSVC Redistributable first -->
+            <ExePackage Id="VcRedist"
+                        SourceFile="${msvc_redist_file}"
+                        DisplayName="Microsoft Visual C++ Redistributable"
+                        InstallCommand="/quiet /norestart"
+                        RepairCommand="/quiet /norestart"
+                        Permanent="yes"
+                        Vital="no"/>
+            
             <PackageGroupRef Id="ClientPackageGroup"/>
         </Chain>
     </Bundle>

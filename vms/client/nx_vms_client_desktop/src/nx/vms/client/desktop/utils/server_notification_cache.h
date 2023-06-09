@@ -19,7 +19,7 @@ public:
     explicit ServerNotificationCache(QObject *parent = 0);
     ~ServerNotificationCache();
 
-    bool storeSound(const QString &filePath, int maxLengthMSecs = -1, const QString &customTitle = QString());
+    bool storeSound(const QString &filePath, int maxLengthMSecs = -1, const QString &customTitle = {}, bool preserveFileName = false);
     bool updateTitle(const QString &filename, const QString &title);
     virtual void clear() override;
 

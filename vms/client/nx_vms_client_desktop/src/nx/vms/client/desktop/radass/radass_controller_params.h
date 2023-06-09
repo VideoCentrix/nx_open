@@ -13,7 +13,7 @@
 
 namespace nx::vms::client::desktop::radass {
 
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 
 // Time to ignore recently added cameras.
 static constexpr auto kRecentlyAddedInterval = 1s;

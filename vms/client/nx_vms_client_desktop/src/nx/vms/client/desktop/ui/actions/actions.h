@@ -17,8 +17,7 @@ Q_NAMESPACE
 /**
  * Enum of all menu actions.
  */
-enum IDType
-{
+enum IDType {
     /* Actions that are not assigned to any menu. */
 
     /**
@@ -81,7 +80,7 @@ enum IDType
     /**
      * Opens saas services tab.
      */
-     PreferencesServicesTabAction,
+    PreferencesServicesTabAction,
 
     /**
      * Opens smtp settings preferences tab.
@@ -254,7 +253,6 @@ enum IDType
      * Offers user to select server in cluster for other servers to synchronize time with
      */
     SelectTimeServerAction,
-
 
     /* Right panel actions */
 
@@ -535,7 +533,6 @@ enum IDType
      */
     CloseAllButThisLayoutAction,
 
-
     /* Resource actions. */
 
     /**
@@ -629,6 +626,8 @@ enum IDType
      * Performs a fit in view operation.
      */
     FitInViewAction,
+
+    VxArrangeInGridAction,
 
     /**
      * Maximizes item.
@@ -735,6 +734,8 @@ enum IDType
      * Opens layout settings dialog.
      */
     LayoutSettingsAction,
+
+    VxMonitoringLayoutSettingsAction,
 
     /**
      * Opens server settings dialog.
@@ -1089,6 +1090,33 @@ enum IDType
     NewUserLayoutAction,
 
     /**
+     * Opens a monitoring layout creation dialog.
+     */
+    VxNewMonitoringLayoutAction,
+
+    /**
+     * Opens a new report layout for the provided system id.
+     */
+    VxOpenReportLayoutAction,
+
+    /**
+     * Opens a report layout for the system that the provided camera belongs to.
+     */
+    VxOpenReportLayoutForCameraAction,
+
+    /**
+     * Opens a report layout for a location.
+     */
+    VxOpenReportLayoutForLocationAction,
+
+    /**
+     * Dismisses all alerting from a system, provided a system id.
+     */
+    VxDismissSystemAlertAction,
+
+    VxPrioritizeAlertAction,
+
+    /**
      * Sets spacing of current layout's cells to None.
      */
     SetCurrentLayoutItemSpacingNoneAction,
@@ -1320,6 +1348,12 @@ enum IDType
      */
     DebugControlPanelAction,
 
+    VxItemDebugAction,
+
+    VxGlobalDebugAction,
+
+    Vx_UNUSED,
+
     /**
      * Opens the Audit Log dialog.
      */
@@ -1519,10 +1553,10 @@ enum IDType
 
 Q_ENUM_NS(IDType)
 
-void initialize(Manager* manager, Action* root);
+void initialize(Manager *manager, Action *root);
 
 std::string toString(IDType id);
-bool fromString(const std::string_view& str, IDType* id);
+bool fromString(const std::string_view &str, IDType *id);
 
 NX_REFLECTION_TAG_TYPE(IDType, useStringConversionForSerialization)
 

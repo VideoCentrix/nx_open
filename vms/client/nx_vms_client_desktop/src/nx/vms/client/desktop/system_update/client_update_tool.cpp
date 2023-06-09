@@ -81,10 +81,7 @@ ClientUpdateTool::ClientUpdateTool(SystemContext* systemContext, QObject *parent
     if (ini().massSystemUpdateClearDownloads)
         clearDownloadFolder();
 
-    m_downloader.reset(new Downloader(
-        m_outputDir,
-        systemContext,
-        {m_peerManager, new InternetOnlyPeerManager(), m_proxyPeerManager}));
+    m_downloader.reset(new Downloader(m_outputDir, systemContext, {new InternetOnlyPeerManager()}));
 
     connect(m_downloader.get(), &Downloader::fileStatusChanged,
         this, &ClientUpdateTool::atDownloaderStatusChanged);

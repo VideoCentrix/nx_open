@@ -17,13 +17,14 @@ enum class Value
     SuccessNotification = (int) nx::vms::event::Level::success,
     ImportantNotification = (int) nx::vms::event::Level::important,
     CriticalNotification = (int) nx::vms::event::Level::critical,
+    SpecialNotification = (int) nx::vms::event::Level::special,
     LevelCount = (int) nx::vms::event::Level::count
 };
 
 Value convert(nx::vms::event::Level level);
 
-Value valueOf(const nx::vms::event::AbstractActionPtr& action);
-Value valueOf(const nx::vms::event::EventParameters& params);
+Value valueOf(const nx::vms::event::AbstractActionPtr &action);
+Value valueOf(const nx::vms::event::EventParameters &params);
 Value valueOf(nx::vms::common::system_health::MessageType messageType);
 
 QColor notificationTextColor(Value level);

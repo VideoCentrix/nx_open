@@ -166,6 +166,9 @@ public:
 
     /** Check if any menu is visible right now */
     bool isMenuVisible() const;
+
+    void replaceUnsafeParameters(QnResourceWidget *oldWidget, QnResourceWidget *newWidget);
+
 signals:
     void menuAboutToShow(QMenu* menu);
     void menuAboutToHide(QMenu* menu);

@@ -68,6 +68,8 @@
 #include <ui/workbench/workbench_ui_globals.h>
 #include <utils/common/event_processors.h>
 
+#include <vx/client/hooks/workbench_hooks.h>
+
 #include "panels/calendar_workbench_panel.h"
 #include "panels/left_workbench_panel.h"
 #include "panels/notifications_workbench_panel.h"
@@ -587,7 +589,7 @@ void WorkbenchUi::updateControlsVisibility(bool animate)
         return;
     }
 
-    const bool notificationsAllowed = context()->user() != nullptr;
+    const bool notificationsAllowed = context()->user() != nullptr && vx::isNotificationsPanelVisible(layout);
 
     if (qnRuntime->isVideoWallMode())
     {
@@ -1257,6 +1259,10 @@ void WorkbenchUi::setTitleUsed(bool used)
     m_titleIsUsed = used;
 
     updateControlsVisibility(false);
+}
+
+NotificationsWorkbenchPanel *WorkbenchUi::notificationsPanel() const {
+    return m_notifications.data();
 }
 
 void WorkbenchUi::setTitleOpened(bool opened, bool animate)

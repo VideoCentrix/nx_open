@@ -267,9 +267,7 @@ void QnRtspClientArchiveDelegate::checkGlobalTimeAsync(
     }
 }
 
-void QnRtspClientArchiveDelegate::checkMinTimeFromOtherServer(
-    const QnSecurityCamResourcePtr& camera)
-{
+void QnRtspClientArchiveDelegate::checkMinTimeFromOtherServer(const QnSecurityCamResourcePtr camera) {
     if (!camera || !camera->resourcePool())
     {
         m_globalMinArchiveTime = DATETIME_INVALID;

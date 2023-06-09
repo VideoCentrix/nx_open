@@ -556,7 +556,8 @@ void QnWorkbenchDisplay::initialize(QGraphicsScene* scene, QGraphicsView* view)
             {
                 const auto mainWindowWidget = this->mainWindowWidget();
                 const auto window = mainWindowWidget ? mainWindowWidget->windowHandle() : nullptr;
-                if (!NX_ASSERT(window))
+                // if (!NX_ASSERT(window))
+                if (!window)
                     return;
 
                 connect(window, &QWindow::screenChanged, this, updateViewScreens);
@@ -881,9 +882,8 @@ void QnWorkbenchDisplay::setWidget(Qn::ItemRole role, QnResourceWidget *widget)
             if (QnMediaResourceWidget *newMediaWidget = dynamic_cast<QnMediaResourceWidget *>(newWidget))
             {
                 newMediaWidget->display()->camDisplay()->setFullScreen(true);
-                if (newMediaWidget->display()->archiveReader())
-                {
-                    newMediaWidget->display()->archiveReader()->setQuality(MEDIA_Quality_High, true);
+                if (newMediaWidget->display()->archiveReader()) {
+                    newMediaWidget->display()->archiveReader()->setQuality(MEDIA_Quality_High, false);
                 }
             }
 
@@ -2014,6 +2014,8 @@ void QnWorkbenchDisplay::at_layout_itemAdded(QnWorkbenchItem *item)
 
         // Unzoom & fit in view on item addition except when item is added in zoomed state.
         workbench()->setItem(Qn::ZoomedRole, addInZoomedState ? item : nullptr);
+
+        return; // VX feature request: guards do not want new alerts to drop the zoom
         if (!item->data<bool>(Qn::ItemSkipFocusOnAdditionRole, false))
         {
             // Newly added item should become selected.
@@ -2533,14 +2535,7 @@ void QnWorkbenchDisplay::at_notificationAdded(const vms::event::AbstractActionPt
 
     for (const QnResourcePtr &resource : targetResources)
     {
-        const auto callback =
-            [this, resource, level = QnNotificationLevel::valueOf(businessAction)]
-            {
-                showSplashOnResource(resource, level);
-            };
-
-        for (int timeMs = 0; timeMs <= splashTotalLengthMs; timeMs += splashPeriodMs)
-            executeDelayedParented(callback, timeMs, this);
+        showMultiSplashOnResource(resource, businessAction);
     }
 }
 
@@ -2617,6 +2612,19 @@ void QnWorkbenchDisplay::showSplashOnResource(
         m_scene->addItem(splashItem);
         setLayer(splashItem, QnWorkbenchDisplay::EffectsLayer);
     }
+}
+
+void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const vms::event::AbstractActionPtr &businessAction) {
+    showMultiSplashOnResource(resource, nx::vms::event::levelOf(businessAction));
+}
+
+void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const nx::vms::event::TLevelExtended &levelExt) {
+    const auto callback = [this, resource, level = QnNotificationLevel::convert(levelExt)] {
+        showSplashOnResource(resource, level);
+    };
+
+    for (int timeMs = 0; timeMs <= levelExt.splashTotalLengthMs; timeMs += levelExt.splashPeriodMs)
+        executeDelayedParented(callback, timeMs, this);
 }
 
 bool QnWorkbenchDisplay::canShowLayoutBackground() const

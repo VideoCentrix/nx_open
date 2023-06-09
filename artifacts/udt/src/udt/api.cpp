@@ -375,10 +375,12 @@ Result<> CUDTUnited::bind(UDTSOCKET u, UDPSOCKET udpsock)
     if (INIT != s->m_Status)
         return Error(OsErrorCode::invalidData);
 
-    detail::SocketAddress socketAddress;
+    sockaddr_storage addr;
+    socklen_t addrlen = sizeof(addr);
 
-    if (-1 == ::getsockname(udpsock, socketAddress.get(), &socketAddress.length()))
+    if (-1 == ::getsockname(udpsock, reinterpret_cast<sockaddr*>(&addr), &addrlen))
         return OsError();
+    detail::SocketAddress socketAddress(&addr, addrlen);
 
     s->m_pUDT->open();
     if (auto result = updateMux(s.get(), socketAddress, &udpsock); !result.ok())
@@ -1220,7 +1222,6 @@ Result<> CUDTUnited::updateMux(
     // a new multiplexer is needed
     auto multiplexer = std::make_shared<Multiplexer>(
         s->m_pUDT->ipVersion(),
-        s->m_pUDT->payloadSize(),
         s->m_pUDT->mss(),
         s->m_pUDT->reuseAddr(),
         s->m_SocketId);

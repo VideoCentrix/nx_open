@@ -123,6 +123,8 @@ public:
     /** Returns QQuickWindow for resource browser widget. */
     QQuickWindow* quickWindow() const;
 
+    NotificationsWorkbenchPanel *notificationsPanel() const;
+
 private:
     void setPerformanceInfoVisible(bool performanceInfoVisible = true);
     void setDebugInfoVisible(bool debugInfoVisible = true);

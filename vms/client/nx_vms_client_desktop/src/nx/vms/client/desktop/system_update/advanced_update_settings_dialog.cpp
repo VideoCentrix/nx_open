@@ -46,12 +46,12 @@ AdvancedUpdateSettingsDialog::AdvancedUpdateSettingsDialog(QWidget* parent):
                     m_currentRequest = 0;
                 };
 
-            m_currentRequest = systemContext()->connectedServerApi()->patchSystemSettings(
-                systemContext()->getSessionTokenHelper(),
-                api::SaveableSystemSettings{.updateNotificationsEnabled = notifyAboutUpdates},
-                callback,
-                this);
-        });
+        const auto &api = systemContext()->connectedServerApi();
+        if (!api)
+            return;
+        m_currentRequest = api->patchSystemSettings(systemContext()->getSessionTokenHelper(),
+                                                    api::SaveableSystemSettings{.updateNotificationsEnabled = notifyAboutUpdates}, callback, this);
+    });
 
     connect(systemSettings(),
         &SystemSettings::updateNotificationsChanged,

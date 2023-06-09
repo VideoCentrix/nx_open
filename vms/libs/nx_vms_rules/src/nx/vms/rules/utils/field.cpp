@@ -14,7 +14,8 @@
 #include "../basic_action.h"
 #include "../event_filter_fields/state_field.h"
 
-using namespace std::chrono_literals;
+#include <chrono>
+using namespace std::literals::chrono_literals;
 
 namespace nx::vms::rules::utils {
 

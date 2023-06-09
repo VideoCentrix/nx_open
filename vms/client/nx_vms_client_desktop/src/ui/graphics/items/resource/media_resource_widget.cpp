@@ -304,7 +304,8 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     nx::vms::client::desktop::SystemContext* systemContext,
     WindowContext* windowContext,
     QnWorkbenchItem* item,
-    QGraphicsItem* parent)
+    QGraphicsItem* parent,
+    bool needSoftwareTriggers)
     :
     base_type(systemContext, windowContext, item, parent),
     d(new MediaResourceWidgetPrivate(base_type::resource())),
@@ -317,7 +318,8 @@ QnMediaResourceWidget::QnMediaResourceWidget(
         new nx::vms::client::core::SoftwareTriggersController(systemContext, this)),
     m_buttonController(new CameraButtonController(this)),
     m_objectTrackingButtonController(new ObjectTrackingButtonController(this)),
-    m_toggleImageEnhancementAction(new QAction(this))
+    m_toggleImageEnhancementAction(new QAction(this)),
+    m_needSoftwareTriggers(needSoftwareTriggers)
 {
     NX_ASSERT(d->mediaResource, "Media resource widget was created with a non-media resource.");
     d->isExportedLayout = layoutResource()->isFile();
@@ -501,7 +503,8 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     updateOverlayButton();
     setImageEnhancement(item->imageEnhancement());
 
-    initSoftwareTriggers();
+    if (m_needSoftwareTriggers)
+        initSoftwareTriggers();
 
     updateWatermark();
     connect(systemContext->globalSettings(),
@@ -3703,6 +3706,10 @@ void QnMediaResourceWidget::at_triggerAdded(
     bool prolonged,
     bool enabled)
 {
+    if (!m_needSoftwareTriggers) {
+        return;
+    }
+
     auto info = SoftwareTriggerInfo{
         .ruleId = id,
         .name = name,

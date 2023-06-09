@@ -14,7 +14,7 @@
 
 namespace nx::vms::utils {
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 class PreloadedTranslationReference;
 class ScopedLocale;

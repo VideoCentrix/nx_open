@@ -26,8 +26,7 @@ using namespace radass;
 
 namespace {
 
-bool isForcedHqDisplay(AbstractVideoDisplay* display)
-{
+bool isForcedHqDisplay(AbstractVideoDisplay *display) {
     return display->isFullScreen() || display->isZoomWindow() || display->isFisheyeEnabled();
 }
 
@@ -430,7 +429,7 @@ struct RadassController::Private
             lastModeChangeTimer->restart();
         }
 
-        consumer->display->setQuality(MEDIA_Quality_High, true);
+        consumer->display->setQuality(MEDIA_Quality_High, false);
     }
 
     bool existsBufferingDisplay() const

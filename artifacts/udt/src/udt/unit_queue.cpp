@@ -2,13 +2,14 @@
 
 #include <algorithm>
 #include <cassert>
+#include <deque>
 #include <utility>
 
 class UDT_API UnitQueueImpl:
     public std::enable_shared_from_this<UnitQueueImpl>
 {
 public:
-    UnitQueueImpl(int initialQueueSize, int bufferSize);
+    UnitQueueImpl(int initialQueueSize);
     ~UnitQueueImpl();
 
     UnitQueueImpl(const UnitQueueImpl&) = delete;
@@ -19,25 +20,22 @@ public:
     void putBack(std::unique_ptr<CPacket> packet);
 
 private:
-    int m_bufferSize = 0;
-    std::vector<std::unique_ptr<CPacket>> m_availablePackets;
+    std::deque<std::unique_ptr<CPacket>> m_availablePackets;
     int m_takenPackets = 0;
     std::mutex m_mutex;
 };
 
 //-------------------------------------------------------------------------------------------------
 
-UnitQueueImpl::UnitQueueImpl(int initialQueueSize, int bufferSize):
-    m_bufferSize(bufferSize)
+UnitQueueImpl::UnitQueueImpl(int initialQueueSize)
 {
     m_availablePackets.resize(initialQueueSize);
 
     std::for_each(
         m_availablePackets.begin(), m_availablePackets.end(),
-        [this](auto& packet)
+        [](auto& packet)
         {
             packet = std::make_unique<CPacket>();
-            packet->payload().resize(m_bufferSize);
         });
 }
 
@@ -54,14 +52,13 @@ Unit UnitQueueImpl::takeNextAvailUnit()
 
     if (!m_availablePackets.empty())
     {
-        Unit unit(shared_from_this(), std::move(m_availablePackets.back()));
-        m_availablePackets.pop_back();
+        Unit unit(shared_from_this(), std::move(m_availablePackets.front()));
+        m_availablePackets.pop_front();
         return unit;
     }
     else
     {
         Unit unit(shared_from_this(), std::make_unique<CPacket>());
-        unit.packet().payload().resize(m_bufferSize);
         return unit;
     }
 }
@@ -92,9 +89,9 @@ Unit::~Unit()
         unitQueueStrong->putBack(std::exchange(m_packet, nullptr));
 }
 
-CPacket& Unit::packet()
+std::unique_ptr<CPacket>& Unit::packet()
 {
-    return *m_packet;
+    return m_packet;
 }
 
 void Unit::setFlag(Flag val)
@@ -109,8 +106,8 @@ Unit::Flag Unit::flag() const
 
 //-------------------------------------------------------------------------------------------------
 
-UnitQueue::UnitQueue(int initialQueueSize, int bufferSize):
-    m_impl(std::make_shared<UnitQueueImpl>(initialQueueSize, bufferSize))
+UnitQueue::UnitQueue(int initialQueueSize):
+    m_impl(std::make_shared<UnitQueueImpl>(initialQueueSize))
 {
 }
 

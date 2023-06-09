@@ -36,6 +36,7 @@ namespace ec2 {
         }
 
         void reset();
+        bool valid() const noexcept { return bool(m_bus); }
 
         template <typename T> T dynamicCast() { return dynamic_cast<T> (m_bus.get()); }
 

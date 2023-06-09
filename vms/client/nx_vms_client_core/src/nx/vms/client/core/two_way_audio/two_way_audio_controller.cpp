@@ -16,6 +16,7 @@
 #include <nx/vms/client/core/resource/screen_recording/desktop_resource.h>
 #include <nx/vms/client/core/system_context.h>
 #include <nx/vms/client/core/two_way_audio/two_way_audio_availability_watcher.h>
+#include <nx/vms/common/application_context.h>
 
 namespace nx::vms::client::core {
 
@@ -57,6 +58,7 @@ void TwoWayAudioController::Private::setStarted(bool value)
 bool TwoWayAudioController::Private::setActive(bool active, OperationCallback&& callback)
 {
     const bool available = q->connection() && q->available();
+    const bool wasActive = started;
     setStarted(active && available);
     if (!available)
         return false;
@@ -70,15 +72,21 @@ bool TwoWayAudioController::Private::setActive(bool active, OperationCallback&& 
     params.insert("resourceId", targetResource->getId().toString());
     params.insert("action", active ? "start" : "stop");
 
-    const auto requestCallback = nx::utils::guarded(q,
-        [this, active, callback](
-            bool success, rest::Handle /*handle*/, const nx::network::rest::JsonResult& result)
-        {
-            const bool ok = success && result.error == nx::network::rest::Result::NoError;
-            setStarted(active && ok);
-            if (callback)
-                callback(ok);
-        });
+    const auto requestCallback = nx::utils::guarded(q, [this, active, callback](bool success, rest::Handle /*handle*/,
+                                                                                const nx::network::rest::JsonResult &result) {
+        const bool ok = success && result.error == nx::network::rest::Result::NoError;
+        setStarted(active && ok);
+        if (callback)
+            callback(ok);
+    });
+
+    if (wasActive xor active) {
+        auto &cb = ::nx::vms::common::appContext()->vxCallback();
+        if (active)
+            cb.startTalkdown(availabilityWatcher->camera());
+        else
+            cb.stopTalkdown();
+    }
 
     auto serverVersion = q->connection()->moduleInformation().version;
     if (serverVersion < nx::utils::SoftwareVersion(5, 0))

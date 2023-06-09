@@ -35,21 +35,18 @@ public:
         m_sendThread.join();
     }
 
-    virtual Result<int> sendto(const detail::SocketAddress& addr, CPacket packet) override
+    virtual Result<int> sendto(const detail::SocketAddress& addr, std::unique_ptr<CPacket> packet) override
     {
         static constexpr auto kMaxDelay = std::chrono::milliseconds(999);
 
         std::lock_guard<std::mutex> lock(m_mutex);
 
-        if (packet.getFlag() == PacketFlag::Control)
+        if (packet->getFlag() == PacketFlag::Control)
             return base_type::sendto(addr, std::move(packet));
 
         // Delaying every data packet to force FIN before the last data.
 
-        const auto [ioBufs, count] = packet.ioBufs();
-        const auto packetSize = std::accumulate(
-            ioBufs, ioBufs + count, 0,
-            [](auto one, auto two) { return one + two.size(); });
+        const auto packetSize = packet->bufferSize();
 
         m_sendTasks.emplace(
             std::chrono::steady_clock::now() + kMaxDelay,
@@ -64,7 +61,7 @@ private:
     struct SendTask
     {
         detail::SocketAddress addr;
-        CPacket packet;
+        std::unique_ptr<CPacket> packet;
     };
 
     std::mutex m_mutex;
@@ -143,17 +140,21 @@ void BasicFixture::givenListeningServerSocket()
     if (m_ipVersion == AF_INET)
     {
         localAddress.setFamily(m_ipVersion);
-        inet_pton(AF_INET, "127.0.0.1", &(localAddress.v4().sin_addr.s_addr));
+        inet_pton(AF_INET, "127.0.0.1", &(localAddress.v4()->sin_addr.s_addr));
     }
     else
     {
         localAddress.setFamily(m_ipVersion);
-        localAddress.v6().sin6_addr = in6addr_loopback;
+        localAddress.v6()->sin6_addr = in6addr_loopback;
     }
 
     ASSERT_EQ(0, UDT::bind(m_serverSocket, localAddress.get(), localAddress.size()));
     ASSERT_EQ(0, UDT::listen(m_serverSocket, 127));
-    ASSERT_EQ(0, UDT::getsockname(m_serverSocket, m_serverAddress.get(), (int*) &m_serverAddress.length()));
+
+    sockaddr_storage addr;
+    int addrlen = sizeof(addr);
+    ASSERT_EQ(0, UDT::getsockname(m_serverSocket, reinterpret_cast<sockaddr*>(&addr), &addrlen));
+    m_serverAddress = detail::SocketAddress(&addr, addrlen);
 }
 
 void BasicFixture::startAcceptingAsync()

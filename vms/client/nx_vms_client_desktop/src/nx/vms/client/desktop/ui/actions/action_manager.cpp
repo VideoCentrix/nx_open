@@ -518,6 +518,13 @@ void Manager::hideAllMenus()
     }
 }
 
+void Manager::replaceUnsafeParameters(QnResourceWidget *oldWidget, QnResourceWidget *newWidget) {
+    for (Parameters &parameters: m_parametersByMenu)
+    {
+        parameters.replaceUnsafeParameters(oldWidget, newWidget);
+    }
+}
+
 } // namespace action
 } // namespace ui
 } // namespace nx::vms::client::desktop

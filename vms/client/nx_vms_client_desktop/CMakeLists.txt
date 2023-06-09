@@ -71,6 +71,15 @@ set(qt_widgets_root "${open_source_root}/artifacts/qt_widgets/src")
 file(GLOB_RECURSE qt_widgets_sources "${qt_widgets_root}/qt_widgets/*")
 file(GLOB_RECURSE qt_widgets_headers "${qt_widgets_root}/qt_widgets/*.h")
 
+file(GLOB_RECURSE vx_sources "${vx_root}/src/vx/*")
+file(GLOB_RECURSE vx_headers "${vx_root}/src/vx/*.h")
+nx_find_files(vx_uis "${vx_root}/src/vx" "ui")
+qt6_wrap_ui(vx_uics ${vx_uis})
+
+file(GLOB_RECURSE VX_AUDIO_FILES CONFIGURE_DEPENDS ${vx_root}/resources/*)
+set_source_files_properties(${VX_AUDIO_FILES}
+        PROPERTIES RESOURCE_BASE_DIR "${vx_root}/resources")
+
 set(qt_images_root "${open_source_root}/artifacts/qt_images/src")
 nx_find_files(qt_images_sources "${qt_images_root}/qt_images" "cpp")
 nx_find_files(qt_images_headers "${qt_images_root}/qt_images" "h")
@@ -90,6 +99,8 @@ nx_add_target(nx_vms_client_desktop LIBRARY
         ${qt_styles_sources}
         ${qt_widgets_sources}
         ${qt_images_sources}
+        ${vx_sources}
+        ${vx_uics}
     ADDITIONAL_RESOURCES
         "${customization_dir}/license.html"
         "${update_verification_keys}"
@@ -97,6 +108,7 @@ nx_add_target(nx_vms_client_desktop LIBRARY
         "${client_font_roboto_regular}"
         "${QML_FILES}"
         "${SHADER_FILES}"
+        "${VX_AUDIO_FILES}"
     ADDITIONAL_MOCABLES
         src/nx/vms/client/desktop/system_administration/widgets/analytics_settings_widget.cpp
         src/nx/vms/client/desktop/ui/common/global_tool_tip.cpp
@@ -105,6 +117,7 @@ nx_add_target(nx_vms_client_desktop LIBRARY
         ${qt_styles_headers}
         ${qt_widgets_headers}
         ${qt_imagess_headers}
+        ${vx_headers}
     OTHER_SOURCES
         ${QML_FILES}
         ${SHADER_FILES}
@@ -114,6 +127,7 @@ nx_add_target(nx_vms_client_desktop LIBRARY
         Qt6::Xml Qt6::Multimedia Qt6::Concurrent
         Qt6::WebEngineQuick
         Qt6::WebEngineWidgets
+	Qt6::Test
         nx_vms_client_core
         nx_speech_synthesizer
         nx_audio
@@ -198,6 +212,7 @@ target_include_directories(nx_vms_client_desktop
     PRIVATE ${qt_styles_root}
     PRIVATE ${qt_widgets_root}
     PRIVATE ${qt_images_root}
+    PRIVATE ${vx_root}/src
 )
 
 if(WINDOWS)

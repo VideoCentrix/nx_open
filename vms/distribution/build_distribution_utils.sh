@@ -100,7 +100,7 @@ distrib_onExit()
     if [ -s "$distrib_STDERR_FILE" ] #< Whether the file exists and is not empty.
     then
         echo ""
-        python3 -c 'print("-" * 99)' #< Print separator.
+        "$PYTHON" -c 'print("-" * 99)' #< Print separator.
         echo "- stderr"
         echo ""
         cat "$distrib_STDERR_FILE" #< Copy accumulated stderr to the log file.

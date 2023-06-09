@@ -64,6 +64,7 @@ protected:
 
     QHash<QString, BaseProperty*> properties() const;
 
+public:
     void loadProperty(BaseProperty* property);
     void saveProperty(BaseProperty* property);
 
