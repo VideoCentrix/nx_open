@@ -14,10 +14,10 @@ string(CONCAT installSystemRequirementsDoc
     "This option does only work in an interactive shell.")
 option(installSystemRequirements ${installSystemRequirementsDoc} OFF)
 # Due to security reasons `installSystemRequirements` should be reset to OFF after every CMake run.
-cmake_language(DEFER
-    DIRECTORY ${CMAKE_SOURCE_DIR}
-    CALL set installSystemRequirements OFF CACHE BOOL ${installSystemRequirementsDoc} FORCE
-)
+# cmake_language(DEFER
+#     DIRECTORY ${CMAKE_SOURCE_DIR}
+#     CALL set installSystemRequirements OFF CACHE BOOL ${installSystemRequirementsDoc} FORCE
+# )
 
 function(nx_init_conan)
     find_program(CONAN_EXECUTABLE NAMES conan NO_CMAKE_SYSTEM_PATH NO_CMAKE_PATH)
