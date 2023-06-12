@@ -122,7 +122,7 @@ function(nx_run_conan)
         "set(ENV{CONAN_USER_HOME} $ENV{CONAN_USER_HOME})"
         "execute_process("
         "    COMMAND"
-        "        ${CONAN_EXECUTABLE} install ${CMAKE_SOURCE_DIR}"
+        "        ${CONAN_EXECUTABLE} install ${open_source_root}"
         "        --install-folder ${CMAKE_BINARY_DIR}"
         ${flags}
         @raw_flags@
