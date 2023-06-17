@@ -96,6 +96,8 @@
 #include <utils/common/delayed.h>
 #include <utils/common/event_processors.h>
 
+#include <vx/client/hooks/handler_registration.h>
+
 #ifdef Q_OS_WIN
     #include <nx/vms/client/desktop/platforms/windows/gdi_win.h>
 #endif
@@ -299,6 +301,8 @@ MainWindow::MainWindow(WindowContext* context, QWidget* parent, Qt::WindowFlags 
 
     /* Set up watchers. */
     workbenchContext()->instance<QnWorkbenchUserInactivityWatcher>()->setMainWindow(this);
+
+    vx::registerHandlers(context);
 
     const auto updateTimeMode =
         []()

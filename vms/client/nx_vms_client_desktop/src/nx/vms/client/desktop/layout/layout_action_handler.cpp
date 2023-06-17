@@ -80,8 +80,6 @@ using namespace nx::vms::common::system_health;
 
 namespace nx::vms::client::desktop {
 
-namespace {
-
 /**
  * @brief alreadyExistingLayouts    Check if layouts with same name already exist.
  * @param name                      Suggested new name.
@@ -109,6 +107,8 @@ core::LayoutResourceList alreadyExistingLayouts(
     }
     return result;
 }
+
+namespace {
 
 QSet<QnResourcePtr> localLayoutResources(QnResourcePool* resourcePool,
     const common::LayoutItemDataMap& items)

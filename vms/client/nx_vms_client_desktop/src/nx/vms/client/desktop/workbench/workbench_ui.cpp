@@ -68,6 +68,8 @@
 #include <ui/workbench/workbench_ui_globals.h>
 #include <utils/common/event_processors.h>
 
+#include <vx/client/resource/resource_properties.h>
+
 #include "panels/calendar_workbench_panel.h"
 #include "panels/notifications_workbench_panel.h"
 #include "panels/resource_tree_workbench_panel.h"
@@ -581,7 +583,8 @@ void WorkbenchUi::updateControlsVisibility(bool animate)
         return;
     }
 
-    const bool notificationsAllowed = !system()->user().isNull();
+    const bool notificationsAllowed = !system()->user().isNull() &&
+        (layout ? !vx::ResourceProperties::isMonitoringLayout(layout->resource()) : true);
 
     if (m_inactive)
     {

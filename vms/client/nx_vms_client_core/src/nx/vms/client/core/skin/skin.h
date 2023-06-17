@@ -186,4 +186,4 @@ NX_DECLARE_COLORIZED_ICON(kAlertIcon, "20x20/Solid/alert2.svg", \
 
 } // namespace nx::vms::client::core
 
-#define qnSkin (nx::vms::client::core::Skin::instance())
+#define qnSkin (::nx::vms::client::core::Skin::instance())

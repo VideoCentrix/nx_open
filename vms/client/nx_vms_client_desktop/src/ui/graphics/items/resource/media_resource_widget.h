@@ -42,6 +42,10 @@ using QnMetaDataV1Ptr = std::shared_ptr<QnMetaDataV1>;
 
 namespace nx::vms::client::core { class RecordingStatusHelper; }
 
+namespace vx {
+class MonitoringResourceWidgetBase;
+}
+
 namespace nx::vms::client::desktop {
 
 class VoiceSpectrumPainter;
@@ -393,6 +397,8 @@ private slots:
     void updateAnalyticsAndHud();
 
 private:
+    friend class vx::MonitoringResourceWidgetBase;
+
     void handleItemDataChanged(const nx::Uuid& id, int role, const QVariant& data);
     void handleDewarpingParamsChanged();
 

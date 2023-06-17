@@ -17,6 +17,7 @@
 #include <nx/vms/client/desktop/resource/resource_access_manager.h>
 #include <nx/vms/client/desktop/system_context.h>
 #include <nx/vms/client/desktop/workbench/workbench.h>
+#include <vx/client/hooks/action_hooks.h>
 
 #include "action_manager.h"
 #include "action_parameter_types.h"
@@ -322,6 +323,13 @@ ActionVisibility Action::checkCondition(ActionScopes scope, const Parameters& pa
                 return InvisibleAction;
         }
     }
+
+    Parameters parametersCopy = parameters;
+    if (parametersCopy.scope() == InvalidScope)
+        parametersCopy.setScope(scope);
+
+    if (auto result = vx::overrideActionVisibility(m_id, parametersCopy, context()))
+        return *result;
 
     if (hasCondition())
     {
