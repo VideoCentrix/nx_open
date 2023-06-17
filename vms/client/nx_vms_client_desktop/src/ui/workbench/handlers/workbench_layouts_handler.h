@@ -20,6 +20,12 @@ struct StreamSynchronizationState;
 namespace ui {
 namespace workbench {
 
+LayoutResourceList alreadyExistingLayouts(
+    QnResourcePool* resourcePool,
+    const QString& name,
+    const nx::Uuid& parentId,
+    const LayoutResourcePtr& layout = LayoutResourcePtr());
+
 class LayoutsHandler: public QObject, public QnSessionAwareDelegate
 {
     Q_OBJECT

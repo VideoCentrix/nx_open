@@ -41,6 +41,13 @@ struct BarDescription
     /** Pointer to property from MessageBarSettings to check, if banner should be shown or not. */
     PropertyPointer isEnabledProperty;
     bool operator==(const BarDescription&) const = default;
+
+    static inline BarDescription error(const QString &text) {
+        BarDescription result;
+        result.level = BarLevel::Error;
+        result.text = text;
+        return result;
+    }
 };
 
 /**

@@ -176,11 +176,11 @@ inline void setLevelReducerEnabled(bool value)
 #define NX_UTILS_LOG_MESSAGE(LEVEL, TAG, ...) do \
 { \
     struct ScopeTag{}; /*< Used by NX_SCOPE_TAG to get scope from demangled type_info::name(). */ \
-    if ((LEVEL) <= nx::log::maxLevel()) \
+    if ((LEVEL) <= ::nx::log::maxLevel()) \
     { \
         const auto systemErrorBak = SystemError::getLastOSErrorCode(); \
-        static nx::log::detail::LevelReducer levelReducer(LEVEL); \
-        if (auto helper = nx::log::detail::Helper(&levelReducer, (TAG))) \
+        static ::nx::log::detail::LevelReducer levelReducer(LEVEL); \
+        if (auto helper = ::nx::log::detail::Helper(&levelReducer, (TAG))) \
             helper.log(::nx::format(__VA_ARGS__)); \
         SystemError::setLastErrorCode(systemErrorBak); \
     } \
@@ -190,10 +190,10 @@ inline void setLevelReducerEnabled(bool value)
     for (auto stream = \
             [&]() \
             { \
-                if ((LEVEL) > nx::log::maxLevel()) \
-                    return nx::log::detail::Stream(); \
-                static nx::log::detail::LevelReducer levelReducer(LEVEL); \
-                return nx::log::detail::Stream(&levelReducer, (TAG));  \
+                if ((LEVEL) > ::nx::log::maxLevel()) \
+                    return ::nx::log::detail::Stream(); \
+                static ::nx::log::detail::LevelReducer levelReducer(LEVEL); \
+                return ::nx::log::detail::Stream(&levelReducer, (TAG));  \
             }(); \
         stream; stream.flush()) \
             stream /* <<... */
@@ -244,7 +244,7 @@ inline void setLevelReducerEnabled(bool value)
  *     NX_ERROR(this, "Connection to the DB has been lost: %1", err);
  * </code></pre>
  */
-#define NX_ERROR(...) NX_UTILS_LOG(nx::log::Level::error, __VA_ARGS__)
+#define NX_ERROR(...) NX_UTILS_LOG(::nx::log::Level::error, __VA_ARGS__)
 
 /**
  * Prints a non-critical error/warning that may cause issues with limited impact. The message text
@@ -255,7 +255,7 @@ inline void setLevelReducerEnabled(bool value)
  *     NX_WARNING(this, "Camera %1 went offline", camera->id());
  * </code></pre>
  */
-#define NX_WARNING(...) NX_UTILS_LOG(nx::log::Level::warning, __VA_ARGS__)
+#define NX_WARNING(...) NX_UTILS_LOG(::nx::log::Level::warning, __VA_ARGS__)
 
 /**
  * Prints an information message about the service's state. The number of such messages must not be
@@ -266,7 +266,7 @@ inline void setLevelReducerEnabled(bool value)
  *     NX_INFO(this, "Bound to https port %1 and listening", server->port());
  * </code></pre>
  */
-#define NX_INFO(...) NX_UTILS_LOG(nx::log::Level::info, __VA_ARGS__)
+#define NX_INFO(...) NX_UTILS_LOG(::nx::log::Level::info, __VA_ARGS__)
 
 /**
  * Prints a message that is useful for understanding how a service is operating. Some examples are:
@@ -285,7 +285,7 @@ inline void setLevelReducerEnabled(bool value)
  *     NX_DEBUG(this, "User %1 added to a system %2 with role %3", username, systemId, role);
  * </code></pre>
  */
-#define NX_DEBUG(...) NX_UTILS_LOG(nx::log::Level::debug, __VA_ARGS__)
+#define NX_DEBUG(...) NX_UTILS_LOG(::nx::log::Level::debug, __VA_ARGS__)
 
 /**
  * Prints a message that is helpful to a developer for understanding the details of a service
@@ -307,7 +307,7 @@ inline void setLevelReducerEnabled(bool value)
  *         response.headers.size(), connection->getForeignAddress());
  * </code></pre>
  */
-#define NX_VERBOSE(...) NX_UTILS_LOG(nx::log::Level::verbose, __VA_ARGS__)
+#define NX_VERBOSE(...) NX_UTILS_LOG(::nx::log::Level::verbose, __VA_ARGS__)
 
 /**
  * Prints a message with very low-level information.
@@ -334,9 +334,9 @@ inline void setLevelReducerEnabled(bool value)
  *     NX_TRACE(this, "Read %1 bytes out of %2 requested", result, size);
  * </code></pre>
  */
-#define NX_TRACE(...) NX_UTILS_LOG(nx::log::Level::trace, __VA_ARGS__)
+#define NX_TRACE(...) NX_UTILS_LOG(::nx::log::Level::trace, __VA_ARGS__)
 
 /** Use as a logging tag in functions without "this". */
-#define NX_SCOPE_TAG nx::log::Tag(nx::scopeOfFunction(typeid(ScopeTag), __FUNCTION__))
+#define NX_SCOPE_TAG ::nx::log::Tag(::nx::scopeOfFunction(typeid(ScopeTag), __FUNCTION__))
 
 } // namespace nx::log

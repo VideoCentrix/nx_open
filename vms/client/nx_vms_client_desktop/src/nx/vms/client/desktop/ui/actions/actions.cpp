@@ -25,6 +25,7 @@
 #include <nx/vms/client/desktop/ui/actions/menu_factory.h>
 #include <nx/vms/client/desktop/workbench/timeline/timeline_actions_factory.h>
 #include <ui/workbench/workbench_layout.h>
+#include <vx/client/hooks/action_registration.h>
 
 #include "actions.h"
 
@@ -405,6 +406,8 @@ void initialize(Manager* manager, Action* root)
         .condition(
             ConditionWrapper(new NewUserLayoutCondition())
         );
+
+    vx::registerNewMonitoringLayoutAction(factory);
 
     factory(OpenCurrentUserLayoutMenu)
         .flags(TitleBar | SingleTarget | NoTarget)
@@ -2287,6 +2290,8 @@ void initialize(Manager* manager, Action* root)
             .condition(ConditionWrapper(new RequiresAdministratorCondition()));
     }
     factory.endSubMenu();
+
+    vx::registerDebugVxActions(factory);
 
     // -- Developer mode actions end. Please do not add real actions afterwards.
 }

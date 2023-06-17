@@ -40,6 +40,10 @@
 struct QnMetaDataV1;
 using QnMetaDataV1Ptr = std::shared_ptr<QnMetaDataV1>;
 
+namespace vx {
+class MonitoringResourceWidgetBase;
+}
+
 namespace nx::vms::client::desktop {
 
 class ObjectTrackingButtonController;
@@ -390,6 +394,8 @@ private slots:
         nx::vms::client::core::SoftwareTriggersWatcher::TriggerFields fields);
 
 private:
+    friend class vx::MonitoringResourceWidgetBase;
+
     void handleItemDataChanged(const nx::Uuid& id, Qn::ItemDataRole role, const QVariant& data);
     void handleDewarpingParamsChanged();
 

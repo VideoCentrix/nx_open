@@ -98,4 +98,4 @@ private:
 
 } // namespace nx::vms::client::core
 
-#define qnSkin (nx::vms::client::core::Skin::instance())
+#define qnSkin (::nx::vms::client::core::Skin::instance())

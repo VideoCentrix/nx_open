@@ -23,6 +23,7 @@
 #include <ui/workbench/workbench_context.h>
 #include <ui/workbench/workbench_display.h> // TODO: this one does not belong here.
 #include <ui/workbench/workbench_layout.h>
+#include <vx/client/hooks/action_hooks.h>
 
 namespace nx::vms::client::desktop {
 namespace ui {
@@ -314,15 +315,16 @@ ActionVisibility Action::checkCondition(ActionScopes scope, const Parameters& pa
         }
     }
 
+    Parameters parametersCopy = parameters;
+    if (parametersCopy.scope() == InvalidScope)
+        parametersCopy.setScope(scope);
+
+    if (auto result = vx::overrideActionVisibility(m_id, parametersCopy, context()))
+        return *result;
+
     if (hasCondition())
     {
-        if (parameters.scope() == InvalidScope)
-        {
-            Parameters scopedParameters(parameters);
-            scopedParameters.setScope(scope);
-            return m_condition->check(scopedParameters, context());
-        }
-        return m_condition->check(parameters, context());
+        return m_condition->check(parametersCopy, context());
     }
 
     return EnabledAction;

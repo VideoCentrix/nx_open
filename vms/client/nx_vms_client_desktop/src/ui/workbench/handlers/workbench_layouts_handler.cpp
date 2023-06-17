@@ -80,8 +80,6 @@ namespace nx::vms::client::desktop {
 namespace ui {
 namespace workbench {
 
-namespace {
-
 /**
  * @brief alreadyExistingLayouts    Check if layouts with same name already exist.
  * @param name                      Suggested new name.
@@ -93,7 +91,7 @@ LayoutResourceList alreadyExistingLayouts(
     QnResourcePool* resourcePool,
     const QString& name,
     const nx::Uuid& parentId,
-    const LayoutResourcePtr& layout = LayoutResourcePtr())
+    const LayoutResourcePtr& layout)
 {
     LayoutResourceList result;
     for (const auto& existingLayout:
@@ -109,6 +107,8 @@ LayoutResourceList alreadyExistingLayouts(
     }
     return result;
 }
+
+namespace {
 
 QSet<QnResourcePtr> localLayoutResources(QnResourcePool* resourcePool,
     const common::LayoutItemDataMap& items)

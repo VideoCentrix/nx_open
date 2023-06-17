@@ -2793,6 +2793,12 @@ void ActionHandler::at_createZoomWindowAction_triggered() {
     addParams.displayRoi = widget->item()->displayRoi();
     addParams.displayAnalyticsObjects = widget->item()->displayAnalyticsObjects();
     addParams.displayHotspots = widget->item()->displayHotspots();
+
+    action::Parameters actionParams = action::Parameters(widget->resource()->toResourcePtr())
+        .withArgument(Qn::LayoutResourceRole, workbench()->currentLayoutResource());
+    if (!menu()->canTrigger(action::OpenInLayoutAction, actionParams))
+        return; // TODO(elric): gdm will implement this one properly, merge the fix from master.
+
     addToLayout(
         workbench()->currentLayoutResource(),
         widget->resource()->toResourcePtr(),

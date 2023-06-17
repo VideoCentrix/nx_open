@@ -1086,6 +1086,11 @@ enum IDType
     NewUserLayoutAction,
 
     /**
+     * Opens a monitoring layout creation dialog.
+     */
+    NewMonitoringLayoutAction,
+
+    /**
      * Sets spacing of current layout's cells to None.
      */
     SetCurrentLayoutItemSpacingNoneAction,
@@ -1314,6 +1319,8 @@ enum IDType
      * Opens up debug control panel.
      */
     DebugControlPanelAction,
+
+    DebugVxAction,
 
     /**
      * Opens the Audit Log dialog.
