@@ -21,6 +21,7 @@
 #include <nx/vms/rules/engine.h>
 #include <nx/vms/rules/ini.h>
 #include <ui/workbench/workbench_layout.h>
+#include <vx/client/hooks/action_registration.h>
 
 #include "action.h"
 #include "action_conditions.h"
@@ -460,6 +461,8 @@ void initialize(Manager* manager, Action* root)
         .condition(
             ConditionWrapper(new NewUserLayoutCondition())
         );
+
+    vx::registerNewMonitoringLayoutAction(factory);
 
     factory(OpenCurrentUserLayoutMenu)
         .flags(TitleBar | SingleTarget | NoTarget)
@@ -2424,6 +2427,8 @@ void initialize(Manager* manager, Action* root)
             .condition(ConditionWrapper(new RequiresAdministratorCondition()));
     }
     factory.endSubMenu();
+
+    vx::registerDebugVxActions(factory);
 
     // -- Developer mode actions end. Please do not add real actions afterwards.
 }
