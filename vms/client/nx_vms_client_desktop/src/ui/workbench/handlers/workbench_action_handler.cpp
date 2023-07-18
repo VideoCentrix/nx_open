@@ -180,6 +180,7 @@
 #include <utils/connection_diagnostics_helper.h>
 #include <utils/email/email.h>
 #include <utils/unity_launcher_workaround.h>
+#include <vx/client/hooks/action_hooks.h>
 
 #if defined(Q_OS_MACOS)
     #include <utils/mac_utils.h>
@@ -1778,8 +1779,10 @@ void ActionHandler::at_dropResourcesAction_triggered()
         {
             if (parameters.widgets().isEmpty()) //< Triggered by resources tree view
                 parameters.setResources(resources);
-            if (!menu()->triggerIfPossible(menu::OpenInCurrentLayoutAction, parameters))
-                menu()->triggerIfPossible(menu::OpenInNewTabAction, parameters);
+
+            if (!vx::overrideDropIntoCurrentLayoutAction(parameters, context()))
+                if (!menu()->triggerIfPossible(menu::OpenInCurrentLayoutAction, parameters))
+                    menu()->triggerIfPossible(menu::OpenInNewTabAction, parameters);
         }
 
         if (!layouts.empty())
