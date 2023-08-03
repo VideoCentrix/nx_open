@@ -150,7 +150,7 @@ public:
     /**
      * Established p2p connection (if any).
      */
-    ec2::AbstractECConnectionPtr messageBusConnection() const;
+    virtual ec2::AbstractECConnectionPtr messageBusConnection() const override;
 
     /** Message processor, cast to actual class. */
     QnClientMessageProcessor* clientMessageProcessor() const;
