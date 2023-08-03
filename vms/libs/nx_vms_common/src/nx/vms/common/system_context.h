@@ -145,7 +145,7 @@ public:
     /**
      * Interface for the Message Bus connection.
      */
-    std::shared_ptr<ec2::AbstractECConnection> messageBusConnection() const;
+    virtual std::shared_ptr<ec2::AbstractECConnection> messageBusConnection() const;
 
     /**
      * Return current connection credentials. Actual only for client-side contexts only.
