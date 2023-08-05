@@ -73,7 +73,7 @@ private:
 
     void convertLayoutToShared(const LayoutResourcePtr& layout);
 
-    void removeLayoutItems(const LayoutItemIndexList& items, bool autoSave);
+    void removeLayoutItems(const LayoutItemIndexList& items, bool autoSave, bool force);
 
     struct LayoutChange
     {
