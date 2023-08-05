@@ -699,9 +699,9 @@ void LayoutActionHandler::convertLayoutToShared(const core::LayoutResourcePtr& l
     menu()->trigger(menu::SelectNewItemAction, layout);
 }
 
-void LayoutActionHandler::removeLayoutItems(const LayoutItemIndexList& items, bool autoSave)
+void LayoutActionHandler::removeLayoutItems(const LayoutItemIndexList& items, bool autoSave, bool force)
 {
-    if (items.size() > 1)
+    if (items.size() > 1 && !force)
     {
         const auto layout = items.first().layout();
         const bool isShowreel = isShowreelReviewLayout(layout);
@@ -1121,13 +1121,14 @@ void LayoutActionHandler::at_openNewTabAction_triggered()
 
 void LayoutActionHandler::at_removeLayoutItemAction_triggered()
 {
-    removeLayoutItems(menu()->currentParameters(sender()).layoutItems(), true);
+    auto params = menu()->currentParameters(sender());
+    removeLayoutItems(params.layoutItems(), true, params.argument(Qn::ForceRole, false));
 }
 
 void LayoutActionHandler::at_removeLayoutItemFromSceneAction_triggered()
 {
-    const auto layoutItems = menu()->currentParameters(sender()).layoutItems();
-    removeLayoutItems(layoutItems, false);
+    auto params = menu()->currentParameters(sender());
+    removeLayoutItems(params.layoutItems(), false, params.argument(Qn::ForceRole, false));
 }
 
 void LayoutActionHandler::at_openInNewTabAction_triggered()
