@@ -13,6 +13,10 @@
 class QnWorkbenchLayout;
 typedef QList<QnWorkbenchLayout *> QnWorkbenchLayoutList;
 
+namespace vx {
+class MonitoringActionHandler;
+} // namespace vx
+
 namespace nx::vms::client::desktop {
 
 struct StreamSynchronizationState;
@@ -108,6 +112,8 @@ private:
         const StreamSynchronizationState& playbackState);
 
     QString generateUniqueLayoutName(const QnUserResourcePtr& user) const;
+
+    friend class vx::MonitoringActionHandler;
 };
 
 } // namespace workbench
