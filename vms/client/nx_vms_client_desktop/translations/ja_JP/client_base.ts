@@ -71,7 +71,7 @@
     </message>
     <message>
       <source>Installation completed</source>
-      <translation>インストール終了</translation>
+      <translation>インストール完了</translation>
     </message>
     <message>
       <source>Getting update information from the server</source>
@@ -114,7 +114,7 @@
     </message>
     <message>
       <source>Control Video Wall</source>
-      <translation>ビデオウォールコントロール</translation>
+      <translation>ビデオウォールの制御</translation>
     </message>
     <message>
       <source>Push my screen</source>
@@ -653,7 +653,7 @@
     </message>
     <message>
       <source>Close All But This</source>
-      <translation>全てを閉じる</translation>
+      <translation>これ以外をすべて閉じる</translation>
     </message>
     <message>
       <source>Play</source>
@@ -1163,7 +1163,7 @@
     </message>
     <message>
       <source>All Files</source>
-      <translation>全てのファイル</translation>
+      <translation>すべてのファイル</translation>
     </message>
   </context>
   <context>
@@ -1662,7 +1662,7 @@ License Key: %2</source>
     <name>Ptz</name>
     <message>
       <source>Cannot get the current position from camera &quot;%1&quot;</source>
-      <translation>カメラから現在位置を取得できません&quot;%1&quot;</translation>
+      <translation>カメラ &quot;%1&quot; から現在のポジションを取得できません</translation>
     </message>
     <message>
       <source>Please wait for the camera to go online.</source>
@@ -1670,15 +1670,15 @@ License Key: %2</source>
     </message>
     <message>
       <source>Failed to get current position</source>
-      <translation>現在の位置の取得に失敗しました</translation>
+      <translation>現在のポジションの取得に失敗しました</translation>
     </message>
     <message>
       <source>Cannot set the current position for camera &quot;%1&quot;</source>
-      <translation>カメラの現在位置を設定できません&quot;%1&quot;</translation>
+      <translation>カメラ &quot;%1&quot; のポジションを設定できません</translation>
     </message>
     <message>
       <source>Failed to set current position</source>
-      <translation>現在の位置の設定に失敗しました</translation>
+      <translation>ポジションの設定に失敗しました</translation>
     </message>
     <message>
       <source>Preset used by some tours. Delete it anyway?</source>
@@ -1920,7 +1920,7 @@ License Key: %2</source>
     </message>
     <message>
       <source>Select All</source>
-      <translation>全て選択</translation>
+      <translation>すべて選択</translation>
     </message>
     <message>
       <source>Export selected records to a file</source>
@@ -2308,15 +2308,15 @@ License Key: %2</source>
     </message>
     <message>
       <source>Stops</source>
-      <translation>停止</translation>
+      <translation>停止時</translation>
     </message>
     <message>
       <source>Starts</source>
-      <translation>開始</translation>
+      <translation>開始時</translation>
     </message>
     <message>
       <source>Occurs</source>
-      <translation>発生</translation>
+      <translation>発生時</translation>
     </message>
     <message>
       <source>N/A</source>
@@ -2448,7 +2448,7 @@ License Key: %2</source>
     </message>
     <message>
       <source>No event rules</source>
-      <translation>イベント ルールなし</translation>
+      <translation>イベントルールがありません</translation>
     </message>
     <message>
       <source>Filter by devices...</source>
@@ -2648,7 +2648,7 @@ License Key: %2</source>
     </message>
     <message>
       <source>Select All</source>
-      <translation>全て選択</translation>
+      <translation>すべて選択</translation>
     </message>
     <message>
       <source>Devices List</source>
@@ -3262,7 +3262,7 @@ to %1</source>
     </message>
     <message>
       <source>Control Video Walls</source>
-      <translation>ビデオウォールコントロール</translation>
+      <translation>ビデオウォールの制御</translation>
     </message>
   </context>
   <context>
@@ -3273,7 +3273,7 @@ to %1</source>
     </message>
     <message>
       <source>All users</source>
-      <translation>全ユーザー</translation>
+      <translation>すべてのユーザー</translation>
     </message>
     <message>
       <source>With enabled digest authentication</source>
@@ -3342,7 +3342,7 @@ to %1</source>
     </message>
     <message>
       <source>Select All</source>
-      <translation>全て選択</translation>
+      <translation>すべて選択</translation>
     </message>
     <message>
       <source>Clear Filter</source>
@@ -3411,7 +3411,7 @@ to %1</source>
     </message>
     <message>
       <source>All users</source>
-      <translation>全ユーザー</translation>
+      <translation>すべてのユーザー</translation>
     </message>
     <message numerus="yes">
       <source>%1 (%n times)</source>
@@ -4136,7 +4136,7 @@ to %1</source>
     <message numerus="yes">
       <source>Set for all %n Cameras</source>
       <translation>
-        <numerusform>全ての %n カメラに設定</numerusform>
+        <numerusform>全 %n カメラに設定</numerusform>
       </translation>
     </message>
     <message>
@@ -4757,11 +4757,11 @@ to %1</source>
     </message>
     <message>
       <source>All Devices</source>
-      <translation>全デバイス</translation>
+      <translation>すべてのデバイス</translation>
     </message>
     <message>
       <source>All Cameras</source>
-      <translation>全カメラ</translation>
+      <translation>すべてのカメラ</translation>
     </message>
     <message>
       <source>Select devices...</source>
@@ -4801,7 +4801,7 @@ to %1</source>
     </message>
     <message>
       <source>All Users</source>
-      <translation>全てのユーザー</translation>
+      <translation>すべてのユーザー</translation>
     </message>
     <message>
       <source>Select Users...</source>
@@ -5063,7 +5063,7 @@ to %1</source>
     </message>
     <message>
       <source>Enable</source>
-      <translation>有効</translation>
+      <translation>有効化</translation>
     </message>
     <message>
       <source>Activate License</source>
@@ -5130,7 +5130,7 @@ to %1</source>
     <name>QnStorageAnalyticsWidget</name>
     <message>
       <source>Select All</source>
-      <translation>全て選択</translation>
+      <translation>すべて選択</translation>
     </message>
     <message>
       <source>Export Selection to File...</source>
@@ -6231,7 +6231,7 @@ We recommend you not to open this web page. If you understand the risks, you can
     </message>
     <message>
       <source>Enter the name of Video Wall to create:</source>
-      <translation>登録するビデオウォールの名前入力:</translation>
+      <translation>作成するビデオウォールの名前を入力してください:</translation>
     </message>
     <message>
       <source>Activate License...</source>
@@ -6808,7 +6808,7 @@ We recommend you not to open this web page. If you understand the risks, you can
     </message>
     <message>
       <source>Control Video Walls</source>
-      <translation>ビデオウォールコントロール</translation>
+      <translation>ビデオウォールの制御</translation>
     </message>
   </context>
   <context>
@@ -7504,7 +7504,7 @@ We recommend you not to open this web page. If you understand the risks, you can
     </message>
     <message>
       <source>Next</source>
-      <translation>次</translation>
+      <translation>次へ</translation>
     </message>
     <message>
       <source>Finish</source>
@@ -7988,7 +7988,7 @@ We recommend you not to open this web page. If you understand the risks, you can
     </message>
     <message>
       <source>Could not connect to server. Video Wall will be closed.</source>
-      <translation>サーバーに接続できませんでした　ビデオウォールが閉じられます</translation>
+      <translation>サーバーに接続できませんでした。ビデオウォールを閉じます。</translation>
     </message>
     <message>
       <source>Could not connect to server. Application will be closed.</source>
@@ -8577,7 +8577,7 @@ We recommend you not to open this web page. If you understand the risks, you can
     </message>
     <message>
       <source>Enable</source>
-      <translation>有効</translation>
+      <translation>有効化</translation>
     </message>
   </context>
   <context>
@@ -9267,7 +9267,7 @@ You can force it, but it may significantly increase CPU load.</source>
     </message>
     <message>
       <source>Cancel update and delete all downloaded data?</source>
-      <translation>更新をキャンセルしてダウンロードしたデータをすべて削除しますか？</translation>
+      <translation>更新をキャンセルし、ダウンロードしたすべてのデータを削除しますか？</translation>
     </message>
     <message>
       <source>OS versions of some components are no longer supported. Please remove them from the System or update their OS to a supported version.</source>
@@ -9371,7 +9371,7 @@ You can force it, but it may significantly increase CPU load.</source>
     </message>
     <message>
       <source>Download &amp;&amp; Install</source>
-      <translation>ダウンロードとインストール</translation>
+      <translation>ダウンロードしてインストール</translation>
     </message>
     <message>
       <source>Browse for Another File...</source>
@@ -10535,7 +10535,7 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     </message>
     <message>
       <source>Replaced camera discovered</source>
-      <translation>交換されたカメラが見つかりました</translation>
+      <translation>交換済みのカメラが検出されました</translation>
     </message>
     <message>
       <source>Camera %1 has been replaced by %2.</source>
@@ -10543,7 +10543,7 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     </message>
     <message>
       <source>Click on the &quot;Undo Replace&quot; button to continue using two devices.</source>
-      <translation>2つのデバイスを引き続き使用するに、&quot;交換を元に戻す&quot; ボタンをクリックしてください。</translation>
+      <translation>2つのデバイスを引き続き使用するには、&quot;交換を元に戻す&quot; ボタンをクリックしてください。</translation>
     </message>
     <message>
       <source>Undo Replace</source>
@@ -10857,7 +10857,7 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     <name>nx::vms::client::desktop::UserListWidget</name>
     <message>
       <source>Enable</source>
-      <translation>有効</translation>
+      <translation>有効化</translation>
     </message>
     <message>
       <source>Disable</source>
@@ -10873,7 +10873,7 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     </message>
     <message>
       <source>All Users</source>
-      <translation>全てのユーザー</translation>
+      <translation>すべてのユーザー</translation>
     </message>
     <message>
       <source>Users with Digest Authentication</source>
@@ -11322,11 +11322,11 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     </message>
     <message>
       <source>Starts</source>
-      <translation>開始</translation>
+      <translation>開始時</translation>
     </message>
     <message>
       <source>Stops</source>
-      <translation>停止</translation>
+      <translation>停止時</translation>
     </message>
     <message>
       <source>Instant</source>
@@ -11453,7 +11453,7 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     <name>nx::vms::client::desktop::ui::SubjectSelectionDialog</name>
     <message>
       <source>All Users</source>
-      <translation>全てのユーザー</translation>
+      <translation>すべてのユーザー</translation>
     </message>
     <message>
       <source>Users</source>
@@ -11531,7 +11531,7 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     <name>nx::vms::client::desktop::ui::dialogs::LicenseDeactivationReason</name>
     <message>
       <source>Next</source>
-      <translation>次</translation>
+      <translation>次へ</translation>
     </message>
     <message>
       <source>Name is necessary</source>
@@ -11653,7 +11653,7 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     </message>
     <message>
       <source>All Supported</source>
-      <translation>すべてサポート</translation>
+      <translation>サポートされているすべて</translation>
     </message>
     <message>
       <source>Too short period selected</source>
@@ -11790,7 +11790,7 @@ You can select another storage location in the &quot;Storage Management&quot; ta
     </message>
     <message>
       <source>Undo replacement completed successfully!</source>
-      <translation>交換の差し戻しが正常に完了しました!</translation>
+      <translation>交換の取り消しが正常に完了しました!</translation>
     </message>
     <message>
       <source>Some settings may not be transferred from the replaced camera due to compatibility issues.</source>
@@ -11798,7 +11798,7 @@ You can select another storage location in the &quot;Storage Management&quot; ta
     </message>
     <message>
       <source>Confirm undo replacement?</source>
-      <translation>置換を元に戻しますか？</translation>
+      <translation>交換を元に戻してもよろしいですか?</translation>
     </message>
     <message>
       <source>Select Folder...</source>

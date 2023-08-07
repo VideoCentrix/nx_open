@@ -427,7 +427,7 @@
     </message>
     <message>
       <source>Could not allocate output stream for recording.</source>
-      <translation>録画用の出力ストリームを割り当てることができません。</translation>
+      <translation>録画用の出力ストリームを割り当てることができませんでした。</translation>
     </message>
     <message>
       <source>Could not perform direct stream copy because frame size is undefined.</source>
@@ -580,7 +580,7 @@
     <message numerus="yes">
       <source>%n Analog Encoder Licenses</source>
       <translation>
-        <numerusform>%n アナログ エンコーダー ライセンス</numerusform>
+        <numerusform>%n アナログエンコーダーライセンス</numerusform>
       </translation>
     </message>
     <message numerus="yes">
@@ -1617,15 +1617,15 @@
     </message>
     <message>
       <source>Could not allocate output stream for recording.</source>
-      <translation>録画用の出力ストリームを割り当てることができません。</translation>
+      <translation>録画用の出力ストリームを割り当てることができませんでした。</translation>
     </message>
     <message>
       <source>Could not allocate output audio stream.</source>
-      <translation>音声出力ストリームを割り当てることができません。</translation>
+      <translation>音声出力ストリームを割り当てることができませんでした。</translation>
     </message>
     <message>
       <source>Could not allocate output metadata stream.</source>
-      <translation>メタデータ出力ストリームを割り当てられませんでした。</translation>
+      <translation>メタデータ出力ストリームを割り当てることができませんでした。</translation>
     </message>
     <message>
       <source>Invalid audio codec information.</source>
@@ -1967,7 +1967,7 @@
     </message>
     <message>
       <source>System disk &quot;%1&quot; is almost full.</source>
-      <translation>システムディスク&quot;%1&quot; がほぼいっぱいです。</translation>
+      <translation>システムディスク &quot;%1&quot; の空き容量が少なくなっています。</translation>
     </message>
     <message>
       <source>start</source>
@@ -2011,7 +2011,7 @@
     </message>
     <message>
       <source>All Users</source>
-      <translation>全てのユーザー</translation>
+      <translation>すべてのユーザー</translation>
     </message>
     <message>
       <source>Select at least one user</source>
@@ -2076,7 +2076,7 @@
     </message>
     <message>
       <source>Analytics storage &quot;%1&quot; is almost full.</source>
-      <translation>分析ストレージ &quot;%1&quot; は容量が不足しかけています。</translation>
+      <translation>分析ストレージ &quot;%1&quot; の空き容量が少なくなっています。</translation>
     </message>
     <message>
       <source>Plugin Diagnostic Event</source>

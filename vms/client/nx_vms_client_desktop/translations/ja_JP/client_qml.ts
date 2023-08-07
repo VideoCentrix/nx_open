@@ -589,7 +589,7 @@
     </message>
     <message>
       <source>Next</source>
-      <translation>次</translation>
+      <translation>次へ</translation>
     </message>
   </context>
   <context>
@@ -862,7 +862,7 @@
     </message>
     <message>
       <source>Next</source>
-      <translation>次</translation>
+      <translation>次へ</translation>
     </message>
   </context>
   <context>
@@ -980,7 +980,7 @@ PTZを行います</translation>
     </message>
     <message>
       <source>All Types</source>
-      <translation>全てのタイプ</translation>
+      <translation>すべてのタイプ</translation>
     </message>
     <message>
       <source>Servers</source>
@@ -1156,7 +1156,7 @@ PTZを行います</translation>
     </message>
     <message>
       <source>Enable</source>
-      <translation>有効</translation>
+      <translation>有効化</translation>
     </message>
     <message>
       <source>Activate License</source>
@@ -1181,7 +1181,7 @@ PTZを行います</translation>
     <message numerus="yes">
       <source>Set for all %n Cameras</source>
       <translation>
-        <numerusform>全ての %n カメラに設定</numerusform>
+        <numerusform>全 %n カメラに設定</numerusform>
       </translation>
     </message>
     <message>
@@ -1302,7 +1302,7 @@ PTZを行います</translation>
     <name>TimeSelector</name>
     <message>
       <source>Any time</source>
-      <translation>いつでも</translation>
+      <translation>期間指定なし</translation>
     </message>
     <message>
       <source>Last day</source>

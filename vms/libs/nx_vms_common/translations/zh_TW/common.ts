@@ -342,7 +342,7 @@
     </message>
     <message>
       <source>Please update firmware. Minimal supported version is %1. Current version is %2</source>
-      <translation>請更新韌體. 至少更新到 %1. 目前版本是 %2</translation>
+      <translation>目前版本是 %2，請更新韌體至 %1或以上版本。 </translation>
     </message>
     <message>
       <source>Plugin error. %1</source>
@@ -2232,11 +2232,11 @@
     </message>
     <message>
       <source>Failed to force using camera time, as it lags too much. System time will be used instead.</source>
-      <translation type="unfinished">Failed to force using camera time, as it lags too much. System time will be used instead.</translation>
+      <translation>無法強制使用攝影機時間，因其延遲過久，將改採用系統時間。</translation>
     </message>
     <message>
       <source>Analytics storage &quot;%1&quot; database error: Insufficient permissions on the mount point.</source>
-      <translation type="unfinished">Analytics storage &quot;%1&quot; database error: Insufficient permissions on the mount point.</translation>
+      <translation>分析儲存裝置 &quot;%1&quot; 資料庫錯誤：掛載點權限不足。</translation>
     </message>
     <message>
       <source>Cannot initialize AES encryption while recording is enabled on the media archive. Data is written unencrypted.</source>
