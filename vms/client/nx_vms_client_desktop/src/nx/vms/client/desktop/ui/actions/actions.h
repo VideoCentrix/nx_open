@@ -1089,17 +1089,17 @@ enum IDType
     /**
      * Opens a monitoring layout creation dialog.
      */
-    NewMonitoringLayoutAction,
+    VxNewMonitoringLayoutAction,
 
     /**
      * Opens a new review layout for the provided system id.
      */
-    OpenReviewLayoutAction,
+    VxOpenReviewLayoutAction,
 
     /**
      * Dismisses all alerting from a system, provided a system id.
      */
-    DismissSystemAlertAction,
+    VxDismissSystemAlertAction,
 
     /**
      * Sets spacing of current layout's cells to None.
@@ -1321,7 +1321,7 @@ enum IDType
      */
     DebugControlPanelAction,
 
-    DebugVxAction,
+    VxDebugAction,
 
     /**
      * Opens the Audit Log dialog.
