@@ -1102,6 +1102,11 @@ enum IDType
     VxDismissSystemAlertAction,
 
     /**
+     * Opens location properties dialog.
+     */
+    VxLocationPropertiesAction,
+
+    /**
      * Sets spacing of current layout's cells to None.
      */
     SetCurrentLayoutItemSpacingNoneAction,
