@@ -1201,6 +1201,10 @@ void WorkbenchUi::setTitleUsed(bool used)
     updateControlsVisibility(false);
 }
 
+NotificationsWorkbenchPanel *WorkbenchUi::notificationsPanel() const {
+    return m_notifications.data();
+}
+
 void WorkbenchUi::setTitleOpened(bool opened, bool animate)
 {
     if (m_title)
