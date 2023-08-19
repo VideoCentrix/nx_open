@@ -81,6 +81,10 @@ public:
     /** Returns QQuickWindow for this window (welcome screen, scene or resource browser). */
     QQuickWindow* quickWindow() const;
 
+    WorkbenchUi *workbenchUi() const {
+        return m_ui.get();
+    }
+
 public slots:
     bool handleOpenFile(const QString &message);
 
