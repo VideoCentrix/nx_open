@@ -12,6 +12,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
 
 #include <nx/utils/log/log.h>
 
