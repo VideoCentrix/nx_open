@@ -462,8 +462,6 @@ void initialize(Manager* manager, Action* root)
             ConditionWrapper(new NewUserLayoutCondition())
         );
 
-    vx::registerNewMonitoringLayoutAction(factory);
-
     factory(OpenCurrentUserLayoutMenu)
         .flags(TitleBar | SingleTarget | NoTarget)
         .text(ContextMenu::tr("Open Layout...")) //< To be displayed on button tooltip
@@ -849,6 +847,8 @@ void initialize(Manager* manager, Action* root)
             .requiredPowerUserPermissions()
             .text(ContextMenu::tr("Virtual Camera..."))
             .pulledText(ContextMenu::tr("Add Virtual Camera..."));
+
+        vx::registerNewMonitoringLayoutAction(factory);
     }
     factory.endSubMenu();
 
