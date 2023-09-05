@@ -147,6 +147,7 @@ void CloudCrossSystemManager::Private::setCloudSystems(
     {
         NX_VERBOSE(this, "Cloud system %1 is lost", cloudSystems[systemId].get());
         emit q->systemAboutToBeLost(systemId);
+        auto ctx = std::move(cloudSystems[systemId]); // Destroyed only after signals are emitted.
         cloudSystems.erase(systemId);
         emit q->systemLost(systemId);
     }
