@@ -1338,7 +1338,9 @@ enum IDType
      */
     DebugControlPanelAction,
 
-    VxDebugAction,
+    VxItemDebugAction,
+
+    VxGlobalDebugAction,
 
     /**
      * Opens the Audit Log dialog.
