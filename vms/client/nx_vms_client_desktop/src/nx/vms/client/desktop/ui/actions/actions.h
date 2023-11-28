@@ -736,6 +736,8 @@ enum IDType
      */
     LayoutSettingsAction,
 
+    VxMonitoringLayoutSettingsAction,
+
     /**
      * Opens server settings dialog.
      */
