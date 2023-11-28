@@ -432,12 +432,16 @@ bool QnResource::setUrlUnsafe(const QString& value)
 bool QnResource::setLocalPropertyUnsafe(const QString& key, const QString& value)
 {
     auto [it, added] = m_locallySavedProperties.emplace(key, value);
-    if (!added)
+    if (added)
     {
-        if (it->second == value)
-            return false;
-        it->second = value;
+        emitPropertyChanged(key, QString(), value);
+        return true;
     }
+    if (it->second == value)
+        return false;
+    QString prev = it->second;
+    it->second = value;
+    emitPropertyChanged(key, prev, value);
     return true;
 }
 
