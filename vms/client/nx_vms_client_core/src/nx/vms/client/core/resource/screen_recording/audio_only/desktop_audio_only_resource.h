@@ -6,7 +6,7 @@
 
 namespace nx::vms::client::core {
 
-class DesktopAudioOnlyResource: public DesktopResource
+class NX_VMS_CLIENT_CORE_API DesktopAudioOnlyResource: public DesktopResource
 {
     Q_OBJECT
 
