@@ -20,6 +20,8 @@
 #include "camera_data.h"
 #include "credentials.h"
 
+#undef DeviceCapabilities
+
 namespace nx::vms::api {
 
 struct DeviceGroupSettings
