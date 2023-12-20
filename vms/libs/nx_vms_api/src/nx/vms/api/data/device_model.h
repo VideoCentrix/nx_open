@@ -21,6 +21,8 @@
 #include <nx/vms/api/data/credentials.h>
 #include <nx/vms/api/data/device_profile.h>
 
+#undef DeviceCapabilities
+
 namespace nx::vms::api {
 
 struct DeviceBitrateInfo
