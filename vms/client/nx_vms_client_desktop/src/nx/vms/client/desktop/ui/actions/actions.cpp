@@ -1117,7 +1117,8 @@ void initialize(Manager* manager, Action* root)
         .text(ContextMenu::tr("Open Containing Folder"))
         .condition(new OpenInFolderCondition());
 
-    vx::registerOpenReportLayoutForResourceAction(factory);
+    vx::registerOpenReportLayoutForCameraAction(factory);
+    vx::registerOpenReportLayoutForLocationAction(factory);
 
     factory(IdentifyVideoWallAction)
         .flags(Tree | Scene | SingleTarget | MultiTarget | ResourceTarget | VideoWallItemTarget)
