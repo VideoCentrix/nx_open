@@ -1103,6 +1103,11 @@ enum IDType
     VxOpenReportLayoutForCameraAction,
 
     /**
+     * Opens a report layout for a location.
+     */
+    VxOpenReportLayoutForLocationAction,
+
+    /**
      * Dismisses all alerting from a system, provided a system id.
      */
     VxDismissSystemAlertAction,
