@@ -2586,6 +2586,18 @@ void QnWorkbenchDisplay::showSplashOnResource(
     }
 }
 
+void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const vms::event::AbstractActionPtr &businessAction)
+{
+    const auto callback =
+        [this, resource, level = QnNotificationLevel::valueOf(businessAction)]
+        {
+            showSplashOnResource(resource, level);
+        };
+
+    for (int timeMs = 0; timeMs <= splashTotalLengthMs; timeMs += splashPeriodMs)
+        executeDelayedParented(callback, timeMs, this);
+}
+
 bool QnWorkbenchDisplay::canShowLayoutBackground() const
 {
     if (qnRuntime->isAcsMode())

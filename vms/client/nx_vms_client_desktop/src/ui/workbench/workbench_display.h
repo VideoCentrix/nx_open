@@ -272,6 +272,7 @@ public:
     QTimer* playbackPositionBlinkTimer() const;
 
     void showNotificationSplash(const QnResourceList& resources, QnNotificationLevel::Value level);
+    void showMultiSplashOnResource(const QnResourcePtr &resource, const nx::vms::event::AbstractActionPtr &businessAction);
 
 public slots:
     void fitInView(bool animate);
