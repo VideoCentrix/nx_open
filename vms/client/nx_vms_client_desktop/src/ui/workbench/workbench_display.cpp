@@ -2526,14 +2526,7 @@ void QnWorkbenchDisplay::at_notificationAdded(const vms::event::AbstractActionPt
 
     for (const QnResourcePtr &resource : targetResources)
     {
-        const auto callback =
-            [this, resource, level = QnNotificationLevel::valueOf(businessAction)]
-            {
-                showSplashOnResource(resource, level);
-            };
-
-        for (int timeMs = 0; timeMs <= splashTotalLengthMs; timeMs += splashPeriodMs)
-            executeDelayedParented(callback, timeMs, this);
+        showMultiSplashOnResource(resource, businessAction);
     }
 }
 
@@ -2610,6 +2603,18 @@ void QnWorkbenchDisplay::showSplashOnResource(
         m_scene->addItem(splashItem);
         setLayer(splashItem, QnWorkbenchDisplay::EffectsLayer);
     }
+}
+
+void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const vms::event::AbstractActionPtr &businessAction)
+{
+    const auto callback =
+        [this, resource, level = QnNotificationLevel::valueOf(businessAction)]
+        {
+            showSplashOnResource(resource, level);
+        };
+
+    for (int timeMs = 0; timeMs <= splashTotalLengthMs; timeMs += splashPeriodMs)
+        executeDelayedParented(callback, timeMs, this);
 }
 
 bool QnWorkbenchDisplay::canShowLayoutBackground() const
