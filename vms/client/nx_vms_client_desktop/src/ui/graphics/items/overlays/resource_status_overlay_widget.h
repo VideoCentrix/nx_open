@@ -130,3 +130,5 @@ private:
     QPixmap m_redGlowHorizontalPixmap;
     QPixmap m_redGlowVerticalPixmap;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(QnStatusOverlayWidget::Controls)
