@@ -452,6 +452,8 @@ void initialize(Manager* manager, Action* root)
             .shortcut("Ctrl+Shift+T")
             .condition(condition::homeTabIsNotActive(ActionVisibility::DisabledAction) &&
                 ConditionWrapper(new LightModeCondition(Qn::LightModeNoNewWindow)));
+
+        vx::registerNewMonitoringLayoutAction(factory);
     }
     factory.endSubMenu();
 
