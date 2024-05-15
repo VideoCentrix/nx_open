@@ -1017,6 +1017,8 @@ enum IDType
      */
     NewUserAction,
 
+    VxMultipleNewUsersAction,
+
     /**
      * Opens an integration creation dialog.
      */

@@ -397,6 +397,58 @@ void initialize(Manager* manager, Action* root)
             .pulledText(ContextMenu::tr("New Welcome Screen"))
             .shortcut("Ctrl+Shift+T")
             .condition(new LightModeCondition(Qn::LightModeNoNewWindow));
+
+        factory()
+            .flags(Main)
+            .separator();
+
+        factory(NewUserAction)
+            .flags(Main | Tree)
+            .requiredGlobalPermission(GlobalPermission::admin)
+            .text(ContextMenu::tr("User..."))
+            .pulledText(ContextMenu::tr("New User..."))
+            .condition(
+                condition::treeNodeType(ResourceTree::NodeType::users)
+            )
+            .autoRepeat(false);
+
+        vx::registerMultipleNewUsersAction(factory);
+
+        factory(NewVideoWallAction)
+            .flags(Main)
+            .requiredGlobalPermission(GlobalPermission::admin)
+            .text(ContextMenu::tr("Video Wall..."))
+            .pulledText(ContextMenu::tr("New Video Wall..."))
+            .autoRepeat(false);
+
+        factory(NewWebPageAction)
+            .flags(Main | Tree)
+            .requiredGlobalPermission(GlobalPermission::admin)
+            .text(ContextMenu::tr("Web Page..."))
+            .pulledText(ContextMenu::tr("Add Web Page..."))
+            .condition(
+                condition::treeNodeType(ResourceTree::NodeType::webPages)
+            )
+            .autoRepeat(false);
+
+        factory(NewLayoutTourAction)
+            .flags(Main | Tree | NoTarget)
+            .text(ContextMenu::tr("Showreel..."))
+            .pulledText(ContextMenu::tr("New Showreel..."))
+            .condition(condition::isLoggedIn()
+                && condition::treeNodeType(ResourceTree::NodeType::layoutTours)
+            )
+            .autoRepeat(false);
+
+        factory(NewVirtualCameraAction)
+            .flags(Main | NoTarget)
+            .requiredGlobalPermission(GlobalPermission::admin)
+            .text(ContextMenu::tr("Virtual Camera..."))
+            .pulledText(ContextMenu::tr("New Virtual Camera..."))
+            .condition(condition::isLoggedIn())
+            .autoRepeat(false);
+
+        vx::registerNewMonitoringLayoutAction(factory);
     }
     factory.endSubMenu();
 
