@@ -179,7 +179,9 @@ void SystemManager::rename(
     const std::string& name,
     std::function<void(api::ResultCode)> completionHandler)
 {
-    update(systemId, api::SystemAttributesUpdate{.name = name}, std::move(completionHandler));
+    api::SystemAttributesUpdate updateData;
+    updateData.name = name;
+    update(systemId, updateData, std::move(completionHandler));
 }
 
 void SystemManager::recordUserSessionStart(
