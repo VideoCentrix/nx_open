@@ -6,6 +6,7 @@
  * Some c++20 features missing in Clang are defined here
  */
 
+#if 0
 #if defined(__clang__)
     #if __clang_major__ < 15
         #define CLANG_MISSING_FEATURE_3WAY_COMPARE_STRING 1
@@ -302,3 +303,4 @@ inline detail::synth3way_t<Tp> operator<=>(
 #endif // defined(_LIBCPP_COMPILER_CLANG_BASED)
 
 #endif // defined(__clang__) && (__clang_major__ < kClangMissingCpp20SupportVersion)
+#endif
