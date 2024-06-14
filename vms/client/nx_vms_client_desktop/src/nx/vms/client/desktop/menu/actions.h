@@ -652,6 +652,8 @@ enum IDType
      */
     FitInViewAction,
 
+    VxArrangeInGridAction,
+
     /**
      * Maximizes item.
      */
