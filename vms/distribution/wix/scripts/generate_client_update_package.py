@@ -155,8 +155,11 @@ def create_client_update_file(config, output_file):
             files=tools.find_all_files(help_directory),
             rel_path=help_directory,
             target_path='help')
-        tools.zip_all_files(zip, os.path.join(config['ucrt_directory'], 'bin'))
-        tools.zip_all_files(zip, os.path.join(config['vcrt_directory'], 'bin'))
+        # TODO(elric): we're disabling packaging the crt DLLs into an update package for now b/c
+        #              the version is conan is conflicting with the version we're building the binaries with.
+        #              This is a hack, and it's not applied to the installer package.
+        # tools.zip_all_files(zip, os.path.join(config['ucrt_directory'], 'bin'))
+        # tools.zip_all_files(zip, os.path.join(config['vcrt_directory'], 'bin'))
         tools.zip_files_to(zip, tools.find_all_files(config['fonts_directory']), binaries_dir)
 
         zip.write(os.path.join(binaries_dir, 'client_external.dat'), 'client_external.dat')
