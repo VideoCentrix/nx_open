@@ -6,7 +6,8 @@ set(additional_sources)
 set(additional_sources_include_dirs)
 set(artifacts_dir ${open_source_root}/artifacts)
 
-if(NOT APPLE AND arch STREQUAL "x64")
+# VX: Disable HW decoders on Linux.
+if(NOT APPLE AND NOT LINUX AND arch STREQUAL "x64")
     set(windows_or_linux_x64 TRUE)
 else()
     set(windows_or_linux_x64 FALSE)
