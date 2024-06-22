@@ -26,7 +26,7 @@ namespace {
     static const qint64 kDefaultMaxAudioJitterUs = 64 * 1000;
 }
 
-Sound::Sound(ALCdevice *device, const nx::media::audio::Format& audioFormat):
+Sound::Sound(void *device, const nx::media::audio::Format& audioFormat):
     QObject()
 {
     m_audioFormat = audioFormat;
@@ -388,7 +388,7 @@ bool Sound::outError(int err, const char* strerr)
     return strerr != NULL;
 }
 
-int Sound::checkOpenALError(ALCdevice *device)
+int Sound::checkOpenALError(void *device)
 {
     // get an error
     int err = alGetError();
@@ -396,15 +396,15 @@ int Sound::checkOpenALError(ALCdevice *device)
         const char* strerr = alGetString(err);
         outError(err, strerr);
     }
-    err = alcGetError(device);
+    err = alcGetError((ALCdevice *) device);
     if (err != AL_NO_ERROR)  {
-        const char* strerr = alcGetString(device, err);
+        const char* strerr = alcGetString((ALCdevice *) device, err);
         outError(err, strerr);
     }
     return err;
 }
 
-int Sound::checkOpenALErrorDebug(ALCdevice *device)
+int Sound::checkOpenALErrorDebug(void *device)
 {
 #ifdef _DEBUG
     return checkOpenALError(device);

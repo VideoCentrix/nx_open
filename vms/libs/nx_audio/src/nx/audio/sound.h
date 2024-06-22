@@ -11,9 +11,6 @@
 #include <nx/utils/thread/mutex.h>
 #include <utils/timer.h>
 
-class AudioDevice;
-typedef struct ALCdevice_struct ALCdevice;
-
 namespace nx {
 namespace audio {
 
@@ -23,7 +20,7 @@ namespace audio {
 class Sound: public QObject, public Qn::EnableSafeDirectConnection
 {
 public:
-    Sound(ALCdevice* device, const nx::media::audio::Format& audioFormat);
+    Sound(void* device, const nx::media::audio::Format& audioFormat);
     ~Sound();
 
     bool isValid() const { return m_isValid; }
@@ -86,7 +83,7 @@ private:
     bool playImpl();
 
     static bool outError(int err, const char *strerr);
-    static int checkOpenALErrorDebug(ALCdevice *device);
+    static int checkOpenALErrorDebug(void *device);
     bool internalPlay(const void *data, uint size);
     void clearBuffers();
 
@@ -108,7 +105,7 @@ private:
     uint m_bitsPerSample;
     uint m_size;
     bool m_isValid;
-    ALCdevice* m_device;
+    void* m_device;
     quint8* m_proxyBuffer = nullptr;
     int m_proxyBufferLen;
     bool m_deinitialized;
@@ -119,7 +116,7 @@ private:
 
 private:
     void internalClear();
-    static int checkOpenALError(ALCdevice* device);
+    static int checkOpenALError(void* device);
 };
 
 } // namespace audio
