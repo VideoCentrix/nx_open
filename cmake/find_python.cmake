@@ -65,7 +65,7 @@ function(find_compatible_python_version)
         endif()
     endforeach()
 
-    message(FATAL_ERROR "Python 3.8/9/10/11 executable not found.")
+    message(FATAL_ERROR "Python 3.8/9/10/11/12 executable not found.")
 endfunction()
 
 if(NOT PYTHON_EXECUTABLE)
