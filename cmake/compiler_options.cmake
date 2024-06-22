@@ -425,6 +425,7 @@ if(NOT compilerMsvc)
     elseif(compilerGcc)
         add_compile_options(
             -Wno-error=maybe-uninitialized
+            -Wno-error=ignored-attributes
             -Wno-missing-field-initializers
             -Wno-psabi
         )
