@@ -447,7 +447,7 @@ private:
 protected:
     virtual bool capabilityButtonsAreVisible() const;
     void updateCapabilityButtons() const;
-    void updateTwoWayAudioButton() const;
+    virtual void updateTwoWayAudioButton() const;
     void updateIntercomButtons();
 
 private:
