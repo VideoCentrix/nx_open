@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------------------
 # CMake setup.
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -427,6 +427,7 @@ if(NOT compilerMsvc)
             -Wno-error=maybe-uninitialized
             -Wno-error=unused-result
             -Wno-error=ignored-attributes
+            -Wno-error=deprecated-declarations
             -Wno-missing-field-initializers
             -Wno-psabi
         )
