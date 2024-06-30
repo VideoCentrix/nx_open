@@ -16,6 +16,7 @@
 #include <tuple>
 #include <type_traits>
 #include <vector>
+#include <exception>
 
 #include "common.h"
 
