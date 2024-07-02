@@ -169,6 +169,11 @@ NX_REFLECTION_ENUM(EventType,
     userDefinedEvent = 1000
 )
 
+constexpr uint32_t ActionTypeServiceOffset = 1000;
+enum class EServiceOffset {
+    VX = ActionTypeServiceOffset * 1,
+};
+
 NX_REFLECTION_ENUM(ActionType,
     undefinedAction = 0,
 
@@ -285,7 +290,19 @@ NX_REFLECTION_ENUM(ActionType,
     buzzerAction = 20,
 
     /** Send push notification using cloud. */
-    pushNotificationAction = 21
+    pushNotificationAction = 21,
+
+    /**
+     * Open intercom as an action. TODO: #dfisenko Describe the action when it is defined.
+     * actionParams:
+     * TODO: #dfisenko Add parameters when they are defined.
+     */
+    showIntercomInformer = 22,
+
+    /**
+     * VX-specific actions
+     */
+    vxMonitoringAction = uint64_t(EServiceOffset::VX) + showPopupAction
 )
 
 enum class EventLevel
