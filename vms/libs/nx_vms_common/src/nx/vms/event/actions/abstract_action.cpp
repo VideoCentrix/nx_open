@@ -41,6 +41,7 @@ bool requiresCameraResource(ActionType actionType)
         case ActionType::openLayoutAction:
         case ActionType::exitFullscreenAction:
         case ActionType::buzzerAction:
+        case ActionType::vxMonitoringAction:
             return false;
 
         case ActionType::playSoundOnceAction:
@@ -86,6 +87,7 @@ bool requiresUserResource(ActionType actionType)
         case ActionType::exitFullscreenAction:
         case ActionType::buzzerAction:
         case ActionType::showIntercomInformer:
+        case ActionType::vxMonitoringAction:
             return false;
 
         case ActionType::acknowledgeAction:
@@ -127,6 +129,7 @@ bool requiresAdditionalUserResource(ActionType actionType)
         case ActionType::playSoundOnceAction:
         case ActionType::sayTextAction:
         case ActionType::showOnAlarmLayoutAction:
+        case ActionType::vxMonitoringAction:
             return true;
 
         default:
@@ -165,6 +168,7 @@ bool hasToggleState(ActionType actionType)
         case ActionType::fullscreenCameraAction:
         case ActionType::exitFullscreenAction:
         case ActionType::showIntercomInformer:
+        case ActionType::vxMonitoringAction:
             return false;
 
         case ActionType::cameraOutputAction:
@@ -218,6 +222,7 @@ bool allowsAggregation(ActionType actionType)
         case ActionType::playSoundAction:
         case ActionType::fullscreenCameraAction:
         case ActionType::exitFullscreenAction:
+        case ActionType::vxMonitoringAction:
             return false;
 
         default:
@@ -261,6 +266,7 @@ QList<ActionType> userAvailableActions()
         ActionType::fullscreenCameraAction,
         ActionType::exitFullscreenAction,
         ActionType::buzzerAction,
+        ActionType::vxMonitoringAction,
     };
 
     return result;
