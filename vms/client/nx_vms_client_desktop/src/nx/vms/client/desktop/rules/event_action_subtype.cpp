@@ -72,6 +72,7 @@ ActionSubtype actionSubtype(nx::vms::api::ActionType actionType)
         case ActionType::execHttpRequestAction:
         case ActionType::buzzerAction:
         case ActionType::acknowledgeAction:
+        case ActionType::vxMonitoringAction:
             return ActionSubtype::server;
 
         default:

@@ -60,6 +60,43 @@ namespace ec2 {
 
 struct overload_tag {};
 
+static bool constexpr isVirtualActionType(const ActionType at) {
+    return at >= ActionTypeServiceOffset;
+}
+
+static void deserializeVirtualActionType(ActionType &actionType, const nx::vms::event::ActionParameters &params) {
+    if (!params.text.isEmpty()) {
+        bool ok{};
+        const auto v = params.text.toUInt(&ok);
+        const bool correctValue = (v == ActionType::vxMonitoringAction);
+        NX_ASSERT(correctValue);
+        if (ok && correctValue) {
+            actionType = ActionType(v);
+        }
+    }
+}
+
+static void serializeVirtualActionType(ActionType &actionType, nx::vms::event::ActionParameters &actionParams) {
+    if (!isVirtualActionType(actionType)) {
+        return;
+    }
+
+    NX_ASSERT(actionParams.text.isEmpty() || actionParams.text == QString::number(actionType));
+    actionParams.text = QString::number(actionType);
+
+    switch (actionType) {
+    case ActionType::vxMonitoringAction:
+        actionParams.allUsers = true;
+        actionParams.durationMs = 0;
+        actionParams.needConfirmation = false;
+        break;
+    default:
+        break;
+    }
+
+    actionType = ActionType(actionType % ActionTypeServiceOffset);
+}
+
 void fromApiToResource(const EventRuleData& src, vms::event::RulePtr& dst)
 {
     dst->setId(src.id);
@@ -70,7 +107,6 @@ void fromApiToResource(const EventRuleData& src, vms::event::RulePtr& dst)
     dst->setEventParams(QJson::deserialized<vms::event::EventParameters>(src.eventCondition));
 
     dst->setEventState(src.eventState);
-    dst->setActionType(src.actionType);
 
     dst->setActionResources(fromStdVector(src.actionResourceIds));
 
@@ -81,6 +117,10 @@ void fromApiToResource(const EventRuleData& src, vms::event::RulePtr& dst)
     dst->setComment(src.comment);
     dst->setSchedule(src.schedule);
     dst->setSystem(src.system);
+
+    auto actionType = src.actionType;
+    deserializeVirtualActionType(actionType, dst->actionParams());
+    dst->setActionType(actionType);
 }
 
 void fromResourceToApi(const vms::event::RulePtr& src, EventRuleData& dst)
@@ -92,10 +132,17 @@ void fromResourceToApi(const vms::event::RulePtr& src, EventRuleData& dst)
     dst.actionResourceIds = nx::toStdVector(src->actionResources());
 
     dst.eventCondition = QJson::serialized(src->eventParams());
-    dst.actionParams = QJson::serialized(src->actionParams());
+
+    dst.actionType = src->actionType();
+    if (isVirtualActionType(src->actionType())) {
+        auto actionParams = src->actionParams();
+        serializeVirtualActionType(dst.actionType, actionParams);
+        dst.actionParams = QJson::serialized(actionParams);
+    } else {
+        dst.actionParams = QJson::serialized(src->actionParams());
+    }
 
     dst.eventState = src->eventState();
-    dst.actionType = src->actionType();
     dst.aggregationPeriod = src->aggregationPeriod();
     dst.disabled = src->isDisabled();
     dst.comment = src->comment();
@@ -126,11 +173,14 @@ void fromResourceListToApi(const vms::event::RuleList& src, EventRuleDataList& d
 void fromResourceToApi(const vms::event::AbstractActionPtr& src, EventActionData& dst)
 {
     dst.actionType = src->actionType();
+    auto actionParams = src->getParams();
+    serializeVirtualActionType(dst.actionType, actionParams);
+
     dst.toggleState = src->getToggleState();
     dst.receivedFromRemoteHost = src->isReceivedFromRemoteHost();
     dst.resourceIds = nx::toStdVector(src->getResources());
 
-    dst.params = QJson::serialized(src->getParams());
+    dst.params = QJson::serialized(actionParams);
     dst.runtimeParams = QJson::serialized(src->getRuntimeParams());
 
     dst.ruleId = src->getRuleId();
@@ -139,14 +189,18 @@ void fromResourceToApi(const vms::event::AbstractActionPtr& src, EventActionData
 
 void fromApiToResource(const EventActionData& src, vms::event::AbstractActionPtr& dst)
 {
-    dst = vms::event::ActionFactory::createAction(src.actionType, QJson::deserialized<vms::event::EventParameters>(src.runtimeParams));
+    auto actionParams = QJson::deserialized<vms::event::ActionParameters>(src.params);
+    auto actionType = src.actionType;
+    deserializeVirtualActionType(actionType, actionParams);
+
+    dst = vms::event::ActionFactory::createAction(actionType, QJson::deserialized<vms::event::EventParameters>(src.runtimeParams));
 
     dst->setToggleState(src.toggleState);
     dst->setReceivedFromRemoteHost(src.receivedFromRemoteHost);
 
     dst->setResources(fromStdVector(src.resourceIds));
 
-    dst->setParams(QJson::deserialized<vms::event::ActionParameters>(src.params));
+    dst->setParams(std::move(actionParams));
 
     dst->setRuleId(src.ruleId);
     dst->setAggregationCount(src.aggregationCount);
