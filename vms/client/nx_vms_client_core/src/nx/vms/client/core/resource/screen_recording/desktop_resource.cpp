@@ -53,12 +53,21 @@ void DesktopResource::initializeConnection(
     NX_ASSERT(!m_connection, "Double initialization");
     disconnectFromServer();
 
+    const auto& sysCtx = systemContext();
+    if (!NX_ASSERT(sysCtx)) {
+        return;
+    }
+    const auto& messageBusConn = sysCtx->messageBusConnection();
+    if (!messageBusConn) {
+        return;
+    }
+
     m_connection.reset(new DesktopCameraConnection(
         toSharedPointer(this),
         server,
         userId,
-        systemContext()->peerId(),
-        systemContext()->messageBusConnection()->credentials()));
+        sysCtx->peerId(),
+        messageBusConn->credentials()));
     m_connection->start();
 }
 
