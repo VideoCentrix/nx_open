@@ -18,8 +18,7 @@ Q_NAMESPACE
 /**
  * Enum of all menu actions.
  */
-enum IDType
-{
+enum IDType {
     /* Actions that are not assigned to any menu. */
 
     /**
@@ -1389,6 +1388,8 @@ enum IDType
     VxItemDebugAction,
 
     VxGlobalDebugAction,
+
+    VxGlobalSystemHealth,
 
     /**
      * Opens the Audit Log dialog.
