@@ -17,8 +17,7 @@ Q_NAMESPACE
 /**
  * Enum of all menu actions.
  */
-enum IDType
-{
+enum IDType {
     /* Actions that are not assigned to any menu. */
 
     /**
@@ -261,7 +260,6 @@ enum IDType
      * Offers user to select server in cluster for other servers to synchronize time with
      */
     SelectTimeServerAction,
-
 
     /* Right panel actions */
 
@@ -541,7 +539,6 @@ enum IDType
      * Closes all layouts but the one provided.
      */
     CloseAllButThisLayoutAction,
-
 
     /* Resource actions. */
 
@@ -1354,6 +1351,8 @@ enum IDType
     VxItemDebugAction,
 
     VxGlobalDebugAction,
+
+    VxGlobalSystemHealth,
 
     /**
      * Opens the Audit Log dialog.
