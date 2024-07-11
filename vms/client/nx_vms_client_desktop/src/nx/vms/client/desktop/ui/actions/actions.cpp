@@ -2281,6 +2281,7 @@ void initialize(Manager* manager, Action* root)
     vx::registerDismissSystemAlertAction(factory);
     vx::registerOpenReportLayoutAction(factory);
     vx::registerDebugVxActions(factory);
+    vx::registerVxGlobalSystemHealth(factory);
 
     // -- Developer mode actions end. Please do not add real actions afterwards.
 }
