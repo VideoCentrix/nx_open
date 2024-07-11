@@ -725,6 +725,8 @@ void initialize(Manager* manager, Action* root)
             condition::isDeviceAccessRelevant(nx::vms::api::AccessRight::viewBookmarks)
             && !condition::showreelIsRunning());
 
+    vx::registerVxGlobalSystemHealth(factory);
+
     factory(LoginToCloud)
         .flags(NoTarget)
         .text(ContextMenu::tr("Log in to %1...", "Log in to Nx Cloud")
@@ -2355,7 +2357,6 @@ void initialize(Manager* manager, Action* root)
     vx::registerDismissSystemAlertAction(factory);
     vx::registerOpenReportLayoutAction(factory);
     vx::registerDebugVxActions(factory);
-    vx::registerVxGlobalSystemHealth(factory);
 
     // -- Developer mode actions end. Please do not add real actions afterwards.
 }
