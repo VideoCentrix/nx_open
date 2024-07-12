@@ -53,10 +53,6 @@ void QnVoiceSpectrumAnalyzer::performFft()
     av_fft_calc(m_fftContext, m_fftData);
 }
 
-QnSpectrumData::QnSpectrumData()
-{
-}
-
 QnVoiceSpectrumAnalyzer::QnVoiceSpectrumAnalyzer()
 {
 }

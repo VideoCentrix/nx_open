@@ -15,7 +15,7 @@ extern "C" {
 
 struct QnSpectrumData
 {
-    QnSpectrumData();
+    QnSpectrumData() = default;
 
     QVector<double> data; //< data in range [0..1]
 };

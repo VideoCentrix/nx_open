@@ -23,6 +23,7 @@
 
 #include "audio_stream_display.h"
 #include "video_stream_display.h"
+#include "utils/media/voice_spectrum_analyzer.h"
 
 #if defined(Q_OS_MAC)
 #include <IOKit/pwr_mgt/IOPMLib.h>
@@ -246,7 +247,7 @@ void QnCamDisplay::setAudioBufferSize(int bufferSize, int prebufferSize)
     m_minAudioDetectJumpInterval = MIN_VIDEO_DETECT_JUMP_INTERVAL + m_audioBufferSize*1000;
     NX_MUTEX_LOCKER lock( &m_audioChangeMutex );
     delete m_audioDisplay;
-    m_audioDisplay = new QnAudioStreamDisplay(m_audioBufferSize, prebufferSize);
+    m_audioDisplay = new QnAudioStreamDisplay(m_audioBufferSize, prebufferSize, m_analyzesAudio);
 
 }
 
@@ -1526,7 +1527,8 @@ bool QnCamDisplay::processData(const QnAbstractDataPacketPtr& data)
         currentAudioFormat = { nx::media::audio::formatFromMediaContext(ad->context),
             ad->context->getBitsPerCodedSample() };
         audioParamsChanged = m_playingFormat != currentAudioFormat
-            || m_audioDisplay->getAudioBufferSize() != expectedBufferSize;
+            || m_audioDisplay->getAudioBufferSize() != expectedBufferSize
+            || !!m_audioDisplay->analyzer() != m_analyzesAudio;
     }
     if (((media->flags & QnAbstractMediaData::MediaFlags_AfterEOF) || audioParamsChanged) &&
         m_videoQueue[0].size() > 0)
@@ -1576,7 +1578,7 @@ bool QnCamDisplay::processData(const QnAbstractDataPacketPtr& data)
             NX_MUTEX_LOCKER lock( &m_audioChangeMutex );
             delete m_audioDisplay;
             m_audioBufferSize = expectedBufferSize;
-            m_audioDisplay = new QnAudioStreamDisplay(m_audioBufferSize, audioPrebufferSize);
+            m_audioDisplay = new QnAudioStreamDisplay(m_audioBufferSize, audioPrebufferSize, m_analyzesAudio);
             m_playingFormat = currentAudioFormat;
         }
 
@@ -2261,4 +2263,17 @@ int QnCamDisplay::maxDataQueueSize() const
 void QnCamDisplay::setCallbackForStreamChanges(std::function<void()> callback)
 {
     m_streamsChangedCallback = callback;
+}
+
+bool QnCamDisplay::analyzesAudio() const {
+    return m_analyzesAudio;
+}
+
+void QnCamDisplay::setAnalyzesAudio(bool analyzesAudio) {
+    m_analyzesAudio = analyzesAudio;
+}
+
+QnSpectrumData QnCamDisplay::audioSpectrum() const {
+    NX_MUTEX_LOCKER lock( &m_audioChangeMutex );
+    return m_audioDisplay && m_audioDisplay->analyzer() ? m_audioDisplay->analyzer()->getSpectrumData() : QnSpectrumData();
 }

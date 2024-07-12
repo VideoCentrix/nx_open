@@ -301,10 +301,6 @@ void QnTwoWayAudioWidget::Private::paint(QPainter* painter, const QRectF& source
         if (!visualizerRect.isValid())
             return;
 
-        const auto oldTimeStamp = m_paintTimeStamp;
-        m_paintTimeStamp = m_stateTimer.elapsed();
-        const auto timeStepMs = m_paintTimeStamp - oldTimeStamp;
-
         m_voiceSpectrumPainter.update(m_stateTimer.elapsed(), appContext()->voiceSpectrumAnalyzer()->getSpectrumData().data);
         m_voiceSpectrumPainter.paint(painter, visualizerRect);
     }
@@ -345,7 +341,6 @@ void QnTwoWayAudioWidget::Private::setState(HintState state)
             break;
     }
 
-    m_paintTimeStamp = 0;
     if (m_state == HintState::ok)
     {
         m_stateTimer.invalidate();

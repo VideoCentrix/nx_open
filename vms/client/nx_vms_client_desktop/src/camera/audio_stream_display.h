@@ -9,6 +9,7 @@
 #include <nx/media/audio_data_packet.h>
 #include <nx/utils/thread/mutex.h>
 
+class QnVoiceSpectrumAnalyzer;
 class QnAbstractAudioDecoder;
 class QnCompressedAudioData;
 
@@ -20,7 +21,7 @@ class QnAudioStreamDisplay: public QObject
     Q_OBJECT
 
 public:
-    QnAudioStreamDisplay(int bufferMs, int prebufferMs);
+    QnAudioStreamDisplay(int bufferMs, int prebufferMs, bool withAnalyzer);
     ~QnAudioStreamDisplay();
 
     bool putData(QnCompressedAudioDataPtr data, qint64 minTime = 0);
@@ -58,6 +59,8 @@ public:
     int getAudioBufferSize() const;
     bool isPlaying() const;
 
+    QnVoiceSpectrumAnalyzer *analyzer() const;
+
 private:
     int msInQueue() const;
 
@@ -74,6 +77,7 @@ private:
     bool m_tooFewDataDetected;
     bool m_isFormatSupported;
     std::unique_ptr<nx::audio::Sound> m_sound;
+    std::unique_ptr<QnVoiceSpectrumAnalyzer> m_analyzer;
 
     bool m_downmixing; //< Do downmixing.
     bool m_forceDownmix; //< Force downmixing, even if output device supports multichannel.

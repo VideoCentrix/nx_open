@@ -76,5 +76,4 @@ private:
     bool m_unmuteAudioOnStreamingStop = false;
 
     QnVoiceSpectrumPainter m_voiceSpectrumPainter;
-    qint64 m_paintTimeStamp = 0;
 };
