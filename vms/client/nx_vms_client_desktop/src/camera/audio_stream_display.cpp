@@ -10,6 +10,7 @@
 #include <nx/vms/client/desktop/settings/local_settings.h>
 
 #include "decoders/audio/abstract_audio_decoder.h"
+#include "utils/media/voice_spectrum_analyzer.h"
 
 using namespace nx::vms::client::desktop;
 
@@ -17,7 +18,7 @@ namespace {
 static const int AVCODEC_MAX_AUDIO_FRAME_SIZE = 192 * 1000;
 }
 
-QnAudioStreamDisplay::QnAudioStreamDisplay(int bufferMs, int prebufferMs):
+QnAudioStreamDisplay::QnAudioStreamDisplay(int bufferMs, int prebufferMs, bool withAnalyzer):
     m_bufferMs(bufferMs),
     m_prebufferMs(prebufferMs),
     m_tooFewDataDetected(true),
@@ -35,6 +36,8 @@ QnAudioStreamDisplay::QnAudioStreamDisplay(int bufferMs, int prebufferMs):
     m_audioQueueMutex(nx::Mutex::Recursive),
     m_blockedTimeValue(AV_NOPTS_VALUE)
 {
+    if (withAnalyzer)
+        m_analyzer = std::make_unique<QnVoiceSpectrumAnalyzer>();
 }
 
 QnAudioStreamDisplay::~QnAudioStreamDisplay()
@@ -253,6 +256,10 @@ bool QnAudioStreamDisplay::isPlaying() const
     return !m_tooFewDataDetected;
 }
 
+QnVoiceSpectrumAnalyzer *QnAudioStreamDisplay::analyzer() const {
+    return m_analyzer.get();
+}
+
 void QnAudioStreamDisplay::playCurrentBuffer()
 {
     NX_MUTEX_LOCKER lock(&m_audioQueueMutex);
@@ -317,6 +324,12 @@ void QnAudioStreamDisplay::playCurrentBuffer()
         {
             m_sound->write(
                 (const quint8*) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
+        }
+
+        if (m_analyzer && audioFormat.sampleSize == 16 && audioFormat.sampleType == nx::media::audio::Format::SampleType::signedInt)
+        {
+            m_analyzer->initialize(audioFormat.sampleRate, audioFormat.channelCount); // Does nothing if sample rate / channel count didn't change.
+            m_analyzer->processData((const qint16 *) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
         }
     }
 }

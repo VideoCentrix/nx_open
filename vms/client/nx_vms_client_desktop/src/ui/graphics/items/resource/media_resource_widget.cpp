@@ -142,6 +142,9 @@
 #include <utils/common/synctime.h>
 #include <utils/math/color_transformations.h>
 
+#include "voice_spectrum_painter.h"
+#include "utils/media/voice_spectrum_analyzer.h"
+
 using namespace std::chrono;
 
 using namespace nx::vms::client::desktop;
@@ -562,6 +565,17 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     using Controller = nx::vms::client::core::SoftwareTriggersController;
     connect(m_triggersController, &Controller::triggerActivated, this, triggerActionHandler);
     connect(m_triggersController, &Controller::triggerDeactivated, this, triggerActionHandler);
+
+    if (!d->hasVideo) {
+        m_voiceSpectrumPainter = std::make_unique<QnVoiceSpectrumPainter>();
+
+        QnVoiceSpectrumPainterOptions options;
+        options.visualizerColor = QColor(97,136,152, 128);
+        options.visualizerLineOffset = 20;
+        m_voiceSpectrumPainter->setOptions(options);
+
+        m_voiceSpectrumTimer.start();
+    }
 }
 
 QnMediaResourceWidget::~QnMediaResourceWidget()
@@ -1675,6 +1689,8 @@ void QnMediaResourceWidget::setDisplay(const QnResourceDisplayPtr& display)
         m_renderer->setChannelCount(display->videoLayout()->channelCount());
         display->addRenderer(m_renderer);
         updateCustomAspectRatio();
+
+        display->camDisplay()->setAnalyzesAudio(!d->hasVideo);
     }
     else
     {
@@ -1847,6 +1863,14 @@ void QnMediaResourceWidget::paintChannelForeground(QPainter *painter, int channe
 
     if (ini().showCameraCrosshair && hasVideo())
         drawCrosshair(painter, rect);
+
+    if (!d->hasVideo) {
+        QPointF size = rect.bottomRight() - rect.topLeft();
+        QRectF rect_1(rect.topLeft() + size / 4, rect.bottomRight() - size / 4);
+
+        m_voiceSpectrumPainter->update(m_voiceSpectrumTimer.elapsed(), display()->camDisplay()->audioSpectrum().data);
+        m_voiceSpectrumPainter->paint(painter, rect_1);
+    }
 }
 
 void QnMediaResourceWidget::paintEffects(QPainter* painter)
@@ -2678,7 +2702,7 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
 
         // Handle export from I/O modules.
         if (!d->hasVideo)
-            return Qn::NoVideoDataOverlay;
+            return Qn::EmptyOverlay;
     }
 
     if (d->display()->camDisplay()->isLongWaiting())
@@ -2705,7 +2729,7 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
     if (d->display()->isPaused())
     {
         if (!d->hasVideo)
-            return Qn::NoVideoDataOverlay;
+            return Qn::EmptyOverlay;
 
         return Qn::EmptyOverlay;
     }

@@ -37,6 +37,7 @@
 
 #include "resource_widget.h"
 
+class QnVoiceSpectrumPainter;
 struct QnMetaDataV1;
 using QnMetaDataV1Ptr = std::shared_ptr<QnMetaDataV1>;
 
@@ -553,4 +554,7 @@ private:
     nx::vms::client::desktop::ObjectTrackingButtonController* m_objectTrackingButtonController = nullptr;
 
     QAction* const m_toggleImageEnhancementAction;
+
+    std::unique_ptr<QnVoiceSpectrumPainter> m_voiceSpectrumPainter;
+    QElapsedTimer m_voiceSpectrumTimer;
 };
