@@ -566,11 +566,12 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     connect(m_triggersController, &Controller::triggerActivated, this, triggerActionHandler);
     connect(m_triggersController, &Controller::triggerDeactivated, this, triggerActionHandler);
 
-    if (!d->hasVideo) {
-        m_voiceSpectrumPainter = std::make_unique<QnVoiceSpectrumPainter>();
+    if (!d->hasVideo)
+    {
+        m_voiceSpectrumPainter = std::make_unique<VoiceSpectrumPainter>();
 
-        QnVoiceSpectrumPainterOptions options;
-        options.visualizerColor = QColor(97,136,152, 128);
+        VoiceSpectrumPainterOptions options;
+        options.color = nx::vms::client::core::colorTheme()->color("camera.visualizer");
         options.visualizerLineOffset = 20;
         m_voiceSpectrumPainter->setOptions(options);
 
@@ -1864,7 +1865,8 @@ void QnMediaResourceWidget::paintChannelForeground(QPainter *painter, int channe
     if (ini().showCameraCrosshair && hasVideo())
         drawCrosshair(painter, rect);
 
-    if (!d->hasVideo) {
+    if (!d->hasVideo)
+    {
         QPointF size = rect.bottomRight() - rect.topLeft();
         QRectF rect_1(rect.topLeft() + size / 4, rect.bottomRight() - size / 4);
 

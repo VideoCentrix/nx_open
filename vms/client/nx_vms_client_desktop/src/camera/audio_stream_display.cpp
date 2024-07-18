@@ -256,7 +256,8 @@ bool QnAudioStreamDisplay::isPlaying() const
     return !m_tooFewDataDetected;
 }
 
-QnVoiceSpectrumAnalyzer *QnAudioStreamDisplay::analyzer() const {
+QnVoiceSpectrumAnalyzer *QnAudioStreamDisplay::analyzer() const
+{
     return m_analyzer.get();
 }
 
@@ -326,10 +327,14 @@ void QnAudioStreamDisplay::playCurrentBuffer()
                 (const quint8*) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
         }
 
-        if (m_analyzer && audioFormat.sampleSize == 16 && audioFormat.sampleType == nx::media::audio::Format::SampleType::signedInt)
+        // TODO(elric): for now we only support 16-bit signed ints here.
+        if (m_analyzer && audioFormat.sampleSize == 16 &&
+            audioFormat.sampleType == nx::media::audio::Format::SampleType::signedInt)
         {
-            m_analyzer->initialize(audioFormat.sampleRate, audioFormat.channelCount); // Does nothing if sample rate / channel count didn't change.
-            m_analyzer->processData((const qint16 *) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
+            // initialize() does nothing if sample rate / channel count didn't change.
+            m_analyzer->initialize(audioFormat.sampleRate, audioFormat.channelCount);
+            m_analyzer->processData((const qint16 *) m_decodedAudioBuffer.data(),
+                                    m_decodedAudioBuffer.size());
         }
     }
 }
