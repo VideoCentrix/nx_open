@@ -5,7 +5,9 @@
 
 class QPainter;
 
-struct QnVoiceSpectrumPainterOptions {
+namespace nx::vms::client::desktop {
+
+struct VoiceSpectrumPainterOptions {
     /** Max visualizer value change per second (on increasing and decreasing values). */
     qreal visualizerAnimationUpSpeed = 5.0;
     qreal visualizerAnimationDownSpeed = 1.0;
@@ -26,21 +28,23 @@ struct QnVoiceSpectrumPainterOptions {
     qreal visualizerLineOffset = 2.0;
 
     /** Color to use for audio spectrum painting. */
-    QColor visualizerColor;
+    QColor color;
 };
 
-class QnVoiceSpectrumPainter {
+class VoiceSpectrumPainter {
 public:
     using Data = QVector<double>;
 
-    QnVoiceSpectrumPainter();
-    virtual ~QnVoiceSpectrumPainter();
+    VoiceSpectrumPainter();
+    virtual ~VoiceSpectrumPainter();
 
-    const QnVoiceSpectrumPainterOptions& options() const {
+    const VoiceSpectrumPainterOptions& options() const
+    {
         return m_options;
     }
 
-    void setOptions(const QnVoiceSpectrumPainterOptions& options) {
+    void setOptions(const VoiceSpectrumPainterOptions& options)
+    {
         m_options = options;
     }
 
@@ -56,7 +60,11 @@ private:
     static Data generateEmptyData(qint64 elapsedMs, int bandsCount);
 
 private:
-    QnVoiceSpectrumPainterOptions m_options;
+    VoiceSpectrumPainterOptions m_options;
     Data m_data;
     qint64 m_oldTimeMs = 0;
 };
+
+} // namespace nx::vms::client::desktop
+
+

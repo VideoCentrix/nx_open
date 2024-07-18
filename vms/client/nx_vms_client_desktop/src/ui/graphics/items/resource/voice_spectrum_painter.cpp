@@ -3,14 +3,18 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 
-#include <ui/workaround/sharp_pixmap_painting.h>
+#include <nx/utils/log/assert.h>
 
 #include <utils/media/voice_spectrum_analyzer.h>
 
-QnVoiceSpectrumPainter::QnVoiceSpectrumPainter() = default;
-QnVoiceSpectrumPainter::~QnVoiceSpectrumPainter() = default;
+#include <ui/workaround/sharp_pixmap_painting.h>
 
-void QnVoiceSpectrumPainter::update(qint64 timeMs, const Data& data)
+namespace nx::vms::client::desktop {
+
+VoiceSpectrumPainter::VoiceSpectrumPainter() = default;
+VoiceSpectrumPainter::~VoiceSpectrumPainter() = default;
+
+void VoiceSpectrumPainter::update(qint64 timeMs, const Data& data)
 {
     const auto timeStepMs = timeMs - m_oldTimeMs;
     m_oldTimeMs = timeMs;
@@ -28,7 +32,7 @@ void QnVoiceSpectrumPainter::update(qint64 timeMs, const Data& data)
     }
 }
 
-void QnVoiceSpectrumPainter::paint(QPainter* painter, const QRectF& rect)
+void VoiceSpectrumPainter::paint(QPainter* painter, const QRectF& rect)
 {
     if (m_data.isEmpty())
         return;
@@ -48,14 +52,16 @@ void QnVoiceSpectrumPainter::paint(QPainter* painter, const QRectF& rect)
     }
 
     paintSharp(painter,
-        [&](QPainter* painter) { painter->fillPath(path, m_options.visualizerColor); });
+        [&](QPainter* painter) { painter->fillPath(path, m_options.color); });
 }
 
-void QnVoiceSpectrumPainter::reset() {
+void VoiceSpectrumPainter::reset()
+{
     m_data = Data();
 }
 
-void QnVoiceSpectrumPainter::normalizeData(Data& source) {
+void VoiceSpectrumPainter::normalizeData(Data& source)
+{
     if (source.isEmpty())
         return;
 
@@ -74,7 +80,7 @@ void QnVoiceSpectrumPainter::normalizeData(Data& source) {
         e *= k;
 }
 
-QnVoiceSpectrumPainter::Data QnVoiceSpectrumPainter::animateData(const Data& prev, const Data& next, qint64 timeStepMs)
+VoiceSpectrumPainter::Data VoiceSpectrumPainter::animateData(const Data& prev, const Data& next, qint64 timeStepMs)
 {
     //NX_ASSERT(next.size() == QnVoiceSpectrumAnalyzer::bandsCount());
 
@@ -100,7 +106,7 @@ QnVoiceSpectrumPainter::Data QnVoiceSpectrumPainter::animateData(const Data& pre
     return result;
 }
 
-QnVoiceSpectrumPainter::Data QnVoiceSpectrumPainter::generateEmptyData(qint64 elapsedMs, int bandsCount)
+VoiceSpectrumPainter::Data VoiceSpectrumPainter::generateEmptyData(qint64 elapsedMs, int bandsCount)
 {
     // Making slider move forth and back...
     const int size = bandsCount;
@@ -118,3 +124,5 @@ QnVoiceSpectrumPainter::Data QnVoiceSpectrumPainter::generateEmptyData(qint64 el
 
     return result;
 }
+
+} // namespace nx::vms::client::desktop

@@ -75,5 +75,5 @@ private:
     QElapsedTimer m_stateTimer;
     bool m_unmuteAudioOnStreamingStop = false;
 
-    QnVoiceSpectrumPainter m_voiceSpectrumPainter;
+    nx::vms::client::desktop::VoiceSpectrumPainter m_voiceSpectrumPainter;
 };

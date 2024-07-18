@@ -2265,15 +2265,18 @@ void QnCamDisplay::setCallbackForStreamChanges(std::function<void()> callback)
     m_streamsChangedCallback = callback;
 }
 
-bool QnCamDisplay::analyzesAudio() const {
+bool QnCamDisplay::analyzesAudio() const
+{
     return m_analyzesAudio;
 }
 
-void QnCamDisplay::setAnalyzesAudio(bool analyzesAudio) {
+void QnCamDisplay::setAnalyzesAudio(bool analyzesAudio)
+{
     m_analyzesAudio = analyzesAudio;
 }
 
-QnSpectrumData QnCamDisplay::audioSpectrum() const {
-    NX_MUTEX_LOCKER lock( &m_audioChangeMutex );
+QnSpectrumData QnCamDisplay::audioSpectrum() const
+{
+    NX_MUTEX_LOCKER lock(&m_audioChangeMutex);
     return m_audioDisplay && m_audioDisplay->analyzer() ? m_audioDisplay->analyzer()->getSpectrumData() : QnSpectrumData();
 }
