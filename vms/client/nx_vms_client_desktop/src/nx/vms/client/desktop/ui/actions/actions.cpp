@@ -729,12 +729,16 @@ void initialize(Manager* manager, Action* root)
         .condition(!condition::tourIsRunning())
         .autoRepeat(false);
 
-    vx::registerVxGlobalSystemHealth(factory);
+    factory().flags(Main | Tree | Scene).mode(DesktopMode).text(ContextMenu::tr("Video Centrix")).condition(!condition::tourIsRunning());
 
-    factory(LoginToCloud)
-        .flags(NoTarget)
-        .text(ContextMenu::tr("Log in to %1...", "Log in to Nx Cloud")
-            .arg(nx::branding::cloudName()));
+    factory.beginSubMenu();
+    {
+        vx::registerVxGlobalSystemHealth(factory);
+        vx::registerVxReportTemplates(factory);
+    }
+    factory.endSubMenu();
+
+    factory(LoginToCloud).flags(NoTarget).text(ContextMenu::tr("Log in to %1...", "Log in to Nx Cloud").arg(nx::branding::cloudName()));
 
     factory(LogoutFromCloud)
         .flags(NoTarget)
