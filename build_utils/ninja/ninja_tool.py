@@ -64,7 +64,7 @@ class ParsedScriptData(NamedTuple):
 
 def clean_build_directory(build_dir: Path,
         build_file_processor: BuildNinjaFileProcessor = None,
-        remove_unknown_files: bool = True,
+        remove_unknown_files: bool = False,
         additional_known_files: Set[str] = None) -> None:
 
     if build_file_processor is None:
