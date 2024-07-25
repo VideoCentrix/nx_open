@@ -729,7 +729,14 @@ void initialize(Manager* manager, Action* root)
         .condition(!condition::tourIsRunning())
         .autoRepeat(false);
 
-    factory().flags(Main | Tree | Scene).mode(DesktopMode).text(ContextMenu::tr("Video Centrix")).condition(!condition::tourIsRunning());
+    factory()
+        .flags(Main)
+        .separator();
+
+    factory()
+        .flags(Main)
+        .mode(DesktopMode)
+        .text(ContextMenu::tr("Video Centrix"));
 
     factory.beginSubMenu();
     {
