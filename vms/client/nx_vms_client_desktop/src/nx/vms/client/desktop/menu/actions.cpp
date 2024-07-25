@@ -738,7 +738,14 @@ void initialize(Manager* manager, Action* root)
         .requiredPowerUserPermissions()
         .text(ContextMenu::tr("Open Integrations..."));
 
-    factory().flags(Main | Tree | Scene).mode(DesktopMode).text(ContextMenu::tr("Video Centrix")).condition(!condition::tourIsRunning());
+    factory()
+        .flags(Main)
+        .separator();
+
+    factory()
+        .flags(Main)
+        .mode(DesktopMode)
+        .text(ContextMenu::tr("Video Centrix"));
 
     factory.beginSubMenu();
     {
