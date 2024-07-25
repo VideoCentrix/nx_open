@@ -725,7 +725,14 @@ void initialize(Manager* manager, Action* root)
             condition::isDeviceAccessRelevant(nx::vms::api::AccessRight::viewBookmarks)
             && !condition::showreelIsRunning());
 
-    factory().flags(Main | Tree | Scene).mode(DesktopMode).text(ContextMenu::tr("Video Centrix")).condition(!condition::tourIsRunning());
+    factory()
+        .flags(Main)
+        .separator();
+
+    factory()
+        .flags(Main)
+        .mode(DesktopMode)
+        .text(ContextMenu::tr("Video Centrix"));
 
     factory.beginSubMenu();
     {
