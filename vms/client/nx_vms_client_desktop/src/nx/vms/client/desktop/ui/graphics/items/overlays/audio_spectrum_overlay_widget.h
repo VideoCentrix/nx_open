@@ -6,6 +6,8 @@
 
 #include <qt_graphics_items/graphics_widget.h>
 
+#include <nx/vms/client/desktop/camera/camera_fwd.h>
+
 class QnMediaResourceWidget;
 
 namespace nx::vms::client::desktop {
@@ -16,9 +18,10 @@ class AudioSpectrumOverlayWidget: public GraphicsWidget
     using base_type = GraphicsWidget;
 
 public:
-    AudioSpectrumOverlayWidget(QnMediaResourceWidget* resourceWidget, QGraphicsWidget* parent);
+    AudioSpectrumOverlayWidget(QnResourceDisplayPtr display, QGraphicsWidget* parent);
     virtual ~AudioSpectrumOverlayWidget() override;
 
+protected:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 private:

@@ -811,7 +811,7 @@ void QnMediaResourceWidget::initAudioSpectrumOverlay()
     if (d->hasVideo)
         return;
 
-    m_audioSpectrumOverlayWidget = new AudioSpectrumOverlayWidget(this, m_compositeOverlay);
+    m_audioSpectrumOverlayWidget = new AudioSpectrumOverlayWidget(display(), m_compositeOverlay);
     addOverlayWidget(
         m_audioSpectrumOverlayWidget,
         {Visible, OverlayFlag::none, InfoLayer});
