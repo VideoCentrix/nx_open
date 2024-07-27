@@ -23,20 +23,20 @@ class AudioSpectrumOverlayWidget::Private
     AudioSpectrumOverlayWidget* const q = nullptr;
 
 public:
-    Private(QnMediaResourceWidget* resourceWidget, AudioSpectrumOverlayWidget* q);
+    Private(QnResourceDisplayPtr display, AudioSpectrumOverlayWidget* q);
 
 public:
-    const QPointer<QnMediaResourceWidget> resourceWidget;
+    QnResourceDisplayPtr display;
     VoiceSpectrumPainter painter;
     QElapsedTimer timer;
 };
 
 AudioSpectrumOverlayWidget::Private::Private(
-    QnMediaResourceWidget* resourceWidget,
+    QnResourceDisplayPtr display,
     AudioSpectrumOverlayWidget* q)
     :
     q(q),
-    resourceWidget(resourceWidget)
+    display(display)
 {
     painter.options.color = nx::vms::client::core::colorTheme()->color("camera.visualizer");
 
@@ -47,13 +47,13 @@ AudioSpectrumOverlayWidget::Private::Private(
 // AreaSelectOverlayWidget
 
 AudioSpectrumOverlayWidget::AudioSpectrumOverlayWidget(
-    QnMediaResourceWidget* resourceWidget,
+    QnResourceDisplayPtr display,
     QGraphicsWidget* parent)
     :
     base_type(parent),
-    d(new Private(resourceWidget, this))
+    d(new Private(display, this))
 {
-    NX_ASSERT(resourceWidget);
+    NX_ASSERT(display);
 }
 
 AudioSpectrumOverlayWidget::~AudioSpectrumOverlayWidget()
@@ -63,10 +63,7 @@ AudioSpectrumOverlayWidget::~AudioSpectrumOverlayWidget()
 void AudioSpectrumOverlayWidget::paint(
     QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-    if (!d->resourceWidget)
-        return;
-
-    d->painter.update(d->timer.elapsed(), d->resourceWidget->display()->camDisplay()->audioSpectrum().data);
+    d->painter.update(d->timer.elapsed(), d->display->camDisplay()->audioSpectrum().data);
     d->painter.options.visualizerLineOffset = rect().width() / 80;
 
     QRectF targetRect = rect().adjusted(rect().width() / 4, rect().height() / 4, -rect().width() / 4, -rect().height() / 4);
