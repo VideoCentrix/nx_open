@@ -50,6 +50,7 @@ class MediaResourceWidgetPrivate;
 class AnalyticsOverlayWidget;
 class AreaSelectOverlayWidget;
 class RoiFiguresOverlayWidget;
+class AudioSpectrumOverlayWidget;
 class WatermarkPainter;
 class SoftwareTriggerButton;
 class EncryptedArchivePasswordDialog;
@@ -460,6 +461,7 @@ private:
     void initAnalyticsOverlays();
     void initStatusOverlayController();
     void initCameraHotspotsOverlay();
+    void initAudioSpectrumOverlay();
 
     void createTrigger(const SoftwareTriggerInfo& info);
 
@@ -540,6 +542,7 @@ private:
     mutable QByteArray m_encryptedArchiveData;
 
     nx::vms::client::desktop::CameraHotspotsOverlayWidget* m_cameraHotspotsOverlayWidget = nullptr;
+    nx::vms::client::desktop::AudioSpectrumOverlayWidget* m_audioSpectrumOverlayWidget = nullptr;
 
     AreaType m_areaSelectionType{AreaType::none};
     QRectF m_analyticsFilterRect;
@@ -554,7 +557,4 @@ private:
     nx::vms::client::desktop::ObjectTrackingButtonController* m_objectTrackingButtonController = nullptr;
 
     QAction* const m_toggleImageEnhancementAction;
-
-    std::unique_ptr<nx::vms::client::desktop::VoiceSpectrumPainter> m_voiceSpectrumPainter;
-    QElapsedTimer m_voiceSpectrumTimer;
 };
