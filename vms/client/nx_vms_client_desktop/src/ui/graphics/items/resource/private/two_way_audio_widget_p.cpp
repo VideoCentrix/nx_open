@@ -87,9 +87,7 @@ QnTwoWayAudioWidget::Private::Private(
     m_camera(camera),
     m_hintTimer(new QTimer(this))
 {
-    VoiceSpectrumPainterOptions spectrumOptions;
-    spectrumOptions.color = core::colorTheme()->color("camera.twoWayAudio.visualizer");
-    m_voiceSpectrumPainter.setOptions(spectrumOptions);
+    m_voiceSpectrumPainter.options.color = core::colorTheme()->color("camera.twoWayAudio.visualizer");
 
     m_controller = std::make_unique<nx::vms::client::core::TwoWayAudioController>(
         SystemContext::fromResource(m_camera));

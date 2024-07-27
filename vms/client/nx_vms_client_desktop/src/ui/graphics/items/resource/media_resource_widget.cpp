@@ -95,6 +95,7 @@
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/camera_hotspots_overlay_widget.h>
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/figure/figures_watcher.h>
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/roi_figures_overlay_widget.h>
+#include <nx/vms/client/desktop/ui/graphics/items/overlays/audio_spectrum_overlay_widget.h>
 #include <nx/vms/client/desktop/ui/graphics/items/resource/widget_analytics_controller.h>
 #include <nx/vms/client/desktop/utils/timezone_helper.h>
 #include <nx/vms/client/desktop/watermark/watermark_painter.h>
@@ -451,6 +452,7 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     initAnalyticsOverlays();
     initAreaSelectOverlay();
     initCameraHotspotsOverlay();
+    initAudioSpectrumOverlay();
 
     /* Set up buttons. */
     createButtons();
@@ -565,18 +567,6 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     using Controller = nx::vms::client::core::SoftwareTriggersController;
     connect(m_triggersController, &Controller::triggerActivated, this, triggerActionHandler);
     connect(m_triggersController, &Controller::triggerDeactivated, this, triggerActionHandler);
-
-    if (!d->hasVideo)
-    {
-        m_voiceSpectrumPainter = std::make_unique<VoiceSpectrumPainter>();
-
-        VoiceSpectrumPainterOptions options;
-        options.color = nx::vms::client::core::colorTheme()->color("camera.visualizer");
-        options.visualizerLineOffset = 20;
-        m_voiceSpectrumPainter->setOptions(options);
-
-        m_voiceSpectrumTimer.start();
-    }
 }
 
 QnMediaResourceWidget::~QnMediaResourceWidget()
@@ -814,6 +804,17 @@ void QnMediaResourceWidget::initCameraHotspotsOverlay()
 
     addOverlayWidget(m_cameraHotspotsOverlayWidget, {UserVisible, OverlayFlag::none, InfoLayer});
     m_cameraHotspotsOverlayWidget->stackBefore(m_hudOverlay);
+}
+
+void QnMediaResourceWidget::initAudioSpectrumOverlay()
+{
+    if (d->hasVideo)
+        return;
+
+    m_audioSpectrumOverlayWidget = new AudioSpectrumOverlayWidget(this, m_compositeOverlay);
+    addOverlayWidget(
+        m_audioSpectrumOverlayWidget,
+        {Visible, OverlayFlag::none, InfoLayer});
 }
 
 QnMediaResourceWidget::AreaType QnMediaResourceWidget::areaSelectionType() const
@@ -1864,15 +1865,6 @@ void QnMediaResourceWidget::paintChannelForeground(QPainter *painter, int channe
 
     if (ini().showCameraCrosshair && hasVideo())
         drawCrosshair(painter, rect);
-
-    if (!d->hasVideo)
-    {
-        QPointF size = rect.bottomRight() - rect.topLeft();
-        QRectF rect_1(rect.topLeft() + size / 4, rect.bottomRight() - size / 4);
-
-        m_voiceSpectrumPainter->update(m_voiceSpectrumTimer.elapsed(), display()->camDisplay()->audioSpectrum().data);
-        m_voiceSpectrumPainter->paint(painter, rect_1);
-    }
 }
 
 void QnMediaResourceWidget::paintEffects(QPainter* painter)

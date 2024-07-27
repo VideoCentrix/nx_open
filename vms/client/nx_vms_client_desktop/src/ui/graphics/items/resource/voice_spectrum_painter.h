@@ -28,7 +28,7 @@ struct VoiceSpectrumPainterOptions {
     qreal visualizerLineOffset = 2.0;
 
     /** Color to use for audio spectrum painting. */
-    QColor color;
+    QColor color = QColor(255, 255, 255);
 };
 
 class VoiceSpectrumPainter {
@@ -38,21 +38,13 @@ public:
     VoiceSpectrumPainter();
     virtual ~VoiceSpectrumPainter();
 
-    const VoiceSpectrumPainterOptions& options() const
-    {
-        return m_options;
-    }
-
-    void setOptions(const VoiceSpectrumPainterOptions& options)
-    {
-        m_options = options;
-    }
-
     void update(qint64 timeMs, const Data& data);
 
     void paint(QPainter* painter, const QRectF& rect);
 
     void reset();
+
+    VoiceSpectrumPainterOptions options;
 
 private:
     void normalizeData(Data& source);
@@ -60,7 +52,6 @@ private:
     static Data generateEmptyData(qint64 elapsedMs, int bandsCount);
 
 private:
-    VoiceSpectrumPainterOptions m_options;
     Data m_data;
     qint64 m_oldTimeMs = 0;
 };

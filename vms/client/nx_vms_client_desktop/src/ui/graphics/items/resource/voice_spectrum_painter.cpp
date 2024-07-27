@@ -37,22 +37,22 @@ void VoiceSpectrumPainter::paint(QPainter* painter, const QRectF& rect)
     if (m_data.isEmpty())
         return;
 
-    const qreal lineWidth = qRound(qMax(m_options.visualizerLineWidth,
-        (rect.width() / m_data.size()) - m_options.visualizerLineOffset));
+    const qreal lineWidth = qRound(qMax(options.visualizerLineWidth,
+        (rect.width() / m_data.size()) - options.visualizerLineOffset));
 
     const qreal midY = rect.center().y();
-    const qreal maxHeight = rect.height() * m_options.maxVisualizerHeightCoeff;
+    const qreal maxHeight = rect.height() * options.maxVisualizerHeightCoeff;
 
     QPainterPath path;
     for (int i = 0; i < m_data.size(); ++i)
     {
-        const qreal lineHeight = qRound(qMax(maxHeight * m_data[i], m_options.visualizerLineOffset * 2));
-        path.addRect(qRound(rect.left() + i * (lineWidth + m_options.visualizerLineOffset)),
+        const qreal lineHeight = qRound(qMax(maxHeight * m_data[i], options.visualizerLineOffset * 2));
+        path.addRect(qRound(rect.left() + i * (lineWidth + options.visualizerLineOffset)),
             qRound(midY - (lineHeight / 2)), lineWidth, lineHeight);
     }
 
     paintSharp(painter,
-        [&](QPainter* painter) { painter->fillPath(path, m_options.color); });
+        [&](QPainter* painter) { painter->fillPath(path, options.color); });
 }
 
 void VoiceSpectrumPainter::reset()
@@ -68,14 +68,14 @@ void VoiceSpectrumPainter::normalizeData(Data& source)
     const auto max = std::max_element(source.cbegin(), source.cend());
 
     // Do not normalize if silence.
-    if (*max < m_options.normalizerSilenceValue)
+    if (*max < options.normalizerSilenceValue)
         return;
 
     // Do not normalize if there is bigger value, so normalizing will always only increase values.
-    if (*max > m_options.normalizerIncreaseValue)
+    if (*max > options.normalizerIncreaseValue)
         return;
 
-    const auto k = m_options.normalizerIncreaseValue / *max;
+    const auto k = options.normalizerIncreaseValue / *max;
     for (auto& e: source)
         e *= k;
 }
@@ -87,8 +87,8 @@ VoiceSpectrumPainter::Data VoiceSpectrumPainter::animateData(const Data& prev, c
     if (prev.size() != next.size())
         return next;
 
-    const qreal maxUpChange = qBound(0.0, m_options.visualizerAnimationUpSpeed * timeStepMs / 1000, 1.0);
-    const qreal maxDownChange = qBound(0.0, m_options.visualizerAnimationDownSpeed * timeStepMs / 1000, 1.0);
+    const qreal maxUpChange = qBound(0.0, options.visualizerAnimationUpSpeed * timeStepMs / 1000, 1.0);
+    const qreal maxDownChange = qBound(0.0, options.visualizerAnimationDownSpeed * timeStepMs / 1000, 1.0);
 
     Data result(prev.size());
     for (int i = 0; i < prev.size(); ++i)
