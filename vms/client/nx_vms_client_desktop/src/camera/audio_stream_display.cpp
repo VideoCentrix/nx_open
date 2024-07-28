@@ -327,13 +327,13 @@ void QnAudioStreamDisplay::playCurrentBuffer()
                 (const quint8*) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
         }
 
-        // TODO(elric): for now we only support 16-bit signed ints here.
-        if (m_analyzer && audioFormat.sampleSize == 16 &&
+        // TODO(elric): for now we only support 16-bit and 32-bit signed ints here, is this OK?
+        if (m_analyzer && (audioFormat.sampleSize == 16 || audioFormat.sampleSize == 32) &&
             audioFormat.sampleType == nx::media::audio::Format::SampleType::signedInt)
         {
             // initialize() does nothing if sample rate / channel count didn't change.
             m_analyzer->initialize(audioFormat.sampleRate, audioFormat.channelCount);
-            m_analyzer->processData((const qint16 *) m_decodedAudioBuffer.data(),
+            m_analyzer->processData(audioFormat, m_decodedAudioBuffer.data(),
                                     m_decodedAudioBuffer.size());
         }
     }

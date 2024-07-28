@@ -12,6 +12,7 @@ extern "C" {
 } // extern "C"
 
 #include <nx/utils/thread/mutex.h>
+#include <nx/media/audio/format.h>
 
 struct QnSpectrumData
 {
@@ -30,10 +31,12 @@ public:
     void initialize(int srcSampleRate, int channels);
 
     /**
-     * Process input data. Data should be in 16 bit form. The total amount of samples is
+     * Process input data. Data should be in 16 or 32 bit form. The total amount of samples is
      * sampleCount * channels.
      */
     void processData(const qint16* sampleData, int sampleCount);
+    void processData(const qint32* sampleData, int sampleCount);
+    void processData(const nx::media::audio::Format& format, const void* sampleData, int sampleCount);
 
     QnSpectrumData getSpectrumData() const;
 
@@ -43,6 +46,8 @@ public:
     static int bandsCount();
 
 protected: //< Made protected for unit tests.
+    template<class T>
+    void processDataInternal(const T* sampleData, int sampleCount);
     int windowSize() const { return m_windowSize; }
     FFTComplex* fftData() const { return m_fftData; }
     void performFft();
