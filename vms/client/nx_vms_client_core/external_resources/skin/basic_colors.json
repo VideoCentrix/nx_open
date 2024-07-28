@@ -291,7 +291,14 @@
             "paletteCheckMark": "#000000"
         },
         "diagnosticsDialog": "#80ff80",
-        "visualizer": "#618898.setAlpha(128)"
+        "audioOnly": {
+            "background": {
+                "default": "dark1.setAlpha(128)",
+                "hovered": "dark7.setAlpha(128)",
+                "pressed": "dark16.setAlpha(128)"
+            },
+            "visualizer": "#618898.setAlpha(128)"
+        }
     },
 
     "server": {

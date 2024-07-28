@@ -8,18 +8,25 @@
 
 #include <nx/vms/client/desktop/camera/camera_fwd.h>
 
-class QnMediaResourceWidget;
-
 namespace nx::vms::client::desktop {
 
-class AudioSpectrumOverlayWidget: public GraphicsWidget
+class AudioSpectrumWidget: public GraphicsWidget
 {
     Q_OBJECT
     using base_type = GraphicsWidget;
 
 public:
-    AudioSpectrumOverlayWidget(QnResourceDisplayPtr display, QGraphicsWidget* parent);
-    virtual ~AudioSpectrumOverlayWidget() override;
+    AudioSpectrumWidget(QnResourceDisplayPtr display, QGraphicsWidget* parent);
+    virtual ~AudioSpectrumWidget() override;
+
+    bool isMuted() const;
+    void setMuted(bool muted);
+
+signals:
+    void mutedChanged();
+
+private:
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 private:
     class Private;

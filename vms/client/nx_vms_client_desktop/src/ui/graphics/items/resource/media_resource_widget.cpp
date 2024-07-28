@@ -447,12 +447,12 @@ QnMediaResourceWidget::QnMediaResourceWidget(
         &QnMediaResourceWidget::updateInfoText, Qt::QueuedConnection);
 
     /* Set up overlays */
+    initAudioSpectrumOverlay();
     initIoModuleOverlay();
     updateCameraButtons();
     initAnalyticsOverlays();
     initAreaSelectOverlay();
     initCameraHotspotsOverlay();
-    initAudioSpectrumOverlay();
 
     /* Set up buttons. */
     createButtons();
@@ -814,7 +814,7 @@ void QnMediaResourceWidget::initAudioSpectrumOverlay()
     m_audioSpectrumOverlayWidget = new AudioSpectrumOverlayWidget(display(), m_compositeOverlay);
     addOverlayWidget(
         m_audioSpectrumOverlayWidget,
-        {Visible, OverlayFlag::none, InfoLayer});
+        {Visible, OverlayFlag::autoRotate | OverlayFlag::bindToViewport, BaseLayer});
 }
 
 QnMediaResourceWidget::AreaType QnMediaResourceWidget::areaSelectionType() const
