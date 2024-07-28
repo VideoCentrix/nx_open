@@ -95,6 +95,7 @@
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/camera_hotspots_overlay_widget.h>
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/figure/figures_watcher.h>
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/roi_figures_overlay_widget.h>
+#include <nx/vms/client/desktop/ui/graphics/items/overlays/audio_spectrum_overlay_widget.h>
 #include <nx/vms/client/desktop/ui/graphics/items/resource/widget_analytics_controller.h>
 #include <nx/vms/client/desktop/utils/timezone_helper.h>
 #include <nx/vms/client/desktop/watermark/watermark_painter.h>
@@ -141,6 +142,9 @@
 #include <utils/common/scoped_painter_rollback.h>
 #include <utils/common/synctime.h>
 #include <utils/math/color_transformations.h>
+
+#include "voice_spectrum_painter.h"
+#include "utils/media/voice_spectrum_analyzer.h"
 
 using namespace std::chrono;
 
@@ -443,6 +447,7 @@ QnMediaResourceWidget::QnMediaResourceWidget(
         &QnMediaResourceWidget::updateInfoText, Qt::QueuedConnection);
 
     /* Set up overlays */
+    initAudioSpectrumOverlay();
     initIoModuleOverlay();
     updateCameraButtons();
     initAnalyticsOverlays();
@@ -799,6 +804,17 @@ void QnMediaResourceWidget::initCameraHotspotsOverlay()
 
     addOverlayWidget(m_cameraHotspotsOverlayWidget, {UserVisible, OverlayFlag::none, InfoLayer});
     m_cameraHotspotsOverlayWidget->stackBefore(m_hudOverlay);
+}
+
+void QnMediaResourceWidget::initAudioSpectrumOverlay()
+{
+    if (d->hasVideo)
+        return;
+
+    m_audioSpectrumOverlayWidget = new AudioSpectrumOverlayWidget(display(), m_compositeOverlay);
+    addOverlayWidget(
+        m_audioSpectrumOverlayWidget,
+        {Visible, OverlayFlag::autoRotate | OverlayFlag::bindToViewport, BaseLayer});
 }
 
 QnMediaResourceWidget::AreaType QnMediaResourceWidget::areaSelectionType() const
@@ -1675,6 +1691,8 @@ void QnMediaResourceWidget::setDisplay(const QnResourceDisplayPtr& display)
         m_renderer->setChannelCount(display->videoLayout()->channelCount());
         display->addRenderer(m_renderer);
         updateCustomAspectRatio();
+
+        display->camDisplay()->setAnalyzesAudio(!d->hasVideo);
     }
     else
     {
@@ -2678,7 +2696,7 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
 
         // Handle export from I/O modules.
         if (!d->hasVideo)
-            return Qn::NoVideoDataOverlay;
+            return Qn::EmptyOverlay;
     }
 
     if (d->display()->camDisplay()->isLongWaiting())
@@ -2705,7 +2723,7 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
     if (d->display()->isPaused())
     {
         if (!d->hasVideo)
-            return Qn::NoVideoDataOverlay;
+            return Qn::EmptyOverlay;
 
         return Qn::EmptyOverlay;
     }
