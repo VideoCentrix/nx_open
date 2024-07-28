@@ -2,16 +2,12 @@
 
 #include "audio_spectrum_overlay_widget.h"
 
-#include <QtCore/QElapsedTimer>
+#include <QtWidgets/QGraphicsGridLayout>
 
-#include <utils/media/voice_spectrum_analyzer.h>
 #include <camera/cam_display.h>
 #include <camera/resource_display.h>
-#include <nx/vms/client/core/skin/color_theme.h>
-#include <ui/graphics/items/resource/voice_spectrum_painter.h>
-#include <ui/graphics/items/resource/media_resource_widget.h>
 
-#include "nx/vms/client/core/utils/geometry.h"
+#include "audio_spectrum_widget.h"
 
 namespace nx::vms::client::desktop {
 
@@ -26,9 +22,8 @@ public:
     Private(QnResourceDisplayPtr display, AudioSpectrumOverlayWidget* q);
 
 public:
-    QnResourceDisplayPtr display;
-    VoiceSpectrumPainter painter;
-    QElapsedTimer timer;
+    QnResourceDisplayPtr const display;
+    AudioSpectrumWidget *const widget;
 };
 
 AudioSpectrumOverlayWidget::Private::Private(
@@ -36,15 +31,13 @@ AudioSpectrumOverlayWidget::Private::Private(
     AudioSpectrumOverlayWidget* q)
     :
     q(q),
-    display(display)
+    display(display),
+    widget(new AudioSpectrumWidget(display, q))
 {
-    painter.options.color = nx::vms::client::core::colorTheme()->color("camera.visualizer");
-
-    timer.start();
 }
 
 //-------------------------------------------------------------------------------------------------
-// AreaSelectOverlayWidget
+// AudioSpectrumOverlayWidget
 
 AudioSpectrumOverlayWidget::AudioSpectrumOverlayWidget(
     QnResourceDisplayPtr display,
@@ -54,20 +47,33 @@ AudioSpectrumOverlayWidget::AudioSpectrumOverlayWidget(
     d(new Private(display, this))
 {
     NX_ASSERT(display);
+
+    // Don't interfere with event handling.
+    setAcceptedMouseButtons(Qt::NoButton);
+    setAcceptHoverEvents(false);
+    setFocusPolicy(Qt::NoFocus);
+
+    // Init layout.
+    // We set margins here so that the audio control isn't placed on top of other item buttons.
+    QGraphicsGridLayout *layout = new QGraphicsGridLayout();
+    layout->setContentsMargins(96, 96, 96, 96);
+    layout->setSpacing(0);
+    layout->addItem(d->widget, 1, 1);
+    layout->setColumnStretchFactor(0, 1);
+    layout->setColumnStretchFactor(2, 1);
+    layout->setRowStretchFactor(0, 1);
+    layout->setRowStretchFactor(2, 1);
+    setLayout(layout);
+
+    // Add event handlers.
+    connect(d->widget, &AudioSpectrumWidget::mutedChanged, this, [this]
+    {
+        d->display->camDisplay()->playAudio(!d->widget->isMuted());
+    });
 }
 
 AudioSpectrumOverlayWidget::~AudioSpectrumOverlayWidget()
 {
-}
-
-void AudioSpectrumOverlayWidget::paint(
-    QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
-{
-    d->painter.update(d->timer.elapsed(), d->display->camDisplay()->audioSpectrum().data);
-    d->painter.options.visualizerLineOffset = rect().width() / 80;
-
-    QRectF targetRect = rect().adjusted(rect().width() / 4, rect().height() / 4, -rect().width() / 4, -rect().height() / 4);
-    d->painter.paint(painter, targetRect);
 }
 
 } // namespace nx::vms::client::desktop
