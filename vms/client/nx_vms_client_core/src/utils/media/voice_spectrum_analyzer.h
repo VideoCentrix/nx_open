@@ -36,7 +36,7 @@ public:
      */
     void processData(const qint16* sampleData, int sampleCount);
     void processData(const qint32* sampleData, int sampleCount);
-    void processData(const nx::media::audio::Format& format, const void* sampleData, int sampleCount);
+    void processData(const nx::media::audio::Format& format, const void* sampleData, int sampleBytes);
 
     QnSpectrumData getSpectrumData() const;
 
