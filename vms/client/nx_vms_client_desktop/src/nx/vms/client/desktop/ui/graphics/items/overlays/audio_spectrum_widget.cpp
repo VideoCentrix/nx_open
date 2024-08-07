@@ -182,7 +182,7 @@ void AudioSpectrumWidget::paint(
         // Draw spectrum.
         QRectF spectrumRect = core::Geometry::eroded(spacerRect, kSpectrumInternalMargins);
         d->painter.update(d->timer.elapsed(), d->display->camDisplay()->audioSpectrum().data);
-        d->painter.options.visualizerLineOffset = spectrumRect.width() / 40;
+        d->painter.options.visualizerLineOffset = spectrumRect.width() / 30;
         d->painter.paint(painter, spectrumRect);
     }
 }
