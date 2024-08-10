@@ -225,7 +225,8 @@ void QnImageButtonWidget::clickInternal(QGraphicsSceneMouseEvent *event)
 
     QPointer<QObject> self(this);
 
-    QScopedValueRollback<bool> clickedRollback(m_isClicked, true);
+    // We used to have QScopedValueRollback<bool> here, but it can't work because `this` can be destroyed while we're in this method.
+    m_isClicked = true;
 
     if (m_action != nullptr)
     {
@@ -262,6 +263,8 @@ void QnImageButtonWidget::clickInternal(QGraphicsSceneMouseEvent *event)
         menu->exec(pos);
         updateState(m_state & ~Pressed);
     }
+
+    m_isClicked = false;
 }
 
 void QnImageButtonWidget::click()
