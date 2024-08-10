@@ -255,7 +255,8 @@ class NxOpenConan(ConanFile):
             if not dst.parent.exists():
                 dst.parent.mkdir(parents=True)
 
-            dst.unlink(missing_ok=True)
+            if dst.exists():
+                dst.unlink()
             self.output.info(f"Importing {src} -> {dst}")
             shutil.copy2(src, dst, follow_symlinks=False)
 
