@@ -230,7 +230,8 @@ class NxOpenConan(ConanFile):
             if not dst.parent.exists():
                 dst.parent.mkdir(parents=True)
 
-            dst.unlink(missing_ok=True)
+            if dst.exists():
+                dst.unlink()
             shutil.copyfile(src, dst, follow_symlinks=False)
 
         self.fixLibraryPermissions()
