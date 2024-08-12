@@ -1,0 +1,103 @@
+{
+    "id": "alphavs",
+    "brand": "alphavs",
+    "companyName": "Alpha VS",
+    "companyId": "alphavs",
+    "vmsName": "Video Centrix",
+    "vmsId": "Video Centrix",
+    "skin": "dark_blue",
+    "uriProtocol": "alpha-vms",
+    "eulaVersion": 1,
+    "installerName": "alphavs",
+    "cloudName": "Alpha VS Cloud",
+    "cloudHost": "cloud.alphavs.com",
+    "defaultLanguage": "en_US",
+    "customLanguages": [],
+    "customOpenSourceLibrariesUrl": "",
+    "contact": {
+        "companyUrl": "www.alphavs.com",
+        "supportAddress": "techsupport@alphavs.com",
+        "licensingAddress": "techsupport@alphavs.com",
+        "systemWebPages": {
+            "homePage": "www.alphavs.com",
+            "supportPage": ""
+        }
+    },
+    "desktop": {
+        "clientAutoUpdates": true,
+        "customClient": false,
+        "supportsHanwha": false,
+        "supportsVmax": false,
+        "trialLicenseKey": "0000-0000-0000-0057",
+        "releaseListUrl": "",
+        "offlineUpdateGeneratorUrl": "",
+        "customClientVariant": "",
+        "systemData": {
+            "webPages": [
+                {
+                    "name": "Home Page",
+                    "url": "www.alphavs.com",
+                    "isIntegration": false
+                },
+                {
+                    "name": "Support",
+                    "url": "",
+                    "isIntegration": false
+                }
+            ]
+        },
+        "windows": {
+            "serverUpgradeCode": "{292bce07-2c51-466d-83be-3647ab50a6c1}",
+            "serverBundleUpgradeCode": "{3d9be581-934c-412e-a2c2-a0a160c532ab}",
+            "clientUpgradeCode": "{a3367398-6d69-4e7d-88bb-9256570bb919}",
+            "clientBundleUpgradeCode": "{18a1c8d6-a548-4793-a47a-f32bba25d475}",
+            "fullBundleUpgradeCode": "{c2c9888e-5968-4db5-9dde-998fbf530017}"
+        },
+        "macos": {
+            "bundleIdentifier": "com.alphavs.videocentrix2",
+            "protocolHandlerBundleIdentifier": "com.alphavs.protocol_handler",
+            "signIdentity": "Developer ID Application: Network Optix, Inc. (L6FE34GJWM)"
+        }
+    },
+    "mobile": {
+        "enabled": false,
+        "displayName": "",
+        "compatibleCustomizations": "",
+        "compatibleUriProtocols": "",
+        "android": {
+            "packageName": "",
+            "storepass": "",
+            "alias": "",
+            "keypass": "",
+            "compatibilityPackage": "",
+            "baidu": {
+                "apiKey": "",
+                "displayName": ""
+            }
+        },
+        "ios": {
+            "bundleName": "",
+            "bundleIdentifier": "",
+            "groupIdentifier": "",
+            "signIdentity": "",
+            "compatibilityPackage": ""
+        }
+    },
+    "paxton": {
+        "enabled": false,
+        "libraryName": "",
+        "productId": "",
+        "productUpgradeCode": "",
+        "bundleUpgradeCode": ""
+    },
+    "advanced": {
+        "useMetaVersion": false,
+        "useFullCloudNameEverywhere": false,
+        "disableCodeSigning": false,
+        "customWindowsInstallPath": "",
+        "customClientDisplayName": "",
+        "customMediaserverServiceName": "",
+        "customMediaserverApplicationName": "",
+        "customMediaserverLinuxUserName": ""
+    }
+}

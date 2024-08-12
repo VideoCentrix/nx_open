@@ -7,6 +7,14 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Ap
     add_compile_options(-Wno-enum-constexpr-conversion)
 endif()
 
+# Prepare customization at configure time.
+set(CUSTOMIZATION_ZIP "${CMAKE_CURRENT_BINARY_DIR}/alphavs.zip")
+file(GLOB CUSTOMIZATION_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/alphavs" "${CMAKE_CURRENT_SOURCE_DIR}/alphavs/*")
+execute_process(
+        COMMAND ${CMAKE_COMMAND} -E tar "cf" "${CUSTOMIZATION_ZIP}" --format=zip -- ${CUSTOMIZATION_FILES}
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/alphavs")
+set(customizationPackageFile "${CUSTOMIZATION_ZIP}" CACHE STRING "Customization package archive" FORCE)
+
 set(open_source_root "${CMAKE_SOURCE_DIR}")
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
