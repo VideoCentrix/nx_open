@@ -96,6 +96,7 @@
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/figure/figures_watcher.h>
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/roi_figures_overlay_widget.h>
 #include <nx/vms/client/desktop/ui/graphics/items/overlays/audio_spectrum_overlay_widget.h>
+#include <nx/vms/client/desktop/ui/graphics/items/overlays/audio_spectrum_widget.h>
 #include <nx/vms/client/desktop/ui/graphics/items/resource/widget_analytics_controller.h>
 #include <nx/vms/client/desktop/utils/timezone_helper.h>
 #include <nx/vms/client/desktop/watermark/watermark_painter.h>
@@ -142,9 +143,6 @@
 #include <utils/common/scoped_painter_rollback.h>
 #include <utils/common/synctime.h>
 #include <utils/math/color_transformations.h>
-
-#include "voice_spectrum_painter.h"
-#include "utils/media/voice_spectrum_analyzer.h"
 
 using namespace std::chrono;
 
@@ -1121,6 +1119,15 @@ void QnMediaResourceWidget::createButtons()
         &QAction::toggled,
         titleBar()->rightButtonsBar()->button(Qn::ObjectSearchButton),
         &QnImageButtonWidget::setChecked);
+
+    auto audioButton = createStatisticAwareButton("media_widget_mute");
+    audioButton->setIcon(loadSvgIcon("item/mute.svg"));
+    audioButton->setCheckable(true);
+    audioButton->setChecked(false);
+    audioButton->setToolTip(tr("Toggle Audio"));
+    connect(audioButton, &QnImageButtonWidget::toggled, this,
+        &QnMediaResourceWidget::at_audioButton_toggled);
+    titleBar()->rightButtonsBar()->addButton(Qn::ToggleAudioButton, audioButton);
 }
 
 void QnMediaResourceWidget::updatePtzController()
@@ -2476,6 +2483,9 @@ int QnMediaResourceWidget::calculateButtonsVisibility() const
 {
     int result = base_type::calculateButtonsVisibility();
 
+    // TODO(elric): should depend on global setting.
+    result |= Qn::ToggleAudioButton;
+
     if (ini().developerMode)
         result |= Qn::DbgScreenshotButton;
 
@@ -3725,4 +3735,11 @@ bool QnMediaResourceWidget::isTitleUnderMouse() const
         return false;
 
     return m_hudOverlay->title()->isUnderMouse();
+}
+
+void QnMediaResourceWidget::at_audioButton_toggled() {
+    bool muted = !(checkedButtons() & Qn::ToggleAudioButton);
+
+    m_audioSpectrumOverlayWidget->audioSpectrumWidget()->setMuted(muted);
+    display()->camDisplay()->setAudioDecodeOnly(muted);
 }

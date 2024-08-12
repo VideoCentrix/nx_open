@@ -292,12 +292,11 @@
         },
         "diagnosticsDialog": "#80ff80",
         "audioOnly": {
-            "background": {
-                "default": "dark1.setAlpha(128)",
-                "hovered": "dark7.setAlpha(128)",
-                "pressed": "dark16.setAlpha(128)"
-            },
-            "visualizer": "#4caf50"
+            "background": "dark1.setAlpha(128)",
+            "visualizer": {
+                "active": "#4caf50",
+                "inactive": "light16"
+            }
         }
     },
 

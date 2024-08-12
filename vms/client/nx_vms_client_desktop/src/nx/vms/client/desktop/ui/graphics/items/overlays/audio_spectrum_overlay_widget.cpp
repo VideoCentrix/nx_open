@@ -8,6 +8,8 @@
 #include <camera/resource_display.h>
 
 #include "audio_spectrum_widget.h"
+#include "nx/vms/client/core/skin/color_theme.h"
+#include "ui/common/palette.h"
 
 namespace nx::vms::client::desktop {
 
@@ -64,16 +66,14 @@ AudioSpectrumOverlayWidget::AudioSpectrumOverlayWidget(
     layout->setRowStretchFactor(0, 1);
     layout->setRowStretchFactor(2, 1);
     setLayout(layout);
-
-    // Add event handlers.
-    connect(d->widget, &AudioSpectrumWidget::mutedChanged, this, [this]
-    {
-        d->display->camDisplay()->playAudio(!d->widget->isMuted());
-    });
 }
 
 AudioSpectrumOverlayWidget::~AudioSpectrumOverlayWidget()
 {
+}
+
+AudioSpectrumWidget *AudioSpectrumOverlayWidget::audioSpectrumWidget() const {
+    return d->widget;
 }
 
 } // namespace nx::vms::client::desktop

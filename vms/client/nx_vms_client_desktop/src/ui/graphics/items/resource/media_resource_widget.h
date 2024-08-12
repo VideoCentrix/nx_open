@@ -391,6 +391,8 @@ private slots:
         nx::Uuid id,
         nx::vms::client::core::SoftwareTriggersWatcher::TriggerFields fields);
 
+    void at_audioButton_toggled();
+
 private:
     void handleItemDataChanged(const nx::Uuid& id, Qn::ItemDataRole role, const QVariant& data);
     void handleDewarpingParamsChanged();

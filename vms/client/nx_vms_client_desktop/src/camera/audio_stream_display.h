@@ -21,7 +21,7 @@ class QnAudioStreamDisplay: public QObject
     Q_OBJECT
 
 public:
-    QnAudioStreamDisplay(int bufferMs, int prebufferMs, bool withAnalyzer);
+    QnAudioStreamDisplay(int bufferMs, int prebufferMs, bool withAnalyzer, bool decodeOnly);
     ~QnAudioStreamDisplay();
 
     bool putData(QnCompressedAudioDataPtr data, qint64 minTime = 0);
@@ -60,6 +60,7 @@ public:
     bool isPlaying() const;
 
     QnVoiceSpectrumAnalyzer *analyzer() const;
+    bool isDecodeOnly() const;
 
 private:
     int msInQueue() const;
@@ -78,6 +79,7 @@ private:
     bool m_isFormatSupported;
     std::unique_ptr<nx::audio::Sound> m_sound;
     std::unique_ptr<QnVoiceSpectrumAnalyzer> m_analyzer;
+    bool m_decodeOnly = false;
 
     bool m_downmixing; //< Do downmixing.
     bool m_forceDownmix; //< Force downmixing, even if output device supports multichannel.

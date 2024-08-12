@@ -12,6 +12,8 @@ class QnMediaResourceWidget;
 
 namespace nx::vms::client::desktop {
 
+class AudioSpectrumWidget;
+
 class AudioSpectrumOverlayWidget: public GraphicsWidget
 {
     Q_OBJECT
@@ -20,6 +22,8 @@ class AudioSpectrumOverlayWidget: public GraphicsWidget
 public:
     AudioSpectrumOverlayWidget(QnResourceDisplayPtr display, QGraphicsWidget* parent);
     virtual ~AudioSpectrumOverlayWidget() override;
+
+    AudioSpectrumWidget *audioSpectrumWidget() const;
 
 private:
     class Private;

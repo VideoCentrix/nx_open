@@ -18,11 +18,12 @@ namespace {
 static const int AVCODEC_MAX_AUDIO_FRAME_SIZE = 192 * 1000;
 }
 
-QnAudioStreamDisplay::QnAudioStreamDisplay(int bufferMs, int prebufferMs, bool withAnalyzer):
+QnAudioStreamDisplay::QnAudioStreamDisplay(int bufferMs, int prebufferMs, bool withAnalyzer, bool decodeOnly):
     m_bufferMs(bufferMs),
     m_prebufferMs(prebufferMs),
     m_tooFewDataDetected(true),
     m_isFormatSupported(true),
+    m_decodeOnly(decodeOnly),
     m_downmixing(false),
     m_forceDownmix(appContext()->localSettings()->downmixAudio()),
     m_sampleConvertMethod(SampleConvertMethod::none),
@@ -228,7 +229,7 @@ bool QnAudioStreamDisplay::putData(QnCompressedAudioDataPtr data, qint64 minTime
         m_startBufferingTime = data->timestamp - bufferSizeMs * 1000;
     }
 
-    bool canDropLateAudio = !m_sound || m_sound->state() != QAudio::State::ActiveState;
+    bool canDropLateAudio = !m_sound || (m_sound->state() != QAudio::State::ActiveState && !m_decodeOnly);
     if (canDropLateAudio && data && data->timestamp < minTime)
     {
         clearAudioBuffer();
@@ -321,7 +322,7 @@ void QnAudioStreamDisplay::playCurrentBuffer()
             }
         }
 
-        if (m_sound)
+        if (m_sound && !m_decodeOnly)
         {
             m_sound->write(
                 (const quint8*) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
@@ -367,4 +368,8 @@ void QnAudioStreamDisplay::setForceDownmix(bool value)
 int QnAudioStreamDisplay::getAudioBufferSize() const
 {
     return m_bufferMs;
+}
+
+bool QnAudioStreamDisplay::isDecodeOnly() const {
+    return m_decodeOnly;
 }

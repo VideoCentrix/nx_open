@@ -154,6 +154,8 @@ public:
 
     bool analyzesAudio() const;
     void setAnalyzesAudio(bool analyzesAudio);
+    bool isAudioDecodeOnly() const;
+    void setAudioDecodeOnly(bool audioDecodeOnly);
     QnSpectrumData audioSpectrum() const;
 
 public slots:
@@ -328,6 +330,7 @@ protected:
     std::function<void()> m_streamsChangedCallback;
 
     bool m_analyzesAudio = false;
+    bool m_audioDecodeOnly = false;
 };
 
 #endif //QN_CAM_DISPLAY_H
