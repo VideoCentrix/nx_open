@@ -56,13 +56,17 @@ QnNotificationSoundModel* ServerNotificationCache::persistentGuiModel() const {
 }
 
 bool ServerNotificationCache::storeSound(
-    const QString &filePath, int maxLengthMSecs, const QString &customTitle)
+    const QString &filePath, int maxLengthMSecs, const QString &customTitle, bool preserveFileName)
 {
     if (!isConnectedToServer())
         return false;
 
-    const auto newFilename =
-        nx::Uuid::createUuid().toSimpleString().append('.').append(targetContainter);
+    QString newFilename;
+    if (preserveFileName) {
+        newFilename = QFileInfo(filePath).fileName();
+    } else {
+        newFilename = nx::Uuid::createUuid().toSimpleString().append('.').append(targetContainter);
+    }
 
     QString title = customTitle;
     if (title.isEmpty())
