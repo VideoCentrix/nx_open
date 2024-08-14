@@ -24,7 +24,7 @@ public:
     void setMessageProcessor(QnClientMessageProcessor* messageProcessor);
 
     bool storeSound(
-        const QString &filePath, int maxLengthMSecs = -1, const QString &customTitle = QString());
+        const QString &filePath, int maxLengthMSecs = -1, const QString &customTitle = QString(), bool preserveFileName = false);
     bool updateTitle(const QString &filename, const QString &title);
     virtual void clear() override;
 
