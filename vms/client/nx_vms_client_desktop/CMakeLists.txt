@@ -73,8 +73,12 @@ file(GLOB_RECURSE qt_widgets_headers "${qt_widgets_root}/qt_widgets/*.h")
 
 file(GLOB_RECURSE vx_sources "${vx_root}/vx/*")
 file(GLOB_RECURSE vx_headers "${vx_root}/vx/*.h")
-nx_find_files(vx_uis "${vx_root}/vx" "ui")
+nx_find_files(vx_uis "${vx_root}/src/vx" "ui")
 qt6_wrap_ui(vx_uics ${vx_uis})
+
+file(GLOB_RECURSE VX_AUDIO_FILES CONFIGURE_DEPENDS ${vx_root}/resources/*)
+set_source_files_properties(${VX_AUDIO_FILES}
+        PROPERTIES RESOURCE_BASE_DIR "${vx_root}/resources")
 
 set(qt_images_root "${open_source_root}/artifacts/qt_images/src")
 nx_find_files(qt_images_sources "${qt_images_root}/qt_images" "cpp")
@@ -104,6 +108,7 @@ nx_add_target(nx_vms_client_desktop LIBRARY
         "${client_font_roboto_regular}"
         "${QML_FILES}"
         "${SHADER_FILES}"
+        "${VX_AUDIO_FILES}"
     ADDITIONAL_MOCABLES
         src/nx/vms/client/desktop/system_administration/widgets/analytics_settings_widget.cpp
         src/nx/vms/client/desktop/ui/common/global_tool_tip.cpp
@@ -206,7 +211,7 @@ target_include_directories(nx_vms_client_desktop
     PRIVATE ${qt_styles_root}
     PRIVATE ${qt_widgets_root}
     PRIVATE ${qt_images_root}
-    PRIVATE ${vx_root}
+    PRIVATE ${vx_root}/src
 )
 
 if(WINDOWS)
