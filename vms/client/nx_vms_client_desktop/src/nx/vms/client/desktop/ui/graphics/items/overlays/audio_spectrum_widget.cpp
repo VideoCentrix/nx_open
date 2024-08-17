@@ -19,7 +19,8 @@ namespace nx::vms::client::desktop {
 
 constexpr QSize kButtonSize(48 * 3, 48 * 3);
 
-constexpr QMargins kButtonInternalMargins(48, 48, 48, 48);
+// Moving the icon a bit to the right here, otherwise it looks off-center because of the half-circle to the left.
+constexpr QMargins kButtonInternalMargins(48 + 6, 48, 48 - 6, 48);
 
 constexpr int kButtonSpectrumSpacing = 2;
 
