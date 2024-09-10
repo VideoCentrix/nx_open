@@ -96,7 +96,7 @@ def main():
         help="Additional library directory")
     parser.add_argument("-lf", "--link-flags", help="Link flags")
     parser.add_argument("-l", "--list", action="store_true", help="List created files")
-    parser.add_argument("libs", nargs="+", help="Libraries to copy")
+    parser.add_argument("libs", nargs="*", help="Libraries to copy")
 
     args = parser.parse_args()
 
