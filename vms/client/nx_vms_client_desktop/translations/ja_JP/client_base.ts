@@ -1009,11 +1009,11 @@
     </message>
     <message>
       <source>Save Current Layout As Cloud...</source>
-      <translation>現在のレイアウトをクラウドとして保存...</translation>
+      <translation>現在のレイアウトをクラウドに保存...</translation>
     </message>
     <message>
       <source>Save Layout As Cloud...</source>
-      <translation>レイアウトをクラウドとして保存...</translation>
+      <translation>クラウドレイアウトとして保存...</translation>
     </message>
     <message>
       <source>Save Cloud Layout</source>
@@ -5289,7 +5289,7 @@ If you intended to move analytics data to another storage location, please conta
     <name>QnStorageUrlDialog</name>
     <message>
       <source>\\&lt;Computer Name&gt;\&lt;Folder&gt;</source>
-      <translation>\\&lt;Computer Name&gt;\&lt;Folder&gt;</translation>
+      <translation>\\&lt;コンピューター名&gt;\&lt;フォルダー&gt;</translation>
     </message>
     <message>
       <source>Network Shared Resource</source>
@@ -5912,7 +5912,7 @@ If you intended to move analytics data to another storage location, please conta
     </message>
     <message>
       <source>More Video Wall licenses required</source>
-      <translation>追加のビデオウォールライセンスが必要</translation>
+      <translation>追加のビデオウォールライセンスが必要です</translation>
     </message>
     <message>
       <source>Control session cannot be started.</source>
@@ -13242,7 +13242,7 @@ You can select another storage location in the &quot;Storage Management&quot; ta
     </message>
     <message>
       <source>Save Layout As Cloud</source>
-      <translation>レイアウトをクラウドとして保存</translation>
+      <translation>クラウドレイアウトとして保存</translation>
     </message>
   </context>
   <context>
