@@ -1688,7 +1688,7 @@ License Key: %2</source>
     </message>
     <message>
       <source>Insecure</source>
-      <translation>安全でない</translation>
+      <translation>暗号化なし</translation>
     </message>
     <message>
       <source>Connection failed</source>
@@ -7363,7 +7363,7 @@ If you intended to move analytics data to another storage location, please conta
     </message>
     <message>
       <source>Select a time span on the timeline and right-click the highlighted section to create a bookmark</source>
-      <translation>ブックマークを作成するには、タイムラインで期間を選択し、強調表示されたセクションを右クリックします</translation>
+      <translation>ブックマークを作成するには、タイムラインで期間を選択し、強調表示されたセクションを右クリックしてください。</translation>
     </message>
   </context>
   <context>
@@ -9430,7 +9430,7 @@ Remember to return the Logging Level to its default setting after you have colle
     </message>
     <message>
       <source>Logging level degrades the performance of the system</source>
-      <translation>ログレベルによりシステムのパフォーマンスが低下します</translation>
+      <translation>このログレベルでは、システムのパフォーマンスが低下します</translation>
     </message>
     <message>
       <source>Non-default Logging level. We recommend setting it to &quot;info&quot;</source>
@@ -11349,7 +11349,7 @@ Do not pin this certificate if you did not modify %2 Server SSL certificate.</so
     <name>nx::vms::client::desktop::SimpleMotionSearchWidget</name>
     <message>
       <source>No motion detected</source>
-      <translation>モーションが検出されませんでした</translation>
+      <translation>検出されたモーションはありません</translation>
     </message>
     <message numerus="yes">
       <source>%n motion events</source>
