@@ -3769,26 +3769,22 @@ void QnMediaResourceWidget::updateAudioPlaybackState() {
         return;
 
     bool isPlayingAll = appContext()->localSettings()->playAudioForAllItems();
+    if (isPlayingAll && isZoomWindow())
+        return;
+
     bool isActiveWindow =
         AudioDispatcher::instance()->currentAudioSource() == mainWindowWidget()->windowHandle();
     bool isCentral = WindowContextAware::display()->widget(Qn::CentralRole) == this;
+    bool isAudioOnly = !d->hasVideo;
 
-    if (!isPlayingAll) {
-        camDisplay->setAudioDecodeOnly(false);
-        camDisplay->playAudio(isActiveWindow && isCentral);
+    bool effectiveMuted = isActiveWindow && (isPlayingAll ? isMuted() : !isCentral);
+
+    if (isAudioOnly) {
+        camDisplay->playAudio(true);
+        camDisplay->setAudioDecodeOnly(effectiveMuted);
+        m_audioSpectrumOverlayWidget->audioSpectrumWidget()->setMuted(effectiveMuted);
     } else {
-        if (isZoomWindow())
-            return;
-
-        bool isLocallyMuted = isMuted();
-        bool isAudioOnly = !d->hasVideo;
-
-        if (isAudioOnly) {
-            camDisplay->playAudio(true);
-            camDisplay->setAudioDecodeOnly(!isActiveWindow || isLocallyMuted);
-        } else {
-            camDisplay->playAudio(isActiveWindow && !isLocallyMuted);
-            camDisplay->setAudioDecodeOnly(false);
-        }
+        camDisplay->playAudio(!effectiveMuted);
+        camDisplay->setAudioDecodeOnly(false);
     }
 }
