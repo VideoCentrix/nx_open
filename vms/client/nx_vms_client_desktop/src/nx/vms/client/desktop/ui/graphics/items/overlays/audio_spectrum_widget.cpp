@@ -78,7 +78,7 @@ AudioSpectrumWidget::AudioSpectrumWidget(
     NX_ASSERT(display);
 
     // Init layout.
-    QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Horizontal);
+    QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(Qt::Horizontal);
     layout->setContentsMargins(0.0, 0.0, 0.0, 0.0);
     layout->addItem(d->button);
     layout->addItem(d->rightSpacer);

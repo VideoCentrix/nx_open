@@ -1820,13 +1820,18 @@ void ActionHandler::at_muteAction_triggered() {
 
     bool muted = parameters.argument(Qn::MutedRole).toBool();
 
-    for (QnResourceWidget* widget : parameters.widgets()) {
-        if (widget->visibleButtons() & Qn::MuteButton) {
+    for (QnResourceWidget* widget : parameters.widgets())
+    {
+        if (widget->visibleButtons() & Qn::MuteButton)
+        {
             // This action is just pressing buttons. All logic is in button handlers.
             int buttons = widget->checkedButtons();
-            if (muted) {
+            if (muted)
+            {
                 buttons |= Qn::MuteButton;
-            } else {
+            }
+            else
+            {
                 buttons &= ~Qn::MuteButton;
             }
             widget->setCheckedButtons(buttons);

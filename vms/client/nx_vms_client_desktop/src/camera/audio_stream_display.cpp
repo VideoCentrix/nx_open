@@ -257,7 +257,7 @@ bool QnAudioStreamDisplay::isPlaying() const
     return !m_tooFewDataDetected;
 }
 
-QnVoiceSpectrumAnalyzer *QnAudioStreamDisplay::analyzer() const
+QnVoiceSpectrumAnalyzer* QnAudioStreamDisplay::analyzer() const
 {
     return m_analyzer.get();
 }

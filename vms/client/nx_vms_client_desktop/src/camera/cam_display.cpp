@@ -20,10 +20,10 @@
 #include <nx/vms/client/desktop/settings/local_settings.h>
 #include <utils/common/synctime.h>
 #include <utils/common/util.h>
+#include <utils/media/voice_spectrum_analyzer.h>
 
 #include "audio_stream_display.h"
 #include "video_stream_display.h"
-#include "utils/media/voice_spectrum_analyzer.h"
 
 #if defined(Q_OS_MAC)
 #include <IOKit/pwr_mgt/IOPMLib.h>

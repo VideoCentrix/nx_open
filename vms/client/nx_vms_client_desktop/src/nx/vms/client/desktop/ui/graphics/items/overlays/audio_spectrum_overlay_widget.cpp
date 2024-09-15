@@ -25,7 +25,7 @@ public:
 
 public:
     QnResourceDisplayPtr const display;
-    AudioSpectrumWidget *const widget;
+    AudioSpectrumWidget* const widget;
 };
 
 AudioSpectrumOverlayWidget::Private::Private(
@@ -57,7 +57,7 @@ AudioSpectrumOverlayWidget::AudioSpectrumOverlayWidget(
 
     // Init layout.
     // We set margins here so that the audio control isn't placed on top of other item buttons.
-    QGraphicsGridLayout *layout = new QGraphicsGridLayout();
+    QGraphicsGridLayout* layout = new QGraphicsGridLayout();
     layout->setContentsMargins(96, 96, 96, 96);
     layout->setSpacing(0);
     layout->addItem(d->widget, 1, 1);
@@ -72,7 +72,7 @@ AudioSpectrumOverlayWidget::~AudioSpectrumOverlayWidget()
 {
 }
 
-AudioSpectrumWidget *AudioSpectrumOverlayWidget::audioSpectrumWidget() const {
+AudioSpectrumWidget* AudioSpectrumOverlayWidget::audioSpectrumWidget() const {
     return d->widget;
 }
 

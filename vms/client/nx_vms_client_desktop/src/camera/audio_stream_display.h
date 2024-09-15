@@ -59,7 +59,7 @@ public:
     int getAudioBufferSize() const;
     bool isPlaying() const;
 
-    QnVoiceSpectrumAnalyzer *analyzer() const;
+    QnVoiceSpectrumAnalyzer* analyzer() const;
     bool isDecodeOnly() const;
 
 private:

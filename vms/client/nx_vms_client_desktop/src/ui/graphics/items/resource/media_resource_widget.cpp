@@ -575,9 +575,9 @@ QnMediaResourceWidget::QnMediaResourceWidget(
         this,
         &QnMediaResourceWidget::updateAudioPlaybackState);
     connect(&appContext()->localSettings()->playAudioForAllItems,
-        &nx::utils::property_storage::BaseProperty::changed,
-        this,
-        [this] {
+        &nx::utils::property_storage::BaseProperty::changed, this,
+        [this]()
+        {
             updateButtonsVisibility();
             updateAudioPlaybackState();
         });
@@ -1142,9 +1142,11 @@ void QnMediaResourceWidget::createButtons()
     muteButton->setCheckable(true);
     muteButton->setChecked(false);
     muteButton->setToolTip(tr("Mute"));
-    connect(muteButton, &QnImageButtonWidget::toggled, this, [this] (bool toggled) {
-        updateAudioPlaybackState();
-    });
+    connect(muteButton, &QnImageButtonWidget::toggled, this,
+        [this] (bool on)
+        {
+            updateAudioPlaybackState();
+        });
     titleBar()->rightButtonsBar()->addButton(Qn::MuteButton, muteButton);
 }
 
@@ -3779,11 +3781,14 @@ void QnMediaResourceWidget::updateAudioPlaybackState() {
 
     bool effectiveMuted = isActiveWindow && (isPlayingAll ? isMuted() : !isCentral);
 
-    if (isAudioOnly) {
+    if (isAudioOnly)
+    {
         camDisplay->playAudio(true);
         camDisplay->setAudioDecodeOnly(effectiveMuted);
         m_audioSpectrumOverlayWidget->audioSpectrumWidget()->setMuted(effectiveMuted);
-    } else {
+    }
+    else
+    {
         camDisplay->playAudio(!effectiveMuted);
         camDisplay->setAudioDecodeOnly(false);
     }

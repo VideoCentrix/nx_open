@@ -530,18 +530,26 @@ QAction* ShowOnItemsFactory::initToolbarAction(const Parameters& parameters, QOb
 
 SoundPlaybackActionFactory::SoundPlaybackActionFactory(QObject* parent): Factory(parent) {}
 
-Factory::ActionList SoundPlaybackActionFactory::newActions(const Parameters& parameters, QObject* parent) {
+Factory::ActionList SoundPlaybackActionFactory::newActions(
+    const Parameters& parameters,
+    QObject* parent)
+{
     auto actionGroup = new QActionGroup(parent);
     actionGroup->setExclusive(true);
 
     int mutedCount = 0;
     int unmutedCount = 0;
 
-    for (const QnResourceWidget* widget : parameters.widgets()) {
-        if (widget->visibleButtons() & Qn::MuteButton) {
-            if (widget->checkedButtons() & Qn::MuteButton) {
+    for (const QnResourceWidget* widget : parameters.widgets())
+    {
+        if (widget->visibleButtons() & Qn::MuteButton)
+        {
+            if (widget->checkedButtons() & Qn::MuteButton)
+            {
                 mutedCount++;
-            } else {
+            }
+            else
+            {
                 unmutedCount++;
             }
         }

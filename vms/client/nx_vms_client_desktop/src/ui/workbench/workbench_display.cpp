@@ -2102,9 +2102,12 @@ void QnWorkbenchDisplay::at_workbench_currentLayoutAboutToBeChanged()
             if (const auto reader = mediaWidget->display()->archiveReader())
                 item->setData(Qn::ItemSpeedRole, reader->getSpeed());
 
-            if (mediaWidget->isMuted()) {
+            if (mediaWidget->isMuted())
+            {
                 mutedItemIds.insert(item->uuid());
-            } else {
+            }
+            else
+            {
                 mutedItemIds.erase(item->uuid());
             }
         }
@@ -2123,7 +2126,7 @@ void QnWorkbenchDisplay::at_workbench_currentLayoutAboutToBeChanged()
     for (const auto& otherLayout: resourcePool()->getResources<QnLayoutResource>())
         for (const auto& itemId: otherLayout->getItems().keys())
             existingItemIds.insert(itemId);
-    std::erase_if(mutedItemIds, [&] (const nx::Uuid &id) { return !existingItemIds.contains(id); });
+    std::erase_if(mutedItemIds, [&] (const nx::Uuid& id) { return !existingItemIds.contains(id); });
     systemContext()->localSettings()->mutedItemIds = mutedItemIds;
 
     foreach(QnWorkbenchItem *item, layout->items())

@@ -23,7 +23,7 @@ public:
     AudioSpectrumOverlayWidget(QnResourceDisplayPtr display, QGraphicsWidget* parent);
     virtual ~AudioSpectrumOverlayWidget() override;
 
-    AudioSpectrumWidget *audioSpectrumWidget() const;
+    AudioSpectrumWidget* audioSpectrumWidget() const;
 
 private:
     class Private;
