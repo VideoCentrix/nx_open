@@ -252,6 +252,11 @@ public:
 
     bool isTitleUnderMouse() const;
 
+    bool isMuted() const;
+    void setMuted(bool muted);
+
+    void updateAudioPlaybackState();
+
 signals:
     void speedChanged();
     void motionSelectionChanged();
@@ -390,8 +395,6 @@ private slots:
     void at_triggerFieldsChanged(
         nx::Uuid id,
         nx::vms::client::core::SoftwareTriggersWatcher::TriggerFields fields);
-
-    void at_audioButton_toggled();
 
 private:
     void handleItemDataChanged(const nx::Uuid& id, Qn::ItemDataRole role, const QVariant& data);

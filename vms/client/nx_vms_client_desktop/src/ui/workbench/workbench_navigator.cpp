@@ -605,7 +605,10 @@ bool QnWorkbenchNavigator::setPlaying(bool playing)
         {
             reader->resumeMedia();
         }
-        camDisplay->playAudio(true);
+
+        // This is a hack. We need to call QnCamDisplay::playAudio b/c QnCamDisplay ignores playAudio calls when paused
+        // and doesn't save the audio playback state anywhere...
+        m_currentMediaWidget->updateAudioPlaybackState();
 
         if (qFuzzyIsNull(speed()))
             setSpeed(1.0);

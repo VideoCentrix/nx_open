@@ -18,8 +18,8 @@ enum WidgetButtons
     // Show info, actual for all widgets.
     InfoButton = 1 << 2,
 
-    // Toggle audio button, available only when "play audio from all cameras" option is ON.
-    ToggleAudioButton = 1 << 3,
+    // Mute button, available only when "play audio from all cameras" option is ON.
+    MuteButton = 1 << 3,
 
     // Rotate, actual for all widgets.
     RotateButton = 1 << 4,

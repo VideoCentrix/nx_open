@@ -50,6 +50,7 @@
 #include <nx/streaming/abstract_archive_stream_reader.h>
 #include <nx/utils/guarded_callback.h>
 #include <nx/utils/log/log.h>
+#include <nx/utils/property_storage/property.h>
 #include <nx/utils/trace/trace.h>
 #include <nx/vms/client/core/access/access_controller.h>
 #include <nx/vms/client/core/cross_system/cross_system_ptz_controller_pool.h>
@@ -64,6 +65,7 @@
 #include <nx/vms/client/core/utils/geometry.h>
 #include <nx/vms/client/desktop/application_context.h>
 #include <nx/vms/client/desktop/common/utils/painter_transform_scale_stripper.h>
+#include <nx/vms/client/desktop/common/utils/audio_dispatcher.h>
 #include <nx/vms/client/desktop/cross_system/cloud_cross_system_context.h>
 #include <nx/vms/client/desktop/cross_system/cloud_cross_system_manager.h>
 #include <nx/vms/client/desktop/cross_system/cross_system_camera_resource.h>
@@ -83,6 +85,7 @@
 #include <nx/vms/client/desktop/scene/resource_widget/private/camera_button_controller.h>
 #include <nx/vms/client/desktop/scene/resource_widget/private/media_resource_widget_p.h>
 #include <nx/vms/client/desktop/scene/resource_widget/private/object_tracking_button_controller.h>
+#include <nx/vms/client/desktop/settings/local_settings.h>
 #include <nx/vms/client/desktop/skin/font_config.h>
 #include <nx/vms/client/desktop/statistics/context_statistics_module.h>
 #include <nx/vms/client/desktop/style/style.h>
@@ -565,6 +568,20 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     using Controller = nx::vms::client::core::SoftwareTriggersController;
     connect(m_triggersController, &Controller::triggerActivated, this, triggerActionHandler);
     connect(m_triggersController, &Controller::triggerDeactivated, this, triggerActionHandler);
+
+    // Connect to audio-related signals.
+    connect(AudioDispatcher::instance(),
+        &AudioDispatcher::currentAudioSourceChanged,
+        this,
+        &QnMediaResourceWidget::updateAudioPlaybackState);
+    connect(&appContext()->localSettings()->playAudioForAllItems,
+        &nx::utils::property_storage::BaseProperty::changed,
+        this,
+        [this] {
+            updateButtonsVisibility();
+            updateAudioPlaybackState();
+        });
+    updateAudioPlaybackState();
 }
 
 QnMediaResourceWidget::~QnMediaResourceWidget()
@@ -1120,14 +1137,15 @@ void QnMediaResourceWidget::createButtons()
         titleBar()->rightButtonsBar()->button(Qn::ObjectSearchButton),
         &QnImageButtonWidget::setChecked);
 
-    auto audioButton = createStatisticAwareButton("media_widget_mute");
-    audioButton->setIcon(loadSvgIcon("item/mute.svg"));
-    audioButton->setCheckable(true);
-    audioButton->setChecked(false);
-    audioButton->setToolTip(tr("Toggle Audio"));
-    connect(audioButton, &QnImageButtonWidget::toggled, this,
-        &QnMediaResourceWidget::at_audioButton_toggled);
-    titleBar()->rightButtonsBar()->addButton(Qn::ToggleAudioButton, audioButton);
+    auto muteButton = createStatisticAwareButton("media_widget_mute");
+    muteButton->setIcon(loadSvgIcon("item/mute.svg"));
+    muteButton->setCheckable(true);
+    muteButton->setChecked(false);
+    muteButton->setToolTip(tr("Mute"));
+    connect(muteButton, &QnImageButtonWidget::toggled, this, [this] (bool toggled) {
+        updateAudioPlaybackState();
+    });
+    titleBar()->rightButtonsBar()->addButton(Qn::MuteButton, muteButton);
 }
 
 void QnMediaResourceWidget::updatePtzController()
@@ -2483,8 +2501,8 @@ int QnMediaResourceWidget::calculateButtonsVisibility() const
 {
     int result = base_type::calculateButtonsVisibility();
 
-    // TODO(elric): should depend on global setting.
-    result |= Qn::ToggleAudioButton;
+    if (!isZoomWindow() && appContext()->localSettings()->playAudioForAllItems())
+        result |= Qn::MuteButton;
 
     if (ini().developerMode)
         result |= Qn::DbgScreenshotButton;
@@ -3737,9 +3755,40 @@ bool QnMediaResourceWidget::isTitleUnderMouse() const
     return m_hudOverlay->title()->isUnderMouse();
 }
 
-void QnMediaResourceWidget::at_audioButton_toggled() {
-    bool muted = !(checkedButtons() & Qn::ToggleAudioButton);
+bool QnMediaResourceWidget::isMuted() const {
+    return titleBar()->rightButtonsBar()->button(Qn::MuteButton)->isChecked();
+}
 
-    m_audioSpectrumOverlayWidget->audioSpectrumWidget()->setMuted(muted);
-    display()->camDisplay()->setAudioDecodeOnly(muted);
+void QnMediaResourceWidget::setMuted(bool muted) {
+    titleBar()->rightButtonsBar()->button(Qn::MuteButton)->setChecked(muted);
+}
+
+void QnMediaResourceWidget::updateAudioPlaybackState() {
+    auto camDisplay = display()->camDisplay();
+    if (!camDisplay)
+        return;
+
+    bool isPlayingAll = appContext()->localSettings()->playAudioForAllItems();
+    bool isActiveWindow =
+        AudioDispatcher::instance()->currentAudioSource() == mainWindowWidget()->windowHandle();
+    bool isCentral = WindowContextAware::display()->widget(Qn::CentralRole) == this;
+
+    if (!isPlayingAll) {
+        camDisplay->setAudioDecodeOnly(false);
+        camDisplay->playAudio(isActiveWindow && isCentral);
+    } else {
+        if (isZoomWindow())
+            return;
+
+        bool isLocallyMuted = isMuted();
+        bool isAudioOnly = !d->hasVideo;
+
+        if (isAudioOnly) {
+            camDisplay->playAudio(true);
+            camDisplay->setAudioDecodeOnly(!isActiveWindow || isLocallyMuted);
+        } else {
+            camDisplay->playAudio(isActiveWindow && !isLocallyMuted);
+            camDisplay->setAudioDecodeOnly(false);
+        }
+    }
 }
