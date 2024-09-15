@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtCore/QVector>
+#include <QtCore/QRectF>
 #include <QtGui/QColor>
 
 class QPainter;
