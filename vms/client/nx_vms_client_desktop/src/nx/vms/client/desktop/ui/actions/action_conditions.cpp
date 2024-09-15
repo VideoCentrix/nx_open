@@ -1907,6 +1907,17 @@ ActionVisibility ReplaceCameraCondition::check(const Parameters& parameters, QnW
     return EnabledAction;
 }
 
+ActionVisibility SoundPlaybackActionCondition::check(const Parameters& parameters, QnWorkbenchContext*)
+{
+    // All logic is in the visibility of mute / unmute button. So this is what we check here.
+    for (QnResourceWidget* widget : parameters.widgets())
+        if (widget->visibleButtons() & Qn::MuteButton)
+            return EnabledAction;
+
+    return InvisibleAction;
+}
+
+
 //-------------------------------------------------------------------------------------------------
 // Definitions of resource grouping related actions conditions.
 //-------------------------------------------------------------------------------------------------

@@ -528,6 +528,51 @@ QAction* ShowOnItemsFactory::initToolbarAction(const Parameters& parameters, QOb
     return action;
 }
 
+SoundPlaybackActionFactory::SoundPlaybackActionFactory(QObject* parent): Factory(parent) {}
+
+Factory::ActionList SoundPlaybackActionFactory::newActions(const Parameters& parameters, QObject* parent) {
+    auto actionGroup = new QActionGroup(parent);
+    actionGroup->setExclusive(true);
+
+    int mutedCount = 0;
+    int unmutedCount = 0;
+
+    for (const QnResourceWidget* widget : parameters.widgets()) {
+        if (widget->visibleButtons() & Qn::MuteButton) {
+            if (widget->checkedButtons() & Qn::MuteButton) {
+                mutedCount++;
+            } else {
+                unmutedCount++;
+            }
+        }
+    }
+
+    auto addAction =
+        [&] (bool muted, const QString& text, bool checked)
+        {
+            auto action = new QAction(parent);
+            action->setText(text);
+            action->setCheckable(true);
+            action->setChecked(checked);
+
+            Parameters parametersCopy = parameters;
+            parametersCopy.setArgument(Qn::MutedRole, muted);
+
+            connect(action, &QAction::triggered, this,
+                [this, parametersCopy]
+                {
+                    menu()->trigger(MuteAction, parametersCopy);
+                });
+
+            actionGroup->addAction(action);
+        };
+
+    addAction(false, tr("Enabled"), mutedCount == 0 && unmutedCount != 0);
+    addAction(true, tr("Disabled"), mutedCount != 0 && unmutedCount == 0);
+    return actionGroup->actions();
+}
+
+
 } // namespace action
 } // namespace ui
 } // namespace nx::vms::client::desktop

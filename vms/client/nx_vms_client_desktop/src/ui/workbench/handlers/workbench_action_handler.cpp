@@ -443,6 +443,9 @@ ActionHandler::ActionHandler(QObject *parent) :
 
     connect(action(action::ReplaceLayoutItemAction), &QAction::triggered,
         this, &ActionHandler::replaceLayoutItemActionTriggered);
+
+    connect(action(ui::action::MuteAction), &QAction::triggered,
+        this, &ActionHandler::at_muteAction_triggered);
 }
 
 ActionHandler::~ActionHandler()
@@ -1810,6 +1813,25 @@ void ActionHandler::at_goToLayoutItemAction_triggered()
         workbench()->setItem(Qn::ZoomedRole, targetItem);
 
     workbench()->setItem(Qn::SingleSelectedRole, targetItem);
+}
+
+void ActionHandler::at_muteAction_triggered() {
+    const auto parameters = menu()->currentParameters(sender());
+
+    bool muted = parameters.argument(Qn::MutedRole).toBool();
+
+    for (QnResourceWidget* widget : parameters.widgets()) {
+        if (widget->visibleButtons() & Qn::MuteButton) {
+            // This action is just pressing buttons. All logic is in button handlers.
+            int buttons = widget->checkedButtons();
+            if (muted) {
+                buttons |= Qn::MuteButton;
+            } else {
+                buttons &= ~Qn::MuteButton;
+            }
+            widget->setCheckedButtons(buttons);
+        }
+    }
 }
 
 void ActionHandler::openSystemAdministrationDialog(int page, const QUrl& url)
