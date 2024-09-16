@@ -3779,7 +3779,7 @@ void QnMediaResourceWidget::updateAudioPlaybackState() {
     bool isCentral = WindowContextAware::display()->widget(Qn::CentralRole) == this;
     bool isAudioOnly = !d->hasVideo;
 
-    bool effectiveMuted = isActiveWindow && (isPlayingAll ? isMuted() : !isCentral);
+    bool effectiveMuted = !isActiveWindow || (isPlayingAll ? isMuted() : !isCentral);
 
     if (isAudioOnly)
     {
