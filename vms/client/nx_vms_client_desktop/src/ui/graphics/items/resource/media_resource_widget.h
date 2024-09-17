@@ -252,6 +252,7 @@ public:
 
     bool isTitleUnderMouse() const;
 
+    bool canBeMuted() const;
     bool isMuted() const;
     void setMuted(bool muted);
 
@@ -564,4 +565,6 @@ private:
     nx::vms::client::desktop::ObjectTrackingButtonController* m_objectTrackingButtonController = nullptr;
 
     QAction* const m_toggleImageEnhancementAction;
+
+    bool m_muted = false;
 };

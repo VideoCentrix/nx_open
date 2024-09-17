@@ -1147,11 +1147,7 @@ void QnMediaResourceWidget::createButtons()
     muteButton->setCheckable(true);
     muteButton->setChecked(false);
     muteButton->setToolTip(tr("Mute"));
-    connect(muteButton, &QnImageButtonWidget::toggled, this,
-        [this] (bool on)
-        {
-            updateAudioPlaybackState();
-        });
+    connect(muteButton, &QnImageButtonWidget::toggled, this, &QnMediaResourceWidget::setMuted);
     titleBar()->rightButtonsBar()->addButton(Qn::MuteButton, muteButton);
 }
 
@@ -2508,7 +2504,7 @@ int QnMediaResourceWidget::calculateButtonsVisibility() const
 {
     int result = base_type::calculateButtonsVisibility();
 
-    if (ini().perItemMute && !isZoomWindow() && appContext()->localSettings()->playAudioForAllItems())
+    if (canBeMuted())
         result |= Qn::MuteButton;
 
     if (ini().developerMode)
@@ -3762,14 +3758,30 @@ bool QnMediaResourceWidget::isTitleUnderMouse() const
     return m_hudOverlay->title()->isUnderMouse();
 }
 
+bool QnMediaResourceWidget::canBeMuted() const
+{
+    return
+        ini().perItemMute &&
+        !isZoomWindow() &&
+        appContext()->localSettings()->playAudioForAllItems();
+}
+
 bool QnMediaResourceWidget::isMuted() const
 {
-    return titleBar()->rightButtonsBar()->button(Qn::MuteButton)->isChecked();
+    return m_muted;
 }
 
 void QnMediaResourceWidget::setMuted(bool muted)
 {
-    titleBar()->rightButtonsBar()->button(Qn::MuteButton)->setChecked(muted);
+    // If canBeMuted() == false then this function just updates the mute state w/o
+    // muting anything. Item will then be muted when canBeMuted() becomes true.
+
+    if (m_muted == muted)
+        return;
+
+    m_muted = muted;
+    titleBar()->rightButtonsBar()->button(Qn::MuteButton)->setChecked(m_muted);
+    updateAudioPlaybackState();
 }
 
 void QnMediaResourceWidget::updateAudioPlaybackState()
@@ -3788,7 +3800,7 @@ void QnMediaResourceWidget::updateAudioPlaybackState()
 
     bool effectiveMuted =
         !isActiveWindow ||
-        (isPlayingAll ? isMuted() && ini().perItemMute : !isCentral);
+        (isPlayingAll ? canBeMuted() && isMuted() : !isCentral);
 
     if (shouldShowAudioSpectrum())
     {

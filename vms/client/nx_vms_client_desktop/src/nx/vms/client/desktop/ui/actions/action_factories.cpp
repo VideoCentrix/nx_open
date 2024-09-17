@@ -540,19 +540,11 @@ Factory::ActionList SoundPlaybackActionFactory::newActions(
     int mutedCount = 0;
     int unmutedCount = 0;
 
-    for (const QnResourceWidget* widget: parameters.widgets())
+    for (QnResourceWidget* widget: parameters.widgets())
     {
-        if (widget->visibleButtons() & Qn::MuteButton)
-        {
-            if (widget->checkedButtons() & Qn::MuteButton)
-            {
-                mutedCount++;
-            }
-            else
-            {
-                unmutedCount++;
-            }
-        }
+        QnMediaResourceWidget* mediaWidget = dynamic_cast<QnMediaResourceWidget*>(widget);
+        if (mediaWidget && mediaWidget->canBeMuted())
+            (mediaWidget->isMuted() ? mutedCount : unmutedCount)++;
     }
 
     auto addAction =

@@ -1909,10 +1909,11 @@ ActionVisibility ReplaceCameraCondition::check(const Parameters& parameters, QnW
 
 ActionVisibility SoundPlaybackActionCondition::check(const Parameters& parameters, QnWorkbenchContext*)
 {
-    // All logic is in the visibility of mute / unmute button. So this is what we check here.
-    for (QnResourceWidget* widget: parameters.widgets())
-        if (widget->visibleButtons() & Qn::MuteButton)
+    for (QnResourceWidget* widget: parameters.widgets()) {
+        QnMediaResourceWidget* mediaWidget = dynamic_cast<QnMediaResourceWidget*>(widget);
+        if (mediaWidget && mediaWidget->canBeMuted())
             return EnabledAction;
+    }
 
     return InvisibleAction;
 }

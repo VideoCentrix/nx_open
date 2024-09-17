@@ -1823,20 +1823,9 @@ void ActionHandler::at_muteAction_triggered()
 
     for (QnResourceWidget* widget: parameters.widgets())
     {
-        if (widget->visibleButtons() & Qn::MuteButton)
-        {
-            // This action is just pressing buttons. All logic is in button handlers.
-            int buttons = widget->checkedButtons();
-            if (muted)
-            {
-                buttons |= Qn::MuteButton;
-            }
-            else
-            {
-                buttons &= ~Qn::MuteButton;
-            }
-            widget->setCheckedButtons(buttons);
-        }
+        QnMediaResourceWidget* mediaWidget = dynamic_cast<QnMediaResourceWidget*>(widget);
+        if (mediaWidget && mediaWidget->canBeMuted())
+            mediaWidget->setMuted(muted);
     }
 }
 
