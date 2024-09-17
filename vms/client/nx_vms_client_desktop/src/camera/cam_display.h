@@ -24,6 +24,7 @@
 #include <nx/media/stream_event.h>
 #include <nx/utils/elapsed_timer.h>
 #include <nx/vms/client/desktop/camera/abstract_video_display.h>
+#include <nx/vms/client/desktop/camera/audio_decode_mode.h>
 
 class QnVoiceSpectrumAnalyzer;
 class QnResourceWidgetRenderer;
@@ -152,10 +153,8 @@ public:
 
     virtual void setCallbackForStreamChanges(std::function<void()> callback) override;
 
-    bool analyzesAudio() const;
-    void setAnalyzesAudio(bool analyzesAudio);
-    bool isAudioDecodeOnly() const;
-    void setAudioDecodeOnly(bool audioDecodeOnly);
+    nx::vms::client::desktop::AudioDecodeMode audioDecodeMode() const;
+    void setAudioDecodeMode(nx::vms::client::desktop::AudioDecodeMode decodeMode);
     QnSpectrumData audioSpectrum() const;
 
 public slots:
@@ -329,8 +328,8 @@ protected:
     QVector<bool> m_gotKeyDataInfo;
     std::function<void()> m_streamsChangedCallback;
 
-    bool m_analyzesAudio = false;
-    bool m_audioDecodeOnly = false;
+    nx::vms::client::desktop::AudioDecodeMode m_audioDecodeMode =
+        nx::vms::client::desktop::AudioDecodeMode::normal;
 };
 
 #endif //QN_CAM_DISPLAY_H

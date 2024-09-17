@@ -18,12 +18,16 @@ namespace {
 static const int AVCODEC_MAX_AUDIO_FRAME_SIZE = 192 * 1000;
 }
 
-QnAudioStreamDisplay::QnAudioStreamDisplay(int bufferMs, int prebufferMs, bool withAnalyzer, bool decodeOnly):
+QnAudioStreamDisplay::QnAudioStreamDisplay(
+    int bufferMs,
+    int prebufferMs,
+    nx::vms::client::desktop::AudioDecodeMode decodeMode)
+    :
     m_bufferMs(bufferMs),
     m_prebufferMs(prebufferMs),
     m_tooFewDataDetected(true),
     m_isFormatSupported(true),
-    m_decodeOnly(decodeOnly),
+    m_decodeMode(decodeMode),
     m_downmixing(false),
     m_forceDownmix(appContext()->localSettings()->downmixAudio()),
     m_sampleConvertMethod(SampleConvertMethod::none),
@@ -37,7 +41,7 @@ QnAudioStreamDisplay::QnAudioStreamDisplay(int bufferMs, int prebufferMs, bool w
     m_audioQueueMutex(nx::Mutex::Recursive),
     m_blockedTimeValue(AV_NOPTS_VALUE)
 {
-    if (withAnalyzer)
+    if (m_decodeMode != AudioDecodeMode::normal)
         m_analyzer = std::make_unique<QnVoiceSpectrumAnalyzer>();
 }
 
@@ -229,7 +233,9 @@ bool QnAudioStreamDisplay::putData(QnCompressedAudioDataPtr data, qint64 minTime
         m_startBufferingTime = data->timestamp - bufferSizeMs * 1000;
     }
 
-    bool canDropLateAudio = !m_sound || (m_sound->state() != QAudio::State::ActiveState && !m_decodeOnly);
+    bool canDropLateAudio =
+        !m_sound ||
+        (m_sound->state() != QAudio::State::ActiveState && m_decodeMode != AudioDecodeMode::spectrumOnly);
     if (canDropLateAudio && data && data->timestamp < minTime)
     {
         clearAudioBuffer();
@@ -322,14 +328,15 @@ void QnAudioStreamDisplay::playCurrentBuffer()
             }
         }
 
-        if (m_sound && !m_decodeOnly)
+        if (m_sound && m_decodeMode != AudioDecodeMode::spectrumOnly)
         {
             m_sound->write(
                 (const quint8*) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
         }
 
         // TODO: #afokin for now we only support 16-bit and 32-bit signed ints here, is this OK?
-        if (m_analyzer && (audioFormat.sampleSize == 16 || audioFormat.sampleSize == 32) &&
+        if (m_decodeMode != AudioDecodeMode::normal &&
+            (audioFormat.sampleSize == 16 || audioFormat.sampleSize == 32) &&
             audioFormat.sampleType == nx::media::audio::Format::SampleType::signedInt)
         {
             // initialize() does nothing if sample rate / channel count didn't change.
@@ -370,7 +377,7 @@ int QnAudioStreamDisplay::getAudioBufferSize() const
     return m_bufferMs;
 }
 
-bool QnAudioStreamDisplay::isDecodeOnly() const
+AudioDecodeMode QnAudioStreamDisplay::decodeMode() const
 {
-    return m_decodeOnly;
+    return m_decodeMode;
 }

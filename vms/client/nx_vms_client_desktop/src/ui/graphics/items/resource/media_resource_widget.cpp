@@ -1719,8 +1719,6 @@ void QnMediaResourceWidget::setDisplay(const QnResourceDisplayPtr& display)
         m_renderer->setChannelCount(display->videoLayout()->channelCount());
         display->addRenderer(m_renderer);
         updateCustomAspectRatio();
-
-        display->camDisplay()->setAnalyzesAudio(shouldShowAudioSpectrum());
     }
     else
     {
@@ -3805,12 +3803,14 @@ void QnMediaResourceWidget::updateAudioPlaybackState()
     if (shouldShowAudioSpectrum())
     {
         camDisplay->playAudio(true);
-        camDisplay->setAudioDecodeOnly(effectiveMuted);
+        camDisplay->setAudioDecodeMode(effectiveMuted
+            ? AudioDecodeMode::spectrumOnly
+            : AudioDecodeMode::normalWithSpectrum);
         m_audioSpectrumOverlayWidget->audioSpectrumWidget()->setMuted(effectiveMuted);
     }
     else
     {
         camDisplay->playAudio(!effectiveMuted);
-        camDisplay->setAudioDecodeOnly(false);
+        camDisplay->setAudioDecodeMode(AudioDecodeMode::normal);
     }
 }

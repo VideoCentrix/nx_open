@@ -247,7 +247,7 @@ void QnCamDisplay::setAudioBufferSize(int bufferSize, int prebufferSize)
     m_minAudioDetectJumpInterval = MIN_VIDEO_DETECT_JUMP_INTERVAL + m_audioBufferSize*1000;
     NX_MUTEX_LOCKER lock( &m_audioChangeMutex );
     delete m_audioDisplay;
-    m_audioDisplay = new QnAudioStreamDisplay(m_audioBufferSize, prebufferSize, m_analyzesAudio, m_audioDecodeOnly);
+    m_audioDisplay = new QnAudioStreamDisplay(m_audioBufferSize, prebufferSize, m_audioDecodeMode);
 }
 
 void QnCamDisplay::addVideoRenderer(int channelCount, QnResourceWidgetRenderer* vw, bool canDownscale)
@@ -1527,8 +1527,7 @@ bool QnCamDisplay::processData(const QnAbstractDataPacketPtr& data)
             ad->context->getBitsPerCodedSample() };
         audioParamsChanged = m_playingFormat != currentAudioFormat
             || m_audioDisplay->getAudioBufferSize() != expectedBufferSize
-            || !!m_audioDisplay->analyzer() != m_analyzesAudio
-            || m_audioDisplay->isDecodeOnly() != m_audioDecodeOnly;
+            || m_audioDisplay->decodeMode() != m_audioDecodeMode;
     }
     if (((media->flags & QnAbstractMediaData::MediaFlags_AfterEOF) || audioParamsChanged) &&
         m_videoQueue[0].size() > 0)
@@ -1578,7 +1577,7 @@ bool QnCamDisplay::processData(const QnAbstractDataPacketPtr& data)
             NX_MUTEX_LOCKER lock( &m_audioChangeMutex );
             delete m_audioDisplay;
             m_audioBufferSize = expectedBufferSize;
-            m_audioDisplay = new QnAudioStreamDisplay(m_audioBufferSize, audioPrebufferSize, m_analyzesAudio, m_audioDecodeOnly);
+            m_audioDisplay = new QnAudioStreamDisplay(m_audioBufferSize, audioPrebufferSize, m_audioDecodeMode);
             m_playingFormat = currentAudioFormat;
         }
 
@@ -2265,26 +2264,18 @@ void QnCamDisplay::setCallbackForStreamChanges(std::function<void()> callback)
     m_streamsChangedCallback = callback;
 }
 
-bool QnCamDisplay::analyzesAudio() const
+AudioDecodeMode QnCamDisplay::audioDecodeMode() const
 {
-    return m_analyzesAudio;
+    return m_audioDecodeMode;
 }
 
-void QnCamDisplay::setAnalyzesAudio(bool analyzesAudio)
+void QnCamDisplay::setAudioDecodeMode(AudioDecodeMode decodeMode)
 {
-    m_analyzesAudio = analyzesAudio;
+    m_audioDecodeMode = decodeMode;
 }
 
 QnSpectrumData QnCamDisplay::audioSpectrum() const
 {
     NX_MUTEX_LOCKER lock(&m_audioChangeMutex);
     return m_audioDisplay && m_audioDisplay->analyzer() ? m_audioDisplay->analyzer()->getSpectrumData() : QnSpectrumData();
-}
-
-bool QnCamDisplay::isAudioDecodeOnly() const {
-    return m_audioDecodeOnly;
-}
-
-void QnCamDisplay::setAudioDecodeOnly(bool audioDecodeOnly) {
-    m_audioDecodeOnly = audioDecodeOnly;
 }

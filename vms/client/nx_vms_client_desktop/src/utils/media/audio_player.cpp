@@ -309,8 +309,7 @@ bool AudioPlayer::openNonSafe( QIODevice* dataSource )
     m_renderer = new QnAudioStreamDisplay(
         AUDIO_BUF_SIZE,
         AUDIO_BUF_SIZE / 2,
-        /*withAnalyzer*/ false,
-        /*decodeOnly*/ false);
+        nx::vms::client::desktop::AudioDecodeMode::normal);
 
     m_filePath = temporaryResUrl;
 
