@@ -2606,7 +2606,7 @@
     </message>
     <message>
       <source>General</source>
-      <translation>Chung</translation>
+      <translation>Tổng quan</translation>
     </message>
     <message>
       <source>Issued by</source>
@@ -2992,7 +2992,7 @@
     <name>WebpageDialog</name>
     <message>
       <source>General</source>
-      <translation>Chung</translation>
+      <translation>Tổng quan</translation>
     </message>
     <message>
       <source>SELECT SERVER</source>

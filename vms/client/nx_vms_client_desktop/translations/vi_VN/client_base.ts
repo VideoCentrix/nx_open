@@ -347,7 +347,7 @@
     </message>
     <message>
       <source>Exit</source>
-      <translation>Lối ra</translation>
+      <translation>Thoát</translation>
     </message>
     <message>
       <source>Mark Selection Start</source>
@@ -3765,7 +3765,7 @@ Khóa giấy phép: %2</translation>
     </message>
     <message>
       <source>Generic</source>
-      <translation>Chung</translation>
+      <translation>Tổng quan</translation>
     </message>
     <message>
       <source>Features</source>
@@ -3901,7 +3901,7 @@ Khóa giấy phép: %2</translation>
     <name>QnLocalSettingsDialog</name>
     <message>
       <source>General</source>
-      <translation>Chung</translation>
+      <translation>Tổng quan</translation>
     </message>
     <message>
       <source>Look and Feel</source>
@@ -4339,7 +4339,7 @@ Khóa giấy phép: %2</translation>
     </message>
     <message>
       <source>Normal</source>
-      <translation>Chung</translation>
+      <translation>Bình thường</translation>
     </message>
     <message>
       <source>High</source>
@@ -4752,7 +4752,7 @@ Khóa giấy phép: %2</translation>
     <name>QnServerSettingsDialog</name>
     <message>
       <source>General</source>
-      <translation>Chung</translation>
+      <translation>Tổng quan</translation>
     </message>
     <message>
       <source>Storage Analytics</source>
@@ -5327,7 +5327,7 @@ Nếu bạn có ý định di chuyển dữ liệu phân tích đến một vị
     <name>QnSystemAdministrationDialog</name>
     <message>
       <source>General</source>
-      <translation>Chung</translation>
+      <translation>Tổng quan</translation>
     </message>
     <message>
       <source>Licenses</source>
@@ -7772,7 +7772,7 @@ Nếu bạn có ý định di chuyển dữ liệu phân tích đến một vị
     <name>nx::vms::client::desktop::CameraSettingsDialog</name>
     <message>
       <source>General</source>
-      <translation>Chung</translation>
+      <translation>Tổng quan</translation>
     </message>
     <message>
       <source>Recording</source>
@@ -9161,7 +9161,7 @@ Nếu bạn có ý định di chuyển dữ liệu phân tích đến một vị
     <name>nx::vms::client::desktop::LayoutSettingsDialog</name>
     <message>
       <source>General</source>
-      <translation>Chung</translation>
+      <translation>Tổng quan</translation>
     </message>
     <message>
       <source>Background</source>
