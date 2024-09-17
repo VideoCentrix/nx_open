@@ -29,7 +29,7 @@ private:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> d;
 };
 

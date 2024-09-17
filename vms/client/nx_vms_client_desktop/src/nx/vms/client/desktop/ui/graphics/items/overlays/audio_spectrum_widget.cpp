@@ -33,14 +33,8 @@ constexpr QMargins kSpectrumInternalMargins(48, 24, 48, 24);
 //-------------------------------------------------------------------------------------------------
 // AudioSpectrumOverlayWidget::Private
 
-class AudioSpectrumWidget::Private
+struct AudioSpectrumWidget::Private
 {
-    AudioSpectrumWidget* const q = nullptr;
-
-public:
-    Private(QnResourceDisplayPtr display, AudioSpectrumWidget* q);
-
-public:
     QnResourceDisplayPtr display;
     QnImageButtonWidget* const button;
     GraphicsWidget* const rightSpacer;
@@ -51,20 +45,6 @@ public:
     QElapsedTimer timer;
 };
 
-AudioSpectrumWidget::Private::Private(
-    QnResourceDisplayPtr display,
-    AudioSpectrumWidget* q)
-    :
-    q(q),
-    display(display),
-    button(new QnImageButtonWidget(q)),
-    rightSpacer(new GraphicsWidget(q)),
-    backgroundColor(core::colorTheme()->color("camera.audioOnly.background")),
-    activeColor(core::colorTheme()->color("camera.audioOnly.visualizer.active")),
-    inactiveColor(core::colorTheme()->color("camera.audioOnly.visualizer.inactive"))
-{
-}
-
 //-------------------------------------------------------------------------------------------------
 // AreaSelectOverlayWidget
 
@@ -73,7 +53,14 @@ AudioSpectrumWidget::AudioSpectrumWidget(
     QGraphicsWidget* parent)
     :
     base_type(parent),
-    d(new Private(display, this))
+    d(new Private{
+        .display = display,
+        .button = new QnImageButtonWidget(this),
+        .rightSpacer = new GraphicsWidget(this),
+        .backgroundColor = core::colorTheme()->color("camera.audioOnly.background"),
+        .activeColor = core::colorTheme()->color("camera.audioOnly.visualizer.active"),
+        .inactiveColor = core::colorTheme()->color("camera.audioOnly.visualizer.inactive")
+    })
 {
     NX_ASSERT(display);
 
