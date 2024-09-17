@@ -823,7 +823,7 @@ void QnMediaResourceWidget::initCameraHotspotsOverlay()
 
 void QnMediaResourceWidget::initAudioSpectrumOverlay()
 {
-    if (d->hasVideo)
+    if (d->hasVideo || !ini().audioVisualization)
         return;
 
     m_audioSpectrumOverlayWidget = new AudioSpectrumOverlayWidget(display(), m_compositeOverlay);
@@ -1719,7 +1719,7 @@ void QnMediaResourceWidget::setDisplay(const QnResourceDisplayPtr& display)
         display->addRenderer(m_renderer);
         updateCustomAspectRatio();
 
-        display->camDisplay()->setAnalyzesAudio(!d->hasVideo);
+        display->camDisplay()->setAnalyzesAudio(!d->hasVideo && ini().audioVisualization);
     }
     else
     {
@@ -2503,7 +2503,7 @@ int QnMediaResourceWidget::calculateButtonsVisibility() const
 {
     int result = base_type::calculateButtonsVisibility();
 
-    if (!isZoomWindow() && appContext()->localSettings()->playAudioForAllItems())
+    if (ini().perItemMute && !isZoomWindow() && appContext()->localSettings()->playAudioForAllItems())
         result |= Qn::MuteButton;
 
     if (ini().developerMode)
@@ -2726,7 +2726,7 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
 
         // Handle export from I/O modules.
         if (!d->hasVideo)
-            return Qn::EmptyOverlay;
+            return ini().audioVisualization ? Qn::EmptyOverlay : Qn::NoVideoDataOverlay;
     }
 
     if (d->display()->camDisplay()->isLongWaiting())
@@ -2753,7 +2753,7 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
     if (d->display()->isPaused())
     {
         if (!d->hasVideo)
-            return Qn::EmptyOverlay;
+            return ini().audioVisualization ? Qn::EmptyOverlay : Qn::NoVideoDataOverlay;
 
         return Qn::EmptyOverlay;
     }
@@ -3777,11 +3777,13 @@ void QnMediaResourceWidget::updateAudioPlaybackState() {
     bool isActiveWindow =
         AudioDispatcher::instance()->currentAudioSource() == mainWindowWidget()->windowHandle();
     bool isCentral = WindowContextAware::display()->widget(Qn::CentralRole) == this;
-    bool isAudioOnly = !d->hasVideo;
+    bool hasAudioVisualizer = !d->hasVideo && ini().audioVisualization;
 
-    bool effectiveMuted = !isActiveWindow || (isPlayingAll ? isMuted() : !isCentral);
+    bool effectiveMuted =
+        !isActiveWindow ||
+        (isPlayingAll ? isMuted() && ini().perItemMute : !isCentral);
 
-    if (isAudioOnly)
+    if (hasAudioVisualizer)
     {
         camDisplay->playAudio(true);
         camDisplay->setAudioDecodeOnly(effectiveMuted);
