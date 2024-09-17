@@ -16,27 +16,11 @@ namespace nx::vms::client::desktop {
 //-------------------------------------------------------------------------------------------------
 // AudioSpectrumOverlayWidget::Private
 
-class AudioSpectrumOverlayWidget::Private
+struct AudioSpectrumOverlayWidget::Private
 {
-    AudioSpectrumOverlayWidget* const q = nullptr;
-
-public:
-    Private(QnResourceDisplayPtr display, AudioSpectrumOverlayWidget* q);
-
-public:
     QnResourceDisplayPtr const display;
     AudioSpectrumWidget* const widget;
 };
-
-AudioSpectrumOverlayWidget::Private::Private(
-    QnResourceDisplayPtr display,
-    AudioSpectrumOverlayWidget* q)
-    :
-    q(q),
-    display(display),
-    widget(new AudioSpectrumWidget(display, q))
-{
-}
 
 //-------------------------------------------------------------------------------------------------
 // AudioSpectrumOverlayWidget
@@ -46,7 +30,10 @@ AudioSpectrumOverlayWidget::AudioSpectrumOverlayWidget(
     QGraphicsWidget* parent)
     :
     base_type(parent),
-    d(new Private(display, this))
+    d(new Private{
+        .display = display,
+        .widget = new AudioSpectrumWidget(display, this)
+    })
 {
     NX_ASSERT(display);
 

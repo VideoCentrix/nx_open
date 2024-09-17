@@ -1815,12 +1815,13 @@ void ActionHandler::at_goToLayoutItemAction_triggered()
     workbench()->setItem(Qn::SingleSelectedRole, targetItem);
 }
 
-void ActionHandler::at_muteAction_triggered() {
+void ActionHandler::at_muteAction_triggered()
+{
     const auto parameters = menu()->currentParameters(sender());
 
     bool muted = parameters.argument(Qn::MutedRole).toBool();
 
-    for (QnResourceWidget* widget : parameters.widgets())
+    for (QnResourceWidget* widget: parameters.widgets())
     {
         if (widget->visibleButtons() & Qn::MuteButton)
         {

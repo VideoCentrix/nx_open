@@ -8,9 +8,9 @@
 #include <nx/utils/log/log.h>
 #include <nx/vms/client/desktop/application_context.h>
 #include <nx/vms/client/desktop/settings/local_settings.h>
+#include <utils/media/voice_spectrum_analyzer.h>
 
 #include "decoders/audio/abstract_audio_decoder.h"
-#include "utils/media/voice_spectrum_analyzer.h"
 
 using namespace nx::vms::client::desktop;
 
@@ -328,7 +328,7 @@ void QnAudioStreamDisplay::playCurrentBuffer()
                 (const quint8*) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
         }
 
-        // TODO(elric): for now we only support 16-bit and 32-bit signed ints here, is this OK?
+        // TODO: #afokin for now we only support 16-bit and 32-bit signed ints here, is this OK?
         if (m_analyzer && (audioFormat.sampleSize == 16 || audioFormat.sampleSize == 32) &&
             audioFormat.sampleType == nx::media::audio::Format::SampleType::signedInt)
         {
@@ -370,6 +370,7 @@ int QnAudioStreamDisplay::getAudioBufferSize() const
     return m_bufferMs;
 }
 
-bool QnAudioStreamDisplay::isDecodeOnly() const {
+bool QnAudioStreamDisplay::isDecodeOnly() const
+{
     return m_decodeOnly;
 }

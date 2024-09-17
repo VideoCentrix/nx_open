@@ -3757,15 +3757,18 @@ bool QnMediaResourceWidget::isTitleUnderMouse() const
     return m_hudOverlay->title()->isUnderMouse();
 }
 
-bool QnMediaResourceWidget::isMuted() const {
+bool QnMediaResourceWidget::isMuted() const
+{
     return titleBar()->rightButtonsBar()->button(Qn::MuteButton)->isChecked();
 }
 
-void QnMediaResourceWidget::setMuted(bool muted) {
+void QnMediaResourceWidget::setMuted(bool muted)
+{
     titleBar()->rightButtonsBar()->button(Qn::MuteButton)->setChecked(muted);
 }
 
-void QnMediaResourceWidget::updateAudioPlaybackState() {
+void QnMediaResourceWidget::updateAudioPlaybackState()
+{
     auto camDisplay = display()->camDisplay();
     if (!camDisplay)
         return;

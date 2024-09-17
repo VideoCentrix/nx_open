@@ -2124,8 +2124,10 @@ void QnWorkbenchDisplay::at_workbench_currentLayoutAboutToBeChanged()
     // GC muted item ids & save. Value is written out on assignment.
     QSet<nx::Uuid> existingItemIds;
     for (const auto& otherLayout: resourcePool()->getResources<QnLayoutResource>())
+    {
         for (const auto& itemId: otherLayout->getItems().keys())
             existingItemIds.insert(itemId);
+    }
     std::erase_if(mutedItemIds, [&] (const nx::Uuid& id) { return !existingItemIds.contains(id); });
     systemContext()->localSettings()->mutedItemIds = mutedItemIds;
 

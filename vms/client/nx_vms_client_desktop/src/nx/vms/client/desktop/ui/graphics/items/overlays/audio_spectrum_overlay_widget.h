@@ -26,7 +26,7 @@ public:
     AudioSpectrumWidget* audioSpectrumWidget() const;
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> d;
 };
 

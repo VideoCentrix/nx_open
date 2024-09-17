@@ -540,7 +540,7 @@ Factory::ActionList SoundPlaybackActionFactory::newActions(
     int mutedCount = 0;
     int unmutedCount = 0;
 
-    for (const QnResourceWidget* widget : parameters.widgets())
+    for (const QnResourceWidget* widget: parameters.widgets())
     {
         if (widget->visibleButtons() & Qn::MuteButton)
         {

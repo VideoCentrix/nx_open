@@ -424,7 +424,7 @@ namespace Qn
          */
         FlattenedRole,
 
-        MutedRole, /**< Role for `MuteAction` paramater. (bool) */
+        MutedRole, /**< Role for `MuteAction` parameter. (bool) */
 
         ItemDataRoleCount,
     };

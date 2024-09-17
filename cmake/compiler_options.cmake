@@ -396,6 +396,8 @@ if(NOT compilerMsvc)
     else() # GCC / Native CLang
         add_compile_options(
             -Wall
+            # Build fails on MacOS with AppleClang 15 w/o -Wno-enum-constexpr-conversion,
+            # see enums in QnIcon.
             -Wno-enum-constexpr-conversion
             -fstack-protector-all #< TODO: Use -fstask-protector-strong when supported.
         )

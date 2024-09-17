@@ -95,10 +95,16 @@ void QnVoiceSpectrumAnalyzer::processData(const qint32* sampleData, int sampleCo
     processDataInternal(sampleData, sampleCount);
 }
 
-void QnVoiceSpectrumAnalyzer::processData(const nx::media::audio::Format& format, const void* sampleData, int sampleBytes) {
+void QnVoiceSpectrumAnalyzer::processData(
+    const nx::media::audio::Format& format,
+    const void* sampleData,
+    int sampleBytes)
+{
     if (!NX_ASSERT(format.sampleType == nx::media::audio::Format::SampleType::signedInt) &&
         (format.sampleSize == 16 || format.sampleSize == 32))
+    {
         return;
+    }
 
     if (format.sampleSize == 16)
     {
