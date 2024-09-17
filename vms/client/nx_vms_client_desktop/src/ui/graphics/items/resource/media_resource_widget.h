@@ -468,6 +468,8 @@ private:
     void initCameraHotspotsOverlay();
     void initAudioSpectrumOverlay();
 
+    bool shouldShowAudioSpectrum() const;
+
     void createTrigger(const SoftwareTriggerInfo& info);
 
     void configureTriggerButton(

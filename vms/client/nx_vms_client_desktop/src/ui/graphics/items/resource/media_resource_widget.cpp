@@ -448,12 +448,12 @@ QnMediaResourceWidget::QnMediaResourceWidget(
         &QnMediaResourceWidget::updateInfoText, Qt::QueuedConnection);
 
     /* Set up overlays */
-    initAudioSpectrumOverlay();
     initIoModuleOverlay();
     updateCameraButtons();
     initAnalyticsOverlays();
     initAreaSelectOverlay();
     initCameraHotspotsOverlay();
+    initAudioSpectrumOverlay();
 
     /* Set up buttons. */
     createButtons();
@@ -823,13 +823,18 @@ void QnMediaResourceWidget::initCameraHotspotsOverlay()
 
 void QnMediaResourceWidget::initAudioSpectrumOverlay()
 {
-    if (d->hasVideo || !ini().audioVisualization)
+    if (!shouldShowAudioSpectrum())
         return;
 
     m_audioSpectrumOverlayWidget = new AudioSpectrumOverlayWidget(display(), m_compositeOverlay);
     addOverlayWidget(
         m_audioSpectrumOverlayWidget,
         {Visible, OverlayFlag::autoRotate | OverlayFlag::bindToViewport, BaseLayer});
+}
+
+bool QnMediaResourceWidget::shouldShowAudioSpectrum() const
+{
+    return !d->hasVideo && !d->isIoModule && ini().audioVisualization;
 }
 
 QnMediaResourceWidget::AreaType QnMediaResourceWidget::areaSelectionType() const
@@ -1719,7 +1724,7 @@ void QnMediaResourceWidget::setDisplay(const QnResourceDisplayPtr& display)
         display->addRenderer(m_renderer);
         updateCustomAspectRatio();
 
-        display->camDisplay()->setAnalyzesAudio(!d->hasVideo && ini().audioVisualization);
+        display->camDisplay()->setAnalyzesAudio(shouldShowAudioSpectrum());
     }
     else
     {
@@ -3780,13 +3785,12 @@ void QnMediaResourceWidget::updateAudioPlaybackState()
     bool isActiveWindow =
         AudioDispatcher::instance()->currentAudioSource() == mainWindowWidget()->windowHandle();
     bool isCentral = WindowContextAware::display()->widget(Qn::CentralRole) == this;
-    bool hasAudioVisualizer = !d->hasVideo && ini().audioVisualization;
 
     bool effectiveMuted =
         !isActiveWindow ||
         (isPlayingAll ? isMuted() && ini().perItemMute : !isCentral);
 
-    if (hasAudioVisualizer)
+    if (shouldShowAudioSpectrum())
     {
         camDisplay->playAudio(true);
         camDisplay->setAudioDecodeOnly(effectiveMuted);
