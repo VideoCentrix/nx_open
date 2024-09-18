@@ -907,15 +907,15 @@
     </message>
     <message>
       <source>Save Window Configuration</source>
-      <translation>ウィンドウの設定を保存</translation>
+      <translation>ウィンドウ構成を保存</translation>
     </message>
     <message>
       <source>Save Windows Configuration</source>
-      <translation>ウィンドウの設定を保存</translation>
+      <translation>ウィンドウ構成を保存</translation>
     </message>
     <message>
       <source>Windows Configuration</source>
-      <translation>ウィンドウの設定</translation>
+      <translation>ウィンドウ構成</translation>
     </message>
     <message>
       <source>Save Current State</source>
@@ -3960,15 +3960,15 @@ License Key: %2</source>
     </message>
     <message>
       <source>Stretch</source>
-      <translation>ウィンドウサイズに引き伸ばし</translation>
+      <translation>引き伸ばし</translation>
     </message>
     <message>
       <source>Fit</source>
-      <translation>縦幅を合わせる</translation>
+      <translation>フィット</translation>
     </message>
     <message>
       <source>Crop</source>
-      <translation>横幅を合わせる</translation>
+      <translation>クロップ</translation>
     </message>
     <message>
       <source>This option will not affect Recording Schedule. Recording Schedule is always based on Server Time.</source>
@@ -10430,7 +10430,7 @@ You can force it, but it may significantly increase CPU load.</source>
     </message>
     <message>
       <source>An integration may interact with the Desktop Client and request access to the user session</source>
-      <translation>インテグレーションはデスクトップクライアントと対話し、ユーザーセッションへのアクセスを要求する場合があります</translation>
+      <translation>インテグレーションはデスクトップクライアントと通信し、ユーザーセッションへのアクセスを要求する場合があります</translation>
     </message>
     <message>
       <source>Proxy this integration through the server</source>
@@ -13169,7 +13169,7 @@ You can select another storage location in the &quot;Storage Management&quot; ta
     </message>
     <message>
       <source>Window configuration saved</source>
-      <translation>ウィンドウ設定を保存しました</translation>
+      <translation>ウィンドウ構成を保存しました</translation>
     </message>
     <message>
       <source>This build is for demo purposes only.</source>
