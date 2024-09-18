@@ -8,7 +8,8 @@ class QPainter;
 
 namespace nx::vms::client::desktop {
 
-struct VoiceSpectrumPainterOptions {
+struct VoiceSpectrumPainterOptions
+{
     /** Max visualizer value change per second (on increasing and decreasing values). */
     qreal visualizerAnimationUpSpeed = 5.0;
     qreal visualizerAnimationDownSpeed = 1.0;
@@ -32,7 +33,8 @@ struct VoiceSpectrumPainterOptions {
     QColor color = QColor(255, 255, 255);
 };
 
-class VoiceSpectrumPainter {
+class VoiceSpectrumPainter
+{
 public:
     using Data = QVector<double>;
 

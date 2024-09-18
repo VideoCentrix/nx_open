@@ -542,7 +542,7 @@ Factory::ActionList SoundPlaybackActionFactory::newActions(
 
     for (QnResourceWidget* widget: parameters.widgets())
     {
-        QnMediaResourceWidget* mediaWidget = dynamic_cast<QnMediaResourceWidget*>(widget);
+        QnMediaResourceWidget* mediaWidget = qobject_cast<QnMediaResourceWidget*>(widget);
         if (mediaWidget && mediaWidget->canBeMuted())
             (mediaWidget->isMuted() ? mutedCount : unmutedCount)++;
     }

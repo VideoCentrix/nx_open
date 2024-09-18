@@ -1823,7 +1823,7 @@ void ActionHandler::at_muteAction_triggered()
 
     for (QnResourceWidget* widget: parameters.widgets())
     {
-        QnMediaResourceWidget* mediaWidget = dynamic_cast<QnMediaResourceWidget*>(widget);
+        QnMediaResourceWidget* mediaWidget = qobject_cast<QnMediaResourceWidget*>(widget);
         if (mediaWidget && mediaWidget->canBeMuted())
             mediaWidget->setMuted(muted);
     }

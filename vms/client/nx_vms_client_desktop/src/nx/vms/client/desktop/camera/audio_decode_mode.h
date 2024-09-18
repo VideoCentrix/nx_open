@@ -2,7 +2,8 @@
 
 namespace nx::vms::client::desktop {
 
-enum class AudioDecodeMode {
+enum class AudioDecodeMode
+{
     /** Decode & play audio as usual. */
     normal,
 

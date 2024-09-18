@@ -6,10 +6,9 @@
 
 #include <camera/cam_display.h>
 #include <camera/resource_display.h>
+#include <nx/vms/client/core/skin/color_theme.h>
 
 #include "audio_spectrum_widget.h"
-#include "nx/vms/client/core/skin/color_theme.h"
-#include "ui/common/palette.h"
 
 namespace nx::vms::client::desktop {
 

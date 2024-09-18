@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <QtCore/QScopedPointer>
+#include <memory>
 
 #include <qt_graphics_items/graphics_widget.h>
 
@@ -30,7 +30,7 @@ private:
 
 private:
     struct Private;
-    const QScopedPointer<Private> d;
+    const std::unique_ptr<Private> d;
 };
 
 } // namespace nx::vms::client::desktop

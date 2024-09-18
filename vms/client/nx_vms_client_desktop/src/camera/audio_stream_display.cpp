@@ -334,7 +334,7 @@ void QnAudioStreamDisplay::playCurrentBuffer()
                 (const quint8*) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
         }
 
-        // TODO: #afokin for now we only support 16-bit and 32-bit signed ints here, is this OK?
+        // Looking at the code in initFormatConvertRule, we'll never get FP sample type here.
         if (m_decodeMode != AudioDecodeMode::normal &&
             (audioFormat.sampleSize == 16 || audioFormat.sampleSize == 32) &&
             audioFormat.sampleType == nx::media::audio::Format::SampleType::signedInt)
