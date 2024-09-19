@@ -163,7 +163,8 @@ bool QnAudioStreamDisplay::initFormatConvertRule(nx::media::audio::Format format
         m_downmixing = false;
     }
 
-    if (nx::audio::Sound::isFormatSupported(format))
+    // If we do spectrum analysis then we always try converting floats to ints.
+    if (m_decodeMode == AudioDecodeMode::normal && nx::audio::Sound::isFormatSupported(format))
         return true;
 
     if (format.sampleType == nx::media::audio::Format::SampleType::floatingPoint)
@@ -334,7 +335,7 @@ void QnAudioStreamDisplay::playCurrentBuffer()
                 (const quint8*) m_decodedAudioBuffer.data(), m_decodedAudioBuffer.size());
         }
 
-        // Looking at the code in initFormatConvertRule, we'll never get FP sample type here.
+        // Given the code in initFormatConvertRule, we should never get FP sample type here.
         if (m_decodeMode != AudioDecodeMode::normal &&
             (audioFormat.sampleSize == 16 || audioFormat.sampleSize == 32) &&
             audioFormat.sampleType == nx::media::audio::Format::SampleType::signedInt)
