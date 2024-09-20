@@ -1743,7 +1743,7 @@
     </message>
     <message>
       <source>Device storage information update interval</source>
-      <translation type="unfinished">Device storage information update interval</translation>
+      <translation>Khoảng thời gian cập nhật thông tin lưu trữ thiết bị</translation>
     </message>
   </context>
   <context>

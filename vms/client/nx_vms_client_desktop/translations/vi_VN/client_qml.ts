@@ -2406,7 +2406,7 @@ Nhấn Alt + Click để theo dõi đối tượng</translation>
     </message>
     <message>
       <source>Local</source>
-      <translation>Vị trí</translation>
+      <translation>Cục bộ</translation>
     </message>
     <message>
       <source>Cloud</source>

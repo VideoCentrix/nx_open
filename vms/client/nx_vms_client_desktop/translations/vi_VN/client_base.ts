@@ -9108,7 +9108,7 @@ Nếu bạn có ý định di chuyển dữ liệu phân tích đến một vị
     </message>
     <message>
       <source>Copy Link Location</source>
-      <translation>Sao chép vị trí liên kết</translation>
+      <translation>Sao chép liên kết vị trí</translation>
     </message>
   </context>
   <context>
@@ -9613,11 +9613,11 @@ Hãy nhớ trả lại Mức ghi nhật ký về cài đặt mặc định sau k
     </message>
     <message>
       <source>Current (%1)</source>
-      <translation type="unfinished">Current (%1)</translation>
+      <translation>Hiện tại (%1)</translation>
     </message>
     <message>
       <source>Remote (%1)</source>
-      <translation type="unfinished">Remote (%1)</translation>
+      <translation>Từ xa (%1)</translation>
     </message>
     <message>
       <source>Success</source>
@@ -9625,7 +9625,7 @@ Hãy nhớ trả lại Mức ghi nhật ký về cài đặt mặc định sau k
     </message>
     <message>
       <source>Remote</source>
-      <translation type="unfinished">Remote</translation>
+      <translation>Từ xa</translation>
     </message>
   </context>
   <context>
