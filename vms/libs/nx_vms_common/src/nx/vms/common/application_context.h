@@ -4,6 +4,7 @@
 
 #include <QtCore/QObject>
 
+#include <core/resource/resource_fwd.h>
 #include <nx/utils/impl_ptr.h>
 #include <nx/utils/uuid.h>
 #include <nx/vms/api/types/connection_types.h>
@@ -26,6 +27,15 @@ class NX_VMS_COMMON_API ApplicationContext: public QObject
 {
     Q_OBJECT
 
+public:
+    class VxCallback {
+    public:
+        virtual ~VxCallback() = default;
+        virtual void init() {}
+        virtual void deinit() {}
+        virtual void startTalkdown(const QnResourcePtr & /*camera*/) {}
+    };
+
 protected:
     using PeerType = nx::vms::api::PeerType;
 
@@ -40,6 +50,9 @@ public:
      * Main context of the VMS applications. Exists through all application lifetime.
      */
     static ApplicationContext* instance();
+
+    void setVxCallback(std::unique_ptr<VxCallback> cb) { _vxCallback = std::move(cb); }
+    VxCallback &vxCallback() { return *_vxCallback; }
 
     void initNetworking(const QString& customCloudHost = QString());
     void deinitNetworking();
@@ -61,6 +74,8 @@ public:
 private:
     struct Private;
     nx::utils::ImplPtr<Private> d;
+
+    std::unique_ptr<VxCallback> _vxCallback = std::make_unique<VxCallback>();
 };
 
 inline ApplicationContext* appContext() { return ApplicationContext::instance(); }
