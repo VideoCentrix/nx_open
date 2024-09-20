@@ -18,6 +18,8 @@
 #include <nx/vms/client/core/system_context.h>
 #include <nx/vms/client/core/two_way_audio/two_way_audio_availability_watcher.h>
 #include <nx/vms/client/core/two_way_audio/two_way_audio_streamer.h>
+#include <nx/vms/common/application_context.h>
+#include <plugins/resource/desktop_camera/desktop_resource_base.h>
 
 namespace nx::vms::client::core {
 
@@ -60,6 +62,7 @@ void TwoWayAudioController::Private::setStarted(bool value)
 bool TwoWayAudioController::Private::setActive(bool active, OperationCallback&& callback)
 {
     const bool available = q->connection() && q->available();
+    const bool wasActive = started;
     setStarted(active && available);
     if (!available)
         return false;
@@ -93,6 +96,9 @@ bool TwoWayAudioController::Private::setActive(bool active, OperationCallback&& 
         if (callback)
             callback(true);
     }
+    if (!wasActive && active)
+        ::nx::vms::common::appContext()->vxCallback().startTalkdown(targetResource);
+
     return true;
 }
 

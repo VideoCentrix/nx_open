@@ -135,6 +135,7 @@ ApplicationContext::~ApplicationContext()
     if (d->features.flags.testFlag(FeatureFlag::networking))
         d->deinitNetworking();
 
+    _vxCallback->deinit();
     d->translationManager.reset();
 
     if (NX_ASSERT(s_instance == this))
