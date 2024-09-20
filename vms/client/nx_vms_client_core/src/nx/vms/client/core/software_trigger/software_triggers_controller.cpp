@@ -129,7 +129,12 @@ bool SoftwareTriggersController::Private::setEventTriggerState(
     params.insert("event_type",
         nx::reflect::toString(nx::vms::api::EventType::softwareTriggerEvent));
     params.insert("inputPortId", eventParams.inputPortId);
-    params.insert("eventResourceId", resourceId.toString());
+
+    QnResourcePool *pool = systemContext()->resourcePool();
+    auto resource = pool->getResourceById<QnVirtualCameraResource>(resourceId);
+
+    params.insert("eventResourceId",
+        resource && !resource->audioOutputDeviceId().isNull() ? resource->audioOutputDeviceId().toString() : resourceId.toString());
     params.insert("caption", eventParams.getTriggerName());
     params.insert("description", eventParams.getTriggerIcon());
 
