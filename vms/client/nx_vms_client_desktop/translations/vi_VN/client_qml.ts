@@ -2233,7 +2233,7 @@ Nhấn Alt + Click để theo dõi đối tượng</translation>
     <name>SyncComboBox</name>
     <message>
       <source>Never</source>
-      <translation>Thường xuyên</translation>
+      <translation>Không hết hạn</translation>
     </message>
     <message>
       <source>Always</source>
