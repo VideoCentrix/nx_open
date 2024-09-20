@@ -321,8 +321,11 @@ QVector<QnUuid> AbstractAction::getSourceResources(const QnResourcePool* resourc
     for (const auto& flexibleId: m_runtimeParams.metadata.cameraRefs)
     {
         auto camera = camera_id_helper::findCameraByFlexibleId(resourcePool, flexibleId);
-        if (camera && !result.contains(camera->getId()))
-            result.push_back(camera->getId());
+        if (camera && !result.contains(camera->getId())) {
+            // VX needs to output to dedicated speaker
+            const auto outputOverride = camera->audioOutputDeviceId();
+            result.push_back(outputOverride.isNull() ? camera->getId() : outputOverride);
+        }
     }
     return result;
 }
