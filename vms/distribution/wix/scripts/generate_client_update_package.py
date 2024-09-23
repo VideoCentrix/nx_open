@@ -72,6 +72,11 @@ nx_libraries = [
     'qtkeychain'
 ]
 
+aws_libraries = [
+    "3rdparty/aws-sdk-cpp/generated/src/aws-cpp-sdk-s3/libaws-cpp-sdk-s3",
+    "3rdparty/aws-sdk-cpp/generated/src/aws-cpp-sdk-secretsmanager/libaws-cpp-sdk-secretsmanager",
+]
+
 
 def create_client_update_file(config, output_file):
     customization_mobile_client_enabled = config['customization_mobile_client_enabled']
@@ -107,6 +112,7 @@ def create_client_update_file(config, output_file):
         tools.zip_files_to(zip, tools.icu_files(icu_lib_directory), icu_lib_directory)
         tools.zip_files_to(zip, tools.find_all_files(locale_resources_directory), qt_directory)
         tools.zip_files_to(zip, tools.find_all_files(webengine_locales_directory), qt_directory)
+        tools.zip_files_to(zip, tools.nx_files(current_binary_dir, aws_libraries), binaries_dir)
 
         if customization_mobile_client_enabled:
             zip.write(mobile_help_source_file_path, mobile_help_destination_file_name)
