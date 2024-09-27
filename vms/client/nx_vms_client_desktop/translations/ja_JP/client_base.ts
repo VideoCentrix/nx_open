@@ -6949,7 +6949,7 @@ If you intended to move analytics data to another storage location, please conta
     </message>
     <message>
       <source>Edit Settings.</source>
-      <translation>編集の設定。</translation>
+      <translation>設定の編集。</translation>
     </message>
   </context>
   <context>
