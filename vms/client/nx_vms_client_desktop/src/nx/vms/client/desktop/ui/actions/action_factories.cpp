@@ -561,7 +561,7 @@ Factory::ActionList SoundPlaybackActionFactory::newActions(
             connect(action, &QAction::triggered, this,
                 [this, parametersCopy]
                 {
-                    menu()->trigger(MuteAction, parametersCopy);
+                    menu()->trigger(ItemMuteAction, parametersCopy);
                 });
 
             actionGroup->addAction(action);
