@@ -428,6 +428,9 @@ ActionHandler::ActionHandler(QObject *parent) :
 
     connect(action(ui::action::ItemMuteAction), &QAction::triggered,
         this, &ActionHandler::at_itemMuteAction_triggered);
+
+    connect(action(ui::action::ToggleItemMuteAction), &QAction::triggered,
+        this, &ActionHandler::at_toggleItemMuteAction_triggered);
 }
 
 ActionHandler::~ActionHandler()
@@ -1678,6 +1681,29 @@ void ActionHandler::at_itemMuteAction_triggered()
         auto mediaWidget = qobject_cast<QnMediaResourceWidget*>(widget);
         if (mediaWidget && mediaWidget->canBeMuted())
             mediaWidget->setMuted(muted);
+    }
+}
+
+void ActionHandler::at_toggleItemMuteAction_triggered()
+{
+    const auto widgets = menu()->currentParameters(sender()).widgets();
+
+    bool muted = true;
+    for (QnResourceWidget* widget: widgets)
+    {
+        auto mediaWidget = qobject_cast<QnMediaResourceWidget*>(widget);
+        if (mediaWidget && mediaWidget->canBeMuted() && !mediaWidget->isMuted())
+        {
+            muted = false;
+            break;
+        }
+    }
+
+    for (QnResourceWidget* widget: widgets)
+    {
+        auto mediaWidget = qobject_cast<QnMediaResourceWidget*>(widget);
+        if (mediaWidget && mediaWidget->canBeMuted())
+            mediaWidget->setMuted(!muted);
     }
 }
 
