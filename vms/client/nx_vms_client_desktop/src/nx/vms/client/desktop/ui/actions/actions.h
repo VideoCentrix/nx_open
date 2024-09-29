@@ -832,7 +832,7 @@ enum IDType
     /**
      * Changes muted state for the given item. Muted value provided in MutedRole.
      */
-    MuteAction,
+    ItemMuteAction,
 
     /**
      * For the camera resource list with the same Composite Group ID with dimension less then

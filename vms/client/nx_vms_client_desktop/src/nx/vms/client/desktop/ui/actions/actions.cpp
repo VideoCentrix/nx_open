@@ -1401,7 +1401,7 @@ void initialize(Manager* manager, Action* root)
         .condition(ConditionWrapper(new ChangeResolutionCondition())
             && !condition::isLayoutTourReviewMode());
 
-    factory(MuteAction)
+    factory(ItemMuteAction)
         .flags(Scene | SingleTarget | MultiTarget | LayoutItemTarget)
         .text(ContextMenu::tr("Sound Playback..."))
         .childFactory(new SoundPlaybackActionFactory(manager))

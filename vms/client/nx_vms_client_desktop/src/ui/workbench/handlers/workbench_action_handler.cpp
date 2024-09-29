@@ -426,8 +426,8 @@ ActionHandler::ActionHandler(QObject *parent) :
     connect(action(action::OpenAdvancedSearchDialog), &QAction::triggered,
         this, &ActionHandler::at_openAdvancedSearchDialog_triggered);
 
-    connect(action(ui::action::MuteAction), &QAction::triggered,
-        this, &ActionHandler::at_muteAction_triggered);
+    connect(action(ui::action::ItemMuteAction), &QAction::triggered,
+        this, &ActionHandler::at_itemMuteAction_triggered);
 }
 
 ActionHandler::~ActionHandler()
@@ -1667,7 +1667,7 @@ void ActionHandler::at_goToLayoutItemAction_triggered()
     workbench()->setItem(Qn::SingleSelectedRole, targetItem);
 }
 
-void ActionHandler::at_muteAction_triggered()
+void ActionHandler::at_itemMuteAction_triggered()
 {
     const auto parameters = menu()->currentParameters(sender());
 
