@@ -1404,6 +1404,12 @@ void initialize(Manager* manager, Action* root)
         .childFactory(new SoundPlaybackActionFactory(manager))
         .condition(ConditionWrapper(new SoundPlaybackActionCondition()));
 
+    factory(ToggleItemMuteAction)
+        .flags(Scene | SingleTarget | MultiTarget | HotkeyOnly)
+        .shortcut("Alt+U")
+        .autoRepeat(true)
+        .condition(ConditionWrapper(new SoundPlaybackActionCondition()));
+
     factory(CreateNewCustomGroupAction)
         .mode(DesktopMode)
         .flags(Tree | SingleTarget | MultiTarget | ResourceTarget)

@@ -1165,7 +1165,7 @@ void QnMediaResourceWidget::createButtons()
     muteButton->setIcon(loadSvgIcon("item/mute.svg"));
     muteButton->setCheckable(true);
     muteButton->setChecked(false);
-    muteButton->setToolTip(tr("Mute"));
+    muteButton->setToolTip(tooltipText(tr("Mute"), QKeySequence("Alt+U")));
     connect(muteButton, &QnImageButtonWidget::toggled, this, &QnMediaResourceWidget::setMuted);
     titleBar()->rightButtonsBar()->addButton(Qn::MuteButton, muteButton);
 }
