@@ -3775,12 +3775,22 @@ bool QnMediaResourceWidget::isTitleUnderMouse() const
     return m_hudOverlay->title()->isUnderMouse();
 }
 
+bool QnMediaResourceWidget::hasAudio() const
+{
+    if (d->camera)
+        return d->camera->isAudioEnabled();
+
+    if (d->mediaResource) // Handle local files.
+        return !d->mediaResource->getAudioLayout(d->display()->dataProvider())->tracks().empty();
+
+    return false;
+}
+
 bool QnMediaResourceWidget::canBeMuted() const
 {
     return
         ini().perItemMute &&
-        d->camera &&
-        d->camera->isAudioEnabled() &&
+        hasAudio() &&
         !isZoomWindow() &&
         appContext()->localSettings()->playAudioForAllItems();
 }
@@ -3819,7 +3829,7 @@ void QnMediaResourceWidget::updateAudioPlaybackState()
 
     bool effectiveMuted =
         !isActiveWindow ||
-        (d->camera && !d->camera->isAudioEnabled()) ||
+        !hasAudio() ||
         (isPlayingAll ? canBeMuted() && isMuted() : !isCentral);
 
     if (shouldShowAudioSpectrum())
