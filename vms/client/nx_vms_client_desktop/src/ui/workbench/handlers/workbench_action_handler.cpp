@@ -429,8 +429,8 @@ ActionHandler::ActionHandler(QObject *parent) :
     connect(action(ui::action::ItemMuteAction), &QAction::triggered,
         this, &ActionHandler::at_itemMuteAction_triggered);
 
-    connect(action(ui::action::ToggleItemMuteAction), &QAction::triggered,
-        this, &ActionHandler::at_toggleItemMuteAction_triggered);
+    connect(action(ui::action::ItemUnmuteAction), &QAction::triggered,
+        this, &ActionHandler::at_itemUnmuteAction_triggered);
 }
 
 ActionHandler::~ActionHandler()
@@ -1672,38 +1672,21 @@ void ActionHandler::at_goToLayoutItemAction_triggered()
 
 void ActionHandler::at_itemMuteAction_triggered()
 {
-    const auto parameters = menu()->currentParameters(sender());
+    muteUnmuteWidgets(menu()->currentParameters(sender()).widgets(), true);
+}
 
-    bool muted = parameters.argument(Qn::MutedRole).toBool();
+void ActionHandler::at_itemUnmuteAction_triggered()
+{
+    muteUnmuteWidgets(menu()->currentParameters(sender()).widgets(), false);
+}
 
-    for (QnResourceWidget* widget: parameters.widgets())
+void ActionHandler::muteUnmuteWidgets(const QnResourceWidgetList& widgets, bool muted) const
+{
+    for (QnResourceWidget* widget: widgets)
     {
         auto mediaWidget = qobject_cast<QnMediaResourceWidget*>(widget);
         if (mediaWidget && mediaWidget->canBeMuted())
             mediaWidget->setMuted(muted);
-    }
-}
-
-void ActionHandler::at_toggleItemMuteAction_triggered()
-{
-    const auto widgets = menu()->currentParameters(sender()).widgets();
-
-    bool muted = true;
-    for (QnResourceWidget* widget: widgets)
-    {
-        auto mediaWidget = qobject_cast<QnMediaResourceWidget*>(widget);
-        if (mediaWidget && mediaWidget->canBeMuted() && !mediaWidget->isMuted())
-        {
-            muted = false;
-            break;
-        }
-    }
-
-    for (QnResourceWidget* widget: widgets)
-    {
-        auto mediaWidget = qobject_cast<QnMediaResourceWidget*>(widget);
-        if (mediaWidget && mediaWidget->canBeMuted())
-            mediaWidget->setMuted(!muted);
     }
 }
 

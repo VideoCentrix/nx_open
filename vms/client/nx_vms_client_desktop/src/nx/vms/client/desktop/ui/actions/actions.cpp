@@ -1402,16 +1402,28 @@ void initialize(Manager* manager, Action* root)
             && !condition::isLayoutTourReviewMode());
 
     factory(ItemMuteAction)
-        .flags(Scene | SingleTarget | MultiTarget | LayoutItemTarget)
-        .text(ContextMenu::tr("Sound Playback..."))
-        .childFactory(new SoundPlaybackActionFactory(manager))
-        .condition(ConditionWrapper(new SoundPlaybackActionCondition()));
-
-    factory(ToggleItemMuteAction)
-        .flags(Scene | SingleTarget | MultiTarget | HotkeyOnly)
+        .flags(Scene | SingleTarget | MultiTarget | IntentionallyAmbiguous)
         .shortcut("Alt+U")
-        .autoRepeat(true)
-        .condition(ConditionWrapper(new SoundPlaybackActionCondition()));
+        .dynamicText(new FunctionalTextFactory(
+            [](const Parameters& parameters, QnWorkbenchContext* /*context*/)
+            {
+                return ContextMenu::tr("Mute Items", "", parameters.widgets().size());
+            },
+            manager))
+        .condition(ConditionWrapper(
+            new ItemMuteActionCondition(true)));
+
+    factory(ItemUnmuteAction)
+        .flags(Scene | SingleTarget | MultiTarget | IntentionallyAmbiguous)
+        .shortcut("Alt+U")
+        .dynamicText(new FunctionalTextFactory(
+            [](const Parameters& parameters, QnWorkbenchContext* /*context*/)
+            {
+                return ContextMenu::tr("Unmute Items", "", parameters.widgets().size());
+            },
+            manager))
+        .condition(ConditionWrapper(
+            new ItemMuteActionCondition(false)));
 
     factory(CreateNewCustomGroupAction)
         .mode(DesktopMode)
