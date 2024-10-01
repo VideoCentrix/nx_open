@@ -2555,7 +2555,7 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
 
         // Handle export from I/O modules.
         if (!d->hasVideo)
-            return ini().audioVisualization ? Qn::EmptyOverlay : Qn::NoVideoDataOverlay;
+            return shouldShowAudioSpectrum() ? Qn::EmptyOverlay : Qn::NoVideoDataOverlay;
     }
 
     if (options().testFlag(DisplayActivity) && d->display()->isPaused())
@@ -2574,7 +2574,7 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
             .containTime(d->display()->camDisplay()->getExternalTime() / 1000))
         {
             return base_type::calculateStatusOverlay(nx::vms::api::ResourceStatus::online,
-                d->hasVideo);
+                d->hasVideo, shouldShowAudioSpectrum());
         }
 
         return Qn::NoDataOverlay;
@@ -2590,12 +2590,13 @@ Qn::ResourceStatusOverlay QnMediaResourceWidget::calculateStatusOverlay() const
     if (d->display()->isPaused())
     {
         if (!d->hasVideo)
-            return ini().audioVisualization ? Qn::EmptyOverlay : Qn::NoVideoDataOverlay;
+            return shouldShowAudioSpectrum() ? Qn::EmptyOverlay : Qn::NoVideoDataOverlay;
 
         return Qn::EmptyOverlay;
     }
 
-    return base_type::calculateStatusOverlay(nx::vms::api::ResourceStatus::online, d->hasVideo);
+    return base_type::calculateStatusOverlay(nx::vms::api::ResourceStatus::online,
+        d->hasVideo, shouldShowAudioSpectrum());
 }
 
 Qn::ResourceOverlayButton QnMediaResourceWidget::calculateOverlayButton(
