@@ -19,7 +19,7 @@
 #include <nx/vms/client/desktop/radass/radass_controller.h>
 #include <utils/common/synctime.h>
 #include <utils/common/util.h>
-#include <utils/media/voice_spectrum_analyzer.h>
+#include <utils/media/queued_voice_spectrum_analyzer.h>
 
 #include "audio_stream_display.h"
 #include "video_stream_display.h"
@@ -1529,8 +1529,7 @@ bool QnCamDisplay::processData(const QnAbstractDataPacketPtr& data)
         currentAudioFormat = { nx::audio::formatFromMediaContext(ad->context),
             ad->context->getBitsPerCodedSample() };
         audioParamsChanged = m_playingFormat != currentAudioFormat
-            || m_audioDisplay->getAudioBufferSize() != expectedBufferSize
-            || m_audioDisplay->decodeMode() != m_audioDecodeMode;
+            || m_audioDisplay->getAudioBufferSize() != expectedBufferSize;
     }
     if (((media->flags & QnAbstractMediaData::MediaFlags_AfterEOF) || audioParamsChanged) &&
         m_videoQueue[0].size() > 0)
@@ -2272,11 +2271,20 @@ AudioDecodeMode QnCamDisplay::audioDecodeMode() const
 
 void QnCamDisplay::setAudioDecodeMode(AudioDecodeMode decodeMode)
 {
+    if (m_audioDecodeMode == decodeMode)
+        return;
+
     m_audioDecodeMode = decodeMode;
+
+    NX_MUTEX_LOCKER lock(&m_audioChangeMutex);
+    if (m_audioDisplay)
+        m_audioDisplay->setAudioDecodeMode(decodeMode);
 }
 
 QnSpectrumData QnCamDisplay::audioSpectrum() const
 {
+    qint64 currentTime = getCurrentTime(); // This call locks, so gotta be outside the mutex below.
+
     NX_MUTEX_LOCKER lock(&m_audioChangeMutex);
-    return m_audioDisplay && m_audioDisplay->analyzer() ? m_audioDisplay->analyzer()->getSpectrumData() : QnSpectrumData();
+    return m_audioDisplay && m_audioDisplay->analyzer() ? m_audioDisplay->analyzer()->readSpectrumData(currentTime) : QnSpectrumData();
 }
