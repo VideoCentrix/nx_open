@@ -85,17 +85,17 @@ void QnVoiceSpectrumAnalyzer::initialize(int srcSampleRate, int channels)
     m_fftContext = av_fft_init(m_bitCount, /*inverse*/ 0);
 }
 
-void QnVoiceSpectrumAnalyzer::processData(const qint16* sampleData, int sampleCount)
+bool QnVoiceSpectrumAnalyzer::processData(const qint16* sampleData, int sampleCount)
 {
-    processDataInternal(sampleData, sampleCount);
+    return processDataInternal(sampleData, sampleCount);
 }
 
-void QnVoiceSpectrumAnalyzer::processData(const qint32* sampleData, int sampleCount)
+bool QnVoiceSpectrumAnalyzer::processData(const qint32* sampleData, int sampleCount)
 {
-    processDataInternal(sampleData, sampleCount);
+    return processDataInternal(sampleData, sampleCount);
 }
 
-void QnVoiceSpectrumAnalyzer::processData(
+bool QnVoiceSpectrumAnalyzer::processData(
     const nx::media::audio::Format& format,
     const void* sampleData,
     int sampleBytes)
@@ -103,21 +103,21 @@ void QnVoiceSpectrumAnalyzer::processData(
     if (!NX_ASSERT(format.sampleType == nx::media::audio::Format::SampleType::signedInt) &&
         (format.sampleSize == 16 || format.sampleSize == 32))
     {
-        return;
+        return false;
     }
 
     if (format.sampleSize == 16)
     {
-        processData((const qint16*) sampleData, sampleBytes / 2);
+        return processData((const qint16*) sampleData, sampleBytes / 2);
     }
     else
     {
-        processData((const qint32*) sampleData, sampleBytes / 4);
+        return processData((const qint32*) sampleData, sampleBytes / 4);
     }
 }
 
 template<class T>
-void QnVoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampleCount)
+bool QnVoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampleCount)
 {
     // Max volume amplification for input data.
     static const double kBoostLevel = 10 * log10(kBoostLevelDb);
@@ -129,6 +129,7 @@ void QnVoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampl
     maxSampleValue = qMax(maxSampleValue, maxAmplifier);
     const T* p = sampleData;
 
+    bool updated = false;
     for (int i = 0; i < sampleCount; ++i)
     {
         // Calculate an average for all channels. Channel samples are interleaved.
@@ -151,10 +152,12 @@ void QnVoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampl
                 m_spectrumData = spectrumData;
             }
 
+            updated = true;
             m_fftDataSize = 0;
             memset(m_fftData, 0, m_windowSize * sizeof(m_fftData[0]));
         }
     }
+    return updated;
 }
 
 /*static*/ QnSpectrumData QnVoiceSpectrumAnalyzer::fillSpectrumData(

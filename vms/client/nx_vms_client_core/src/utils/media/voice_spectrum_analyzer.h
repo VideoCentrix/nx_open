@@ -33,10 +33,12 @@ public:
     /**
      * Process input data. Data should be in 16 or 32 bit form. The total amount of samples is
      * sampleCount * channels.
+     *
+     * @returns                         Whether the stored spectrum data was updated.
      */
-    void processData(const qint16* sampleData, int sampleCount);
-    void processData(const qint32* sampleData, int sampleCount);
-    void processData(const nx::media::audio::Format& format, const void* sampleData, int sampleBytes);
+    bool processData(const qint16* sampleData, int sampleCount);
+    bool processData(const qint32* sampleData, int sampleCount);
+    bool processData(const nx::media::audio::Format& format, const void* sampleData, int sampleBytes);
 
     QnSpectrumData getSpectrumData() const;
 
@@ -47,7 +49,7 @@ public:
 
 protected: //< Made protected for unit tests.
     template<class T>
-    void processDataInternal(const T* sampleData, int sampleCount);
+    bool processDataInternal(const T* sampleData, int sampleCount);
     int windowSize() const { return m_windowSize; }
     FFTComplex* fftData() const { return m_fftData; }
     void performFft();
