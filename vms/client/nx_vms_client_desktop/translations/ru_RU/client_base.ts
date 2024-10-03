@@ -1673,7 +1673,7 @@ License Key: %2</translation>
     </message>
     <message>
       <source>Active</source>
-      <translation type="unfinished">Active</translation>
+      <translation>Активный</translation>
     </message>
     <message>
       <source>Not configured</source>
@@ -11262,7 +11262,7 @@ You can force it, but it may significantly increase CPU load.</translation>
     <name>nx::vms::client::desktop::SaasInfoWidget</name>
     <message>
       <source>Active</source>
-      <translation type="unfinished">Active</translation>
+      <translation>Активный</translation>
     </message>
     <message>
       <source>Suspended</source>
