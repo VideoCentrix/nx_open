@@ -71,8 +71,8 @@ set(qt_widgets_root "${open_source_root}/artifacts/qt_widgets/src")
 file(GLOB_RECURSE qt_widgets_sources "${qt_widgets_root}/qt_widgets/*")
 file(GLOB_RECURSE qt_widgets_headers "${qt_widgets_root}/qt_widgets/*.h")
 
-file(GLOB_RECURSE vx_sources "${vx_root}/vx/*")
-file(GLOB_RECURSE vx_headers "${vx_root}/vx/*.h")
+file(GLOB_RECURSE vx_sources "${vx_root}/src/vx/*")
+file(GLOB_RECURSE vx_headers "${vx_root}/src/vx/*.h")
 nx_find_files(vx_uis "${vx_root}/src/vx" "ui")
 qt6_wrap_ui(vx_uics ${vx_uis})
 
