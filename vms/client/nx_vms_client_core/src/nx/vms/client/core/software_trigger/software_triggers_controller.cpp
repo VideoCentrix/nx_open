@@ -130,7 +130,7 @@ bool SoftwareTriggersController::Private::setEventTriggerState(
         nx::reflect::toString(nx::vms::api::EventType::softwareTriggerEvent));
     params.insert("inputPortId", eventParams.inputPortId);
 
-    QnResourcePool *pool = systemContext()->resourcePool();
+    QnResourcePool *pool = q->systemContext()->resourcePool();
     auto resource = pool->getResourceById<QnVirtualCameraResource>(resourceId);
 
     params.insert("eventResourceId",
