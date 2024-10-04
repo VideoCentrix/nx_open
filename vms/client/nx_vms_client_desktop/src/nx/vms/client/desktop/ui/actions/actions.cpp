@@ -406,7 +406,7 @@ void initialize(Manager* manager, Action* root)
 
         factory(NewUserAction)
             .flags(Main | Tree)
-            .requiredGlobalPermission(GlobalPermission::admin)
+            .requiredGlobalPermission(GlobalPermission::administrator)
             .text(ContextMenu::tr("User..."))
             .pulledText(ContextMenu::tr("New User..."))
             .condition(
@@ -418,14 +418,14 @@ void initialize(Manager* manager, Action* root)
 
         factory(NewVideoWallAction)
             .flags(Main)
-            .requiredGlobalPermission(GlobalPermission::admin)
+            .requiredGlobalPermission(GlobalPermission::administrator)
             .text(ContextMenu::tr("Video Wall..."))
             .pulledText(ContextMenu::tr("New Video Wall..."))
             .autoRepeat(false);
 
         factory(NewWebPageAction)
             .flags(Main | Tree)
-            .requiredGlobalPermission(GlobalPermission::admin)
+            .requiredGlobalPermission(GlobalPermission::administrator)
             .text(ContextMenu::tr("Web Page..."))
             .pulledText(ContextMenu::tr("Add Web Page..."))
             .condition(
@@ -433,22 +433,19 @@ void initialize(Manager* manager, Action* root)
             )
             .autoRepeat(false);
 
-        factory(NewLayoutTourAction)
-            .flags(Main | Tree | NoTarget)
+        factory(NewShowreelAction)
+            .flags(Main | Tree)
             .text(ContextMenu::tr("Showreel..."))
-            .pulledText(ContextMenu::tr("New Showreel..."))
+            .pulledText(ContextMenu::tr("Add Showreel..."))
             .condition(condition::isLoggedIn()
-                && condition::treeNodeType(ResourceTree::NodeType::layoutTours)
-            )
-            .autoRepeat(false);
+                       && condition::treeNodeType(ResourceTree::NodeType::showreels)
+                       );
 
-        factory(NewVirtualCameraAction)
-            .flags(Main | NoTarget)
-            .requiredGlobalPermission(GlobalPermission::admin)
+        factory(MainMenuAddVirtualCameraAction)
+            .flags(Main)
+            .requiredPowerUserPermissions()
             .text(ContextMenu::tr("Virtual Camera..."))
-            .pulledText(ContextMenu::tr("New Virtual Camera..."))
-            .condition(condition::isLoggedIn())
-            .autoRepeat(false);
+            .pulledText(ContextMenu::tr("Add Virtual Camera..."));
 
         vx::registerNewMonitoringLayoutAction(factory);
     }
