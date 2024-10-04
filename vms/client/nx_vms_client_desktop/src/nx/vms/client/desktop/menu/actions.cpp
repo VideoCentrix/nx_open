@@ -824,6 +824,8 @@ void initialize(Manager* manager, Action* root)
                 condition::treeNodeType(ResourceTree::NodeType::users)
             );
 
+        vx::registerMultipleNewUsersAction(factory);
+
         factory(NewVideoWallAction)
             .flags(Main)
             .requiredPowerUserPermissions()
