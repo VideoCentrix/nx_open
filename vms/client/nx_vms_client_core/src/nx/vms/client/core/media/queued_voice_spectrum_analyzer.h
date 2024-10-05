@@ -26,8 +26,9 @@ public:
 
     void initialize(int srcSampleRate, int channels);
 
-    void pushData(qint64 timestampUsec, const nx::audio::Format& format, const void* sampleData,
-                  int sampleBytes, qint64 maxQueueSizeUsec);
+    void pushData(
+        qint64 timestampUsec, const nx::audio::Format& format,
+        const void* sampleData, int sampleBytes, qint64 maxQueueSizeUsec);
 
     SpectrumData readSpectrumData(qint64 timestampUsec);
 

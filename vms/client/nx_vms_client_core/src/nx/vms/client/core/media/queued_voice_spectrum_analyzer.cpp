@@ -23,9 +23,9 @@ void QueuedVoiceSpectrumAnalyzer::initialize(int srcSampleRate, int channels)
     m_baseAnalyzer->initialize(srcSampleRate, channels);
 }
 
-void QueuedVoiceSpectrumAnalyzer::pushData(qint64 timestampUsec, const nx::audio::Format& format,
-                                             const void* sampleData, int sampleBytes,
-                                             qint64 maxQueueSizeUsec)
+void QueuedVoiceSpectrumAnalyzer::pushData(
+    qint64 timestampUsec, const nx::audio::Format& format,
+    const void* sampleData, int sampleBytes, qint64 maxQueueSizeUsec)
 {
     if (!m_baseAnalyzer->processData(format, sampleData, sampleBytes))
         return; // Wasn't updated.
