@@ -13,26 +13,31 @@
 
 #include "voice_spectrum_analyzer.h"
 
-class NX_VMS_CLIENT_CORE_API QnQueuedVoiceSpectrumAnalyzer:
+namespace nx::vms::client::core {
+
+class NX_VMS_CLIENT_CORE_API QueuedVoiceSpectrumAnalyzer:
     public QObject
 {
     Q_OBJECT
 
 public:
-    QnQueuedVoiceSpectrumAnalyzer();
-    virtual ~QnQueuedVoiceSpectrumAnalyzer();
+    QueuedVoiceSpectrumAnalyzer();
+    virtual ~QueuedVoiceSpectrumAnalyzer();
 
     void initialize(int srcSampleRate, int channels);
 
     void pushData(qint64 timestampUsec, const nx::audio::Format& format, const void* sampleData,
                   int sampleBytes, qint64 maxQueueSizeUsec);
 
-    QnSpectrumData readSpectrumData(qint64 timestampUsec);
+    SpectrumData readSpectrumData(qint64 timestampUsec);
 
     void reset();
 
 private:
-    std::unique_ptr<QnVoiceSpectrumAnalyzer> m_baseAnalyzer;
-    std::queue<std::pair<qint64, QnSpectrumData>> m_queue; // (timestamp, data) pairs.
+    std::unique_ptr<VoiceSpectrumAnalyzer> m_baseAnalyzer;
+    std::queue<std::pair<qint64, SpectrumData>> m_queue; // (timestamp, data) pairs.
     mutable nx::Mutex m_mutex;
 };
+
+} // namespace nx::vms::client::core
+
