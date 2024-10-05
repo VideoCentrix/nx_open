@@ -11,6 +11,8 @@
 #include <nx/media/media_fwd.h> //< for kMediaAlignment
 #include <utils/math/math.h>
 
+namespace nx::vms::client::core {
+
 static const int kUpdatesPerSecond = 30;
 static const int kFreqStart = 50;
 static const int kFreqEnd = 800;
@@ -49,23 +51,23 @@ static int intLog2(int value)
     return result;
 }
 
-void QnVoiceSpectrumAnalyzer::performFft()
+void VoiceSpectrumAnalyzer::performFft()
 {
     av_fft_permute(m_fftContext, m_fftData);
     av_fft_calc(m_fftContext, m_fftData);
 }
 
-QnVoiceSpectrumAnalyzer::QnVoiceSpectrumAnalyzer()
+VoiceSpectrumAnalyzer::VoiceSpectrumAnalyzer()
 {
 }
 
-QnVoiceSpectrumAnalyzer::~QnVoiceSpectrumAnalyzer()
+VoiceSpectrumAnalyzer::~VoiceSpectrumAnalyzer()
 {
     nx::kit::utils::freeAligned(m_fftData);
     av_fft_end(m_fftContext);
 }
 
-void QnVoiceSpectrumAnalyzer::initialize(int srcSampleRate, int channels)
+void VoiceSpectrumAnalyzer::initialize(int srcSampleRate, int channels)
 {
     // Check if already initialized.
     if (m_srcSampleRate == srcSampleRate && m_channels == channels)
@@ -85,17 +87,17 @@ void QnVoiceSpectrumAnalyzer::initialize(int srcSampleRate, int channels)
     m_fftContext = av_fft_init(m_bitCount, /*inverse*/ 0);
 }
 
-bool QnVoiceSpectrumAnalyzer::processData(const qint16* sampleData, int sampleCount)
+bool VoiceSpectrumAnalyzer::processData(const qint16* sampleData, int sampleCount)
 {
     return processDataInternal(sampleData, sampleCount);
 }
 
-bool QnVoiceSpectrumAnalyzer::processData(const qint32* sampleData, int sampleCount)
+bool VoiceSpectrumAnalyzer::processData(const qint32* sampleData, int sampleCount)
 {
     return processDataInternal(sampleData, sampleCount);
 }
 
-bool QnVoiceSpectrumAnalyzer::processData(
+bool VoiceSpectrumAnalyzer::processData(
     const nx::audio::Format& format,
     const void* sampleData,
     int sampleBytes)
@@ -117,7 +119,7 @@ bool QnVoiceSpectrumAnalyzer::processData(
 }
 
 template<class T>
-bool QnVoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampleCount)
+bool VoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampleCount)
 {
     // Max volume amplification for input data.
     static const double kBoostLevel = 10 * log10(kBoostLevelDb);
@@ -145,7 +147,7 @@ bool QnVoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampl
         {
             performFft();
 
-            const QnSpectrumData spectrumData = fillSpectrumData(
+            const SpectrumData spectrumData = fillSpectrumData(
                 m_fftData, m_windowSize, m_srcSampleRate);
             {
                 NX_MUTEX_LOCKER lock(&m_mutex);
@@ -160,10 +162,10 @@ bool QnVoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampl
     return updated;
 }
 
-/*static*/ QnSpectrumData QnVoiceSpectrumAnalyzer::fillSpectrumData(
+/*static*/ SpectrumData VoiceSpectrumAnalyzer::fillSpectrumData(
     const FFTComplex data[], int windowSize, int srcSampleRate)
 {
-    QnSpectrumData spectrumData;
+    SpectrumData spectrumData;
 
     const double maxIndex = windowSize / 2;
     const double maxFreqSum = windowSize / 2;
@@ -202,26 +204,26 @@ bool QnVoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampl
     return spectrumData;
 }
 
-QnSpectrumData QnVoiceSpectrumAnalyzer::getSpectrumData() const
+SpectrumData VoiceSpectrumAnalyzer::getSpectrumData() const
 {
     NX_MUTEX_LOCKER lock(&m_mutex);
     return m_spectrumData;
 }
 
-void QnVoiceSpectrumAnalyzer::reset()
+void VoiceSpectrumAnalyzer::reset()
 {
     NX_MUTEX_LOCKER lock(&m_mutex);
-    m_spectrumData = QnSpectrumData();
+    m_spectrumData = SpectrumData();
 }
 
-int QnVoiceSpectrumAnalyzer::bandsCount()
+int VoiceSpectrumAnalyzer::bandsCount()
 {
     return kBands;
 }
 
 //-------------------------------------------------------------------------------------------------
 
-/*static*/ std::string QnVoiceSpectrumAnalyzer::asString(const double data[], int size)
+/*static*/ std::string VoiceSpectrumAnalyzer::asString(const double data[], int size)
 {
     std::string s;
     for (int i = 0; i < size; ++i)
@@ -242,7 +244,7 @@ int QnVoiceSpectrumAnalyzer::bandsCount()
     return s;
 }
 
-/*static*/ std::string QnVoiceSpectrumAnalyzer::asString(const FFTComplex data[], int size)
+/*static*/ std::string VoiceSpectrumAnalyzer::asString(const FFTComplex data[], int size)
 {
     std::string s;
     for (int i = 0; i < size; ++i)
@@ -263,7 +265,7 @@ int QnVoiceSpectrumAnalyzer::bandsCount()
     return s;
 }
 
-/*static*/ std::string QnVoiceSpectrumAnalyzer::asString(const int16_t data[], int size)
+/*static*/ std::string VoiceSpectrumAnalyzer::asString(const int16_t data[], int size)
 {
     std::string s;
     for (int i = 0; i < size; ++i)
@@ -284,7 +286,7 @@ int QnVoiceSpectrumAnalyzer::bandsCount()
     return s;
 }
 
-std::string QnVoiceSpectrumAnalyzer::dump() const
+std::string VoiceSpectrumAnalyzer::dump() const
 {
     std::string s;
 
@@ -303,3 +305,5 @@ std::string QnVoiceSpectrumAnalyzer::dump() const
 
     return s;
 }
+
+} // namespace nx::vms::client::core

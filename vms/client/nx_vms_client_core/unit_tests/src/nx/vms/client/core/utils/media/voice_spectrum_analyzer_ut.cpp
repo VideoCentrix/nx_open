@@ -12,7 +12,7 @@ extern "C" {
 
 #include <nx/kit/debug.h>
 
-#include <utils/media/voice_spectrum_analyzer.h>
+#include <nx/vms/client/core/media/voice_spectrum_analyzer.h>
 
 namespace nx::vms::client::core {
 
@@ -83,7 +83,7 @@ static void assertComplexArraysEqual(
 }
 
 // Inheriting to access protected members.
-class TestVoiceSpectrumAnalyzer: public QnVoiceSpectrumAnalyzer
+class TestVoiceSpectrumAnalyzer: public VoiceSpectrumAnalyzer
 {
 public:
     FFTComplex* access_fftData() { return fftData(); }
@@ -91,7 +91,7 @@ public:
     void access_performFft() { return performFft(); }
     std::string access_dump() { return dump(); }
 
-    static QnSpectrumData access_fillSpectrumData(
+    static SpectrumData access_fillSpectrumData(
         const FFTComplex data[], int size, int srcSampleRate)
     {
         return fillSpectrumData(data, size, srcSampleRate);
@@ -99,7 +99,7 @@ public:
 };
 
 static void assertSpectrumEquals(
-    const char tag[], const double expected[], const QnSpectrumData& actual)
+    const char tag[], const double expected[], const SpectrumData& actual)
 {
     ASSERT_EQ(kBandCount, actual.data.size());
 
@@ -129,7 +129,7 @@ TEST(SpectrumAnalyzerTest, Spectrum)
 
     std::vector<FFTComplex> fftData{kFftInput, kFftInput + ARRAY_LEN(kFftInput)};
 
-    const QnSpectrumData spectrumData =
+    const SpectrumData spectrumData =
         analyzer.access_fillSpectrumData(kExpectedFftOutput, kWindowSize, kSampleRate);
 
     ASSERT_NO_FATAL_FAILURE(assertSpectrumEquals("for expected FFT output",
