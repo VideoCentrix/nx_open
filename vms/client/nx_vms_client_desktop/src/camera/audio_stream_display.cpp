@@ -8,7 +8,7 @@
 #include <nx/utils/log/log.h>
 #include <nx/vms/client/desktop/application_context.h>
 #include <nx/vms/client/desktop/settings/local_settings.h>
-#include <utils/media/queued_voice_spectrum_analyzer.h>
+#include <nx/vms/client/core/media/queued_voice_spectrum_analyzer.h>
 
 #include "decoders/audio/abstract_audio_decoder.h"
 
@@ -27,7 +27,7 @@ QnAudioStreamDisplay::QnAudioStreamDisplay(
     m_prebufferMs(prebufferMs),
     m_tooFewDataDetected(true),
     m_isFormatSupported(true),
-    m_analyzer(std::make_unique<QnQueuedVoiceSpectrumAnalyzer>()),
+    m_analyzer(std::make_unique<nx::vms::client::core::QueuedVoiceSpectrumAnalyzer>()),
     m_decodeMode(decodeMode),
     m_downmixing(false),
     m_forceDownmix(appContext()->localSettings()->downmixAudio()),
@@ -265,7 +265,7 @@ bool QnAudioStreamDisplay::isPlaying() const
     return !m_tooFewDataDetected;
 }
 
-QnQueuedVoiceSpectrumAnalyzer* QnAudioStreamDisplay::analyzer() const
+nx::vms::client::core::QueuedVoiceSpectrumAnalyzer* QnAudioStreamDisplay::analyzer() const
 {
     return m_analyzer.get();
 }

@@ -2,6 +2,8 @@
 
 #include "queued_voice_spectrum_analyzer.h"
 
+namespace nx::vms::client::core {
+
 template<class T>
 static void clear(std::queue<T> &queue)
 {
@@ -9,25 +11,25 @@ static void clear(std::queue<T> &queue)
         queue.pop();
 }
 
-QnQueuedVoiceSpectrumAnalyzer::QnQueuedVoiceSpectrumAnalyzer():
-    m_baseAnalyzer(std::make_unique<QnVoiceSpectrumAnalyzer>())
+QueuedVoiceSpectrumAnalyzer::QueuedVoiceSpectrumAnalyzer():
+    m_baseAnalyzer(std::make_unique<VoiceSpectrumAnalyzer>())
 {
 }
 
-QnQueuedVoiceSpectrumAnalyzer::~QnQueuedVoiceSpectrumAnalyzer() = default;
+QueuedVoiceSpectrumAnalyzer::~QueuedVoiceSpectrumAnalyzer() = default;
 
-void QnQueuedVoiceSpectrumAnalyzer::initialize(int srcSampleRate, int channels)
+void QueuedVoiceSpectrumAnalyzer::initialize(int srcSampleRate, int channels)
 {
     m_baseAnalyzer->initialize(srcSampleRate, channels);
 }
 
-void QnQueuedVoiceSpectrumAnalyzer::pushData(qint64 timestampUsec, const nx::media::audio::Format& format,
-                                             const void* sampleData, int sampleBytes,
-                                             qint64 maxQueueSizeUsec)
+void QueuedVoiceSpectrumAnalyzer::pushData(
+    qint64 timestampUsec, const nx::media::audio::Format& format,
+    const void* sampleData, int sampleBytes, qint64 maxQueueSizeUsec)
 {
     if (!m_baseAnalyzer->processData(format, sampleData, sampleBytes))
         return; // Wasn't updated.
-    QnSpectrumData data = m_baseAnalyzer->getSpectrumData();
+    SpectrumData data = m_baseAnalyzer->getSpectrumData();
 
     NX_MUTEX_LOCKER lock(&m_mutex);
 
@@ -42,20 +44,22 @@ void QnQueuedVoiceSpectrumAnalyzer::pushData(qint64 timestampUsec, const nx::med
     m_queue.push({timestampUsec, std::move(data)});
 }
 
-QnSpectrumData QnQueuedVoiceSpectrumAnalyzer::readSpectrumData(qint64 timestampUsec)
+SpectrumData QueuedVoiceSpectrumAnalyzer::readSpectrumData(qint64 timestampUsec)
 {
     NX_MUTEX_LOCKER lock(&m_mutex);
 
     while (m_queue.size() > 1 && m_queue.front().first < timestampUsec)
         m_queue.pop();
 
-    return m_queue.empty() ? QnSpectrumData() : m_queue.front().second;
+    return m_queue.empty() ? SpectrumData() : m_queue.front().second;
 }
 
-void QnQueuedVoiceSpectrumAnalyzer::reset()
+void QueuedVoiceSpectrumAnalyzer::reset()
 {
     m_baseAnalyzer->reset();
 
     NX_MUTEX_LOCKER lock(&m_mutex);
     clear(m_queue);
 }
+
+} // namespace nx::vms::client::core

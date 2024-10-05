@@ -20,7 +20,7 @@
 #include <nx/vms/client/desktop/settings/local_settings.h>
 #include <utils/common/synctime.h>
 #include <utils/common/util.h>
-#include <utils/media/queued_voice_spectrum_analyzer.h>
+#include <nx/vms/client/core/media/queued_voice_spectrum_analyzer.h>
 
 #include "audio_stream_display.h"
 #include "video_stream_display.h"
@@ -2280,10 +2280,12 @@ void QnCamDisplay::setAudioDecodeMode(AudioDecodeMode decodeMode)
         m_audioDisplay->setAudioDecodeMode(decodeMode);
 }
 
-QnSpectrumData QnCamDisplay::audioSpectrum() const
+nx::vms::client::core::SpectrumData QnCamDisplay::audioSpectrum() const
 {
     qint64 currentTime = getCurrentTime(); // This call locks, so gotta be outside the mutex below.
 
     NX_MUTEX_LOCKER lock(&m_audioChangeMutex);
-    return m_audioDisplay && m_audioDisplay->analyzer() ? m_audioDisplay->analyzer()->readSpectrumData(currentTime) : QnSpectrumData();
+    return m_audioDisplay && m_audioDisplay->analyzer() ?
+        m_audioDisplay->analyzer()->readSpectrumData(currentTime) :
+        nx::vms::client::core::SpectrumData();
 }
