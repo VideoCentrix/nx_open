@@ -127,6 +127,7 @@ nx_add_target(nx_vms_client_desktop LIBRARY
         Qt6::Xml Qt6::Multimedia Qt6::Concurrent
         Qt6::WebEngineQuick
         Qt6::WebEngineWidgets
+	Qt6::Test
         nx_vms_client_core
         nx_speech_synthesizer
         nx_audio
