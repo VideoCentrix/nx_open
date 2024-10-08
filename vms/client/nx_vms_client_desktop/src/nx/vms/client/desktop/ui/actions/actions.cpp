@@ -414,8 +414,6 @@ void initialize(Manager* manager, Action* root)
             )
             .autoRepeat(false);
 
-        vx::registerMultipleNewUsersAction(factory);
-
         factory(NewVideoWallAction)
             .flags(Main)
             .requiredGlobalPermission(GlobalPermission::administrator)
