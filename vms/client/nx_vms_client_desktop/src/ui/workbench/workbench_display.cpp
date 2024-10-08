@@ -581,7 +581,8 @@ void QnWorkbenchDisplay::initialize(QGraphicsScene* scene, QGraphicsView* view)
             {
                 const auto mainWindowWidget = this->mainWindowWidget();
                 const auto window = mainWindowWidget ? mainWindowWidget->windowHandle() : nullptr;
-                if (!NX_ASSERT(window))
+                // if (!NX_ASSERT(window))
+                if (!window)
                     return;
 
                 connect(window, &QWindow::screenChanged, this, updateViewScreens);

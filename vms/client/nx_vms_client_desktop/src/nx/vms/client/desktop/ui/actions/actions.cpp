@@ -378,10 +378,7 @@ void initialize(Manager* manager, Action* root)
             .pulledText(ContextMenu::tr("New Layout"))
             .shortcut("Ctrl+T")
             .condition(!condition::showreelIsRunning())
-            .icon(qnSkin->icon("titlebar/plus_16.svg",
-                nullptr,
-                nullptr,
-                kTitleBarIconSubstitutions));
+            .icon(qnSkin->icon("titlebar/plus_16.svg", nullptr, nullptr, kTitleBarIconSubstitutions));
 
         factory(OpenNewWindowAction)
             .flags(Main | GlobalHotkey)
@@ -389,8 +386,7 @@ void initialize(Manager* manager, Action* root)
             .text(ContextMenu::tr("Window"))
             .pulledText(ContextMenu::tr("New Window"))
             .shortcut("Ctrl+N")
-            .condition(condition::isLoggedIn()
-                 && ConditionWrapper(new LightModeCondition(Qn::LightModeNoNewWindow)));
+            .condition(condition::isLoggedIn() && ConditionWrapper(new LightModeCondition(Qn::LightModeNoNewWindow)));
 
         factory(OpenWelcomeScreenAction)
             .flags(Main | GlobalHotkey)
@@ -399,62 +395,13 @@ void initialize(Manager* manager, Action* root)
             .pulledText(ContextMenu::tr("New Welcome Screen"))
             .shortcut("Ctrl+Shift+T")
             .condition(new LightModeCondition(Qn::LightModeNoNewWindow));
-
-        factory()
-            .flags(Main)
-            .separator();
-
-        factory(NewUserAction)
-            .flags(Main | Tree)
-            .requiredGlobalPermission(GlobalPermission::administrator)
-            .text(ContextMenu::tr("User..."))
-            .pulledText(ContextMenu::tr("New User..."))
-            .condition(
-                condition::treeNodeType(ResourceTree::NodeType::users)
-            )
-            .autoRepeat(false);
-
-        factory(NewVideoWallAction)
-            .flags(Main)
-            .requiredGlobalPermission(GlobalPermission::administrator)
-            .text(ContextMenu::tr("Video Wall..."))
-            .pulledText(ContextMenu::tr("New Video Wall..."))
-            .autoRepeat(false);
-
-        factory(NewWebPageAction)
-            .flags(Main | Tree)
-            .requiredGlobalPermission(GlobalPermission::administrator)
-            .text(ContextMenu::tr("Web Page..."))
-            .pulledText(ContextMenu::tr("Add Web Page..."))
-            .condition(
-                condition::treeNodeType(ResourceTree::NodeType::webPages)
-            )
-            .autoRepeat(false);
-
-        factory(NewShowreelAction)
-            .flags(Main | Tree)
-            .text(ContextMenu::tr("Showreel..."))
-            .pulledText(ContextMenu::tr("Add Showreel..."))
-            .condition(condition::isLoggedIn()
-                       && condition::treeNodeType(ResourceTree::NodeType::showreels)
-                       );
-
-        factory(MainMenuAddVirtualCameraAction)
-            .flags(Main)
-            .requiredPowerUserPermissions()
-            .text(ContextMenu::tr("Virtual Camera..."))
-            .pulledText(ContextMenu::tr("Add Virtual Camera..."));
-
-        vx::registerNewMonitoringLayoutAction(factory);
     }
     factory.endSubMenu();
 
     factory(NewUserLayoutAction)
         .flags(Tree | SingleTarget | ResourceTarget | NoTarget)
         .text(ContextMenu::tr("New Layout..."))
-        .condition(
-            ConditionWrapper(new NewUserLayoutCondition())
-        );
+        .condition(ConditionWrapper(new NewUserLayoutCondition()));
 
     factory(OpenCurrentUserLayoutMenu)
         .flags(TitleBar | SingleTarget | NoTarget)
@@ -474,9 +421,8 @@ void initialize(Manager* manager, Action* root)
         .text(ContextMenu::tr("Show Servers"))
         .checkable()
         .checked(false) //< This action will be kept in unchecked state.
-        .condition(condition::isLoggedIn()
-            && condition::treeNodeType({ResourceTree::NodeType::camerasAndDevices})
-            && condition::allowedToShowServersInResourceTree());
+        .condition(condition::isLoggedIn() && condition::treeNodeType(ResourceTree::NodeType::camerasAndDevices) &&
+                   condition::allowedToShowServersInResourceTree());
 
     factory(HideServersInTreeAction)
         .flags(Tree | NoTarget | SingleTarget | ResourceTarget)
@@ -802,19 +748,14 @@ void initialize(Manager* manager, Action* root)
 
     factory.beginSubMenu();
     {
-        factory(MainMenuAddDeviceManuallyAction)
-            .flags(Main)
-            .text(ContextMenu::tr("Device..."))
-            .requiredPowerUserPermissions();
+        factory(MainMenuAddDeviceManuallyAction).flags(Main).text(ContextMenu::tr("Device...")).requiredPowerUserPermissions();
 
         factory(NewUserAction)
             .flags(Main | Tree)
             .requiredPowerUserPermissions()
             .text(ContextMenu::tr("User..."))
             .pulledText(ContextMenu::tr("Add User..."))
-            .condition(
-                condition::treeNodeType(ResourceTree::NodeType::users)
-            );
+            .condition(condition::treeNodeType(ResourceTree::NodeType::users));
 
         factory(NewVideoWallAction)
             .flags(Main)
