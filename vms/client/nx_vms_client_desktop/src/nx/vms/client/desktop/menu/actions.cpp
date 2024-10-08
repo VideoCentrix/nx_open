@@ -462,9 +462,7 @@ void initialize(Manager* manager, Action* root)
     factory(NewUserLayoutAction)
         .flags(Tree | SingleTarget | ResourceTarget | NoTarget)
         .text(ContextMenu::tr("New Layout..."))
-        .condition(
-            ConditionWrapper(new NewUserLayoutCondition())
-        );
+        .condition(ConditionWrapper(new NewUserLayoutCondition()));
 
     factory(OpenCurrentUserLayoutMenu)
         .flags(TitleBar | SingleTarget | NoTarget)
@@ -481,9 +479,8 @@ void initialize(Manager* manager, Action* root)
         .text(ContextMenu::tr("Show Servers"))
         .checkable()
         .checked(false) //< This action will be kept in unchecked state.
-        .condition(condition::isLoggedIn()
-            && condition::treeNodeType({ResourceTree::NodeType::camerasAndDevices})
-            && condition::allowedToShowServersInResourceTree());
+        .condition(condition::isLoggedIn() && condition::treeNodeType(ResourceTree::NodeType::camerasAndDevices) &&
+                   condition::allowedToShowServersInResourceTree());
 
     factory(HideServersInTreeAction)
         .flags(Tree | NoTarget | SingleTarget | ResourceTarget)
@@ -810,19 +807,14 @@ void initialize(Manager* manager, Action* root)
 
     factory.beginSubMenu();
     {
-        factory(MainMenuAddDeviceManuallyAction)
-            .flags(Main)
-            .text(ContextMenu::tr("Device..."))
-            .requiredPowerUserPermissions();
+        factory(MainMenuAddDeviceManuallyAction).flags(Main).text(ContextMenu::tr("Device...")).requiredPowerUserPermissions();
 
         factory(NewUserAction)
             .flags(Main | Tree)
             .requiredPowerUserPermissions()
             .text(ContextMenu::tr("User..."))
             .pulledText(ContextMenu::tr("Add User..."))
-            .condition(
-                condition::treeNodeType(ResourceTree::NodeType::users)
-            );
+            .condition(condition::treeNodeType(ResourceTree::NodeType::users));
 
         factory(NewVideoWallAction)
             .flags(Main)
