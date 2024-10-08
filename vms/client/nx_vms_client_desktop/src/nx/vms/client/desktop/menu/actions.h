@@ -81,7 +81,7 @@ enum IDType {
     /**
      * Opens saas services tab.
      */
-     PreferencesServicesTabAction,
+    PreferencesServicesTabAction,
 
     /**
      * Opens smtp settings preferences tab.
@@ -1048,7 +1048,7 @@ enum IDType {
      */
     NewUserAction,
 
-    VxMultipleNewUsersAction,
+    VxMultipleNewUsersAction, // UNUSED
 
     /**
      * Opens an integration creation dialog.
