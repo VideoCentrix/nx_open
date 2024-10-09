@@ -56,6 +56,42 @@ namespace ec2 {
 
 struct overload_tag {};
 
+static bool constexpr isVirtualActionType(const ActionType at) {
+    return at >= ActionTypeServiceOffset;
+}
+
+static void deserializeVirtualActionType(ActionType &actionType, const nx::vms::event::ActionParameters &params) {
+    if (!params.text.isEmpty()) {
+        bool ok{};
+        const auto v = params.text.toUInt(&ok);
+        const bool correctValue = (v == ActionType::vxMonitoringAction);
+        if (ok && correctValue) {
+            actionType = ActionType(v);
+        }
+    }
+}
+
+static void serializeVirtualActionType(ActionType &actionType, nx::vms::event::ActionParameters &actionParams) {
+    if (!isVirtualActionType(actionType)) {
+        return;
+    }
+
+    NX_ASSERT(actionParams.text.isEmpty() || actionParams.text == QString::number(actionType));
+    actionParams.text = QString::number(actionType);
+
+    switch (actionType) {
+    case ActionType::vxMonitoringAction:
+        actionParams.allUsers = true;
+        actionParams.durationMs = 0;
+        actionParams.needConfirmation = false;
+        break;
+    default:
+        break;
+    }
+
+    actionType = ActionType(actionType % ActionTypeServiceOffset);
+}
+
 void fromApiToResource(const EventRuleData& src, vms::event::RulePtr& dst)
 {
     dst->setId(src.id);

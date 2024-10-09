@@ -16,6 +16,10 @@
     #include <sys/sysctl.h>
 #endif
 
+#if defined(Q_OS_WINDOWS)
+#include <QDialogButtonBox>
+#endif
+
 #include <iostream>
 
 #include <QtCore/QDateTime>
