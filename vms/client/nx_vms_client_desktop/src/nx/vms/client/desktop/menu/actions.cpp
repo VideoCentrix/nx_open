@@ -741,7 +741,6 @@ void initialize(Manager* manager, Action* root)
 
     factory()
         .flags(Main)
-        .mode(DesktopMode)
         .text(ContextMenu::tr("Video Centrix"));
 
     factory.beginSubMenu();
