@@ -15,7 +15,7 @@
 #endif
 
 #if defined(Q_OS_WINDOWS)
-#include <QDialogButtonBox>
+#include <QtWidgets/QDialogButtonBox>
 #endif
 
 #include <iostream>
