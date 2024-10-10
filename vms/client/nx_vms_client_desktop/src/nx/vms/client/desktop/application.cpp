@@ -210,7 +210,7 @@ void initQmlGlyphCacheWorkaround()
 void askForGraphicsApiSubstitution()
 {
     #if defined (Q_OS_WINDOWS)
-        const QDialogButtonBox::StandardButton selectedButton = QnMessageBox::question(
+        const enum QDialogButtonBox::StandardButton selectedButton = QnMessageBox::question(
             nullptr,
             QCoreApplication::translate(
                 "runApplication",
