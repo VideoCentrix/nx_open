@@ -16,10 +16,6 @@
     #include <sys/sysctl.h>
 #endif
 
-#if defined(Q_OS_WINDOWS)
-#include <QtWidgets/QDialogButtonBox>
-#endif
-
 #include <iostream>
 
 #include <QtCore/QDateTime>
@@ -93,6 +89,11 @@
 
 #if defined(Q_OS_WIN)
     #include <QtGui/qpa/qplatformwindow_p.h>
+#endif
+
+#if defined(Q_OS_WIN) || defined(Q_OS_WINDOWS)
+    #include <QtWidgets/QDialogButtonBox>
+    #include <ui/dialogs/common/message_box.h>
 #endif
 
 namespace nx::vms::client::desktop {
