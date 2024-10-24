@@ -97,7 +97,8 @@ public:
         nx::vms::client::desktop::SystemContext* systemContext,
         nx::vms::client::desktop::WindowContext* windowContext,
         QnWorkbenchItem* item,
-        QGraphicsItem* parent = nullptr);
+        QGraphicsItem* parent = nullptr,
+        bool needSoftwareTriggers = true);
     virtual ~QnMediaResourceWidget();
 
     /**
@@ -576,4 +577,5 @@ private:
     QAction* const m_toggleImageEnhancementAction;
 
     bool m_muted = false;
+    const bool m_needSoftwareTriggers;
 };
