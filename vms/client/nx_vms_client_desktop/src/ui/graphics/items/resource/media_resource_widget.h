@@ -95,7 +95,8 @@ public:
         nx::vms::client::desktop::SystemContext* systemContext,
         nx::vms::client::desktop::WindowContext* windowContext,
         QnWorkbenchItem* item,
-        QGraphicsItem* parent = nullptr);
+        QGraphicsItem* parent = nullptr,
+        bool needSoftwareTriggers = true);
     virtual ~QnMediaResourceWidget();
 
     /**
@@ -560,4 +561,6 @@ private:
     nx::vms::client::desktop::ObjectTrackingButtonController* m_objectTrackingButtonController = nullptr;
 
     QAction* const m_toggleImageEnhancementAction;
+
+    const bool m_needSoftwareTriggers;
 };
