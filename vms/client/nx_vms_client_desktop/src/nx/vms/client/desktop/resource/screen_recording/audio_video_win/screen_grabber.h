@@ -12,6 +12,10 @@
 #include <d3dx9.h>
 #include <shellapi.h>
 
+extern "C" {
+#include <libavcodec/avcodec.h>
+}
+
 #include <QtCore/QElapsedTimer>
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
