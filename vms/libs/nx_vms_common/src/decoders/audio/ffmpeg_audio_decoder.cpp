@@ -31,11 +31,6 @@ QnFfmpegAudioDecoder::QnFfmpegAudioDecoder(const QnCompressedAudioDataPtr& data)
     else
         NX_ASSERT(false, "Audio packets without codec is deprecated!");
 
-    // MP3 is always decoded into AV_SAMPLE_FMT_FLTP (planar float), but this format isn't accessible to plugins
-    // created using the camera SDK. So we just work it around here.
-    if (m_codec == AV_CODEC_ID_MP3)
-        data->context->getAvCodecParameters()->format = AV_SAMPLE_FMT_FLTP;
-
     m_initialized = avcodec_open2(m_audioDecoderCtx, codec, nullptr) >= 0;
 
     if (m_audioDecoderCtx && !m_initialized)
@@ -66,6 +61,15 @@ bool QnFfmpegAudioDecoder::decode(QnCompressedAudioDataPtr& data, nx::utils::Byt
 
     if (!codec)
         return false;
+
+    // MP3 is always decoded into AV_SAMPLE_FMT_FLTP (planar float), but this format isn't
+    // accessible to plugins created using the camera SDK. So we just work it around here.
+    // TODO: #rvasilenko This code was originally in constructor, which made sense. But somehow
+    //       it wasn't working when a lot of items were opened quickly (or the same item opened
+    //       many times quickly). So the check was moved here, and things now work, but why they
+    //       weren't working before, I have no idea. This begs a proper fix.
+    if (m_codec == AV_CODEC_ID_MP3)
+        data->context->getAvCodecParameters()->format = AV_SAMPLE_FMT_FLTP;
 
     const unsigned char* inbuf_ptr = (const unsigned char*) data->data();
     int size = static_cast<int>(data->dataSize());
