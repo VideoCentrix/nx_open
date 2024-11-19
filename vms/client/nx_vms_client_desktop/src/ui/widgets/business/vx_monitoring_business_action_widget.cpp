@@ -2,6 +2,8 @@
 #include "ui_vx_monitoring_business_action_widget.h"
 
 #include <QtCore/QScopedValueRollback>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace nx::vms::client::desktop {
 
