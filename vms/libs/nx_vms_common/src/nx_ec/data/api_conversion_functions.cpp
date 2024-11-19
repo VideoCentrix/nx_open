@@ -64,9 +64,10 @@ static void deserializeVirtualActionType(ActionType &actionType, const nx::vms::
     if (!params.text.isEmpty()) {
         bool ok{};
         const auto v = params.text.toUInt(&ok);
-        const bool correctValue = (v == ActionType::vxMonitoringAction);
-        if (ok && correctValue) {
-            actionType = ActionType(v);
+        if (ok) {
+            if (v == ActionType::vxMonitoringAction) {
+                actionType = ActionType(v);
+            }
         }
     }
 }
