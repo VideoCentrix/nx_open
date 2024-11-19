@@ -19,6 +19,7 @@
 #include <ui/widgets/business/fullscreen_camera_action_widget.h>
 #include <ui/widgets/business/exit_fullscreen_action_widget.h>
 #include <ui/widgets/business/buzzer_business_action_widget.h>
+#include <ui/widgets/business/vx_monitoring_business_action_widget.h>
 #include <ui/workbench/workbench_context.h>
 
 using namespace nx;
@@ -66,6 +67,8 @@ QnAbstractBusinessParamsWidget* QnBusinessActionWidgetFactory::createWidget(
             return new QnExitFullscreenActionWidget(systemContext, parent);
         case vms::api::ActionType::buzzerAction:
             return new BuzzerBusinessActionWidget(systemContext, parent);
+        case vms::api::ActionType::vxMonitoringAction:
+            return new VxMonitoringBusinessActionWidget(systemContext, parent);
 
         default:
             break;
