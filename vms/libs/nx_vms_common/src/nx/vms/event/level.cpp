@@ -4,17 +4,45 @@
 
 #include "actions/abstract_action.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+
+namespace {
+static const QString _alertLevelTag = "al";
+}
+
 namespace nx::vms::event {
 
 Level levelOf(const AbstractActionPtr& action)
 {
-    if (action->actionType() == ActionType::playSoundAction)
+    switch (action->actionType()) {
+    case ActionType::playSoundAction:
         return Level::common;
-
-    if (action->actionType() == ActionType::showOnAlarmLayoutAction)
+    case ActionType::showOnAlarmLayoutAction:
         return Level::critical;
-
-    return levelOf(action->getRuntimeParams());
+    case ActionType::vxMonitoringAction: {
+        auto json = QJsonDocument::fromJson(action->getParams().tags.toLocal8Bit());
+        if (json.isObject()) {
+            const auto& obj = json.object();
+            const auto iter = obj.find(_alertLevelTag);
+            if (iter != obj.end()) {
+                const auto& levelDesc = iter.value().toString();
+                if (levelDesc == QStringLiteral("Tier 1")) {
+                    return Level::common;
+                }
+                if (levelDesc == QStringLiteral("Tier 2")) {
+                    return Level::important;
+                }
+                if (levelDesc == QStringLiteral("Tier 3")) {
+                    return Level::critical;
+                }
+            }
+        }
+        return Level::critical;
+    }
+    default:
+        return levelOf(action->getRuntimeParams());
+    }
 }
 
 Level levelOf(const EventParameters& params)
