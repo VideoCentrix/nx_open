@@ -38,7 +38,7 @@ Level levelOf(const AbstractActionPtr& action)
                 }
             }
         }
-        return Level::critical;
+        // fall-through
     }
     default:
         return levelOf(action->getRuntimeParams());
