@@ -1,24 +1,15 @@
-// Copyright 2018-present Network Optix, Inc. Licensed under MPL 2.0: www.mozilla.org/MPL/2.0/
-
 #include "vx_monitoring_business_action_widget.h"
 #include "ui_vx_monitoring_business_action_widget.h"
 
 #include <QtCore/QScopedValueRollback>
-
-#include <nx/vms/client/desktop/system_context.h>
-#include <nx/vms/event/action_parameters.h>
-#include <nx/vms/event/events/abstract_event.h>
-#include <ui/common/read_only.h>
-#include <ui/workaround/widgets_signals_workaround.h>
 
 namespace nx::vms::client::desktop {
 
 namespace {
 
 static QJsonObject parseActionParams(const vms::event::ActionParameters &actionParams) {
-    QJsonParseError e{};
-    auto json = QJsonDocument::fromJson(actionParams.tags.toLocal8Bit(), &e);
-    if (e.error == QJsonParseError::ParseError::NoError || !json.isObject()) {
+    auto json = QJsonDocument::fromJson(actionParams.tags.toLocal8Bit());
+    if (json.isObject()) {
         return QJsonObject();
     }
     return json.object();
