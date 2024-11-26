@@ -2318,7 +2318,6 @@ void initialize(Manager* manager, Action* root)
     factory.endSubMenu();
 
     vx::registerDebugVxActions(factory);
-    vx::registerLocationPropertiesAction(factory);
     vx::registerDismissSystemAlertAction(factory);
     vx::registerOpenReportLayoutAction(factory);
     vx::registerDebugVxActions(factory);
