@@ -2608,13 +2608,12 @@ void QnWorkbenchDisplay::showSplashOnResource(
 
 void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const vms::event::AbstractActionPtr &businessAction)
 {
-    const auto callback =
-        [this, resource, level = QnNotificationLevel::valueOf(businessAction)]
-        {
-            showSplashOnResource(resource, level);
-        };
+    const auto levelExt = nx::vms::event::levelOf(businessAction);
+    const auto callback = [this, resource, level = QnNotificationLevel::convert(levelExt)] {
+        showSplashOnResource(resource, level);
+    };
 
-    for (int timeMs = 0; timeMs <= splashTotalLengthMs; timeMs += splashPeriodMs)
+    for (int timeMs = 0; timeMs <= levelExt.splashTotalLengthMs; timeMs += levelExt.splashPeriodMs)
         executeDelayedParented(callback, timeMs, this);
 }
 
