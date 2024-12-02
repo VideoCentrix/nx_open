@@ -21,7 +21,15 @@ NX_REFLECTION_ENUM_CLASS(Level,
     count
 );
 
-NX_VMS_COMMON_API Level levelOf(const AbstractActionPtr& action);
-NX_VMS_COMMON_API Level levelOf(const EventParameters& params);
+struct TLevelExtended {
+    operator Level() const noexcept { return level; }
+
+    Level level = Level::none;
+    int splashPeriodMs = 500;
+    int splashTotalLengthMs = 1000;
+};
+
+NX_VMS_COMMON_API TLevelExtended levelOf(const AbstractActionPtr &action);
+NX_VMS_COMMON_API Level levelOf(const EventParameters &params);
 
 } // namespace nx::vms::event

@@ -13,13 +13,12 @@ static const QString _alertLevelTag = "al";
 
 namespace nx::vms::event {
 
-Level levelOf(const AbstractActionPtr& action)
-{
+TLevelExtended levelOf(const AbstractActionPtr &action) {
     switch (action->actionType()) {
     case ActionType::playSoundAction:
-        return Level::common;
+        return {Level::common};
     case ActionType::showOnAlarmLayoutAction:
-        return Level::critical;
+        return {Level::critical};
     case ActionType::vxMonitoringAction: {
         auto json = QJsonDocument::fromJson(action->getParams().tags.toLocal8Bit());
         if (json.isObject()) {
@@ -28,25 +27,24 @@ Level levelOf(const AbstractActionPtr& action)
             if (iter != obj.end()) {
                 const auto& levelDesc = iter.value().toString();
                 if (levelDesc == QStringLiteral("Tier 1")) {
-                    return Level::common;
+                    return TLevelExtended{Level::common, 500, 1000};
                 }
                 if (levelDesc == QStringLiteral("Tier 2")) {
-                    return Level::important;
+                    return TLevelExtended{Level::important, 500, 10'000};
                 }
                 if (levelDesc == QStringLiteral("Tier 3")) {
-                    return Level::critical;
+                    return TLevelExtended{Level::critical, 400, 60'000};
                 }
             }
         }
         // fall-through
     }
     default:
-        return levelOf(action->getRuntimeParams());
+        return {levelOf(action->getRuntimeParams())};
     }
 }
 
-Level levelOf(const EventParameters& params)
-{
+Level levelOf(const EventParameters &params) {
     EventType eventType = params.eventType;
 
     if (eventType >= EventType::userDefinedEvent)
