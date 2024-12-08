@@ -15,7 +15,8 @@ public:
         nx::vms::client::desktop::SystemContext* systemContext,
         nx::vms::client::desktop::WindowContext* windowContext,
         QnWorkbenchItem* item,
-        QGraphicsItem* parent = nullptr);
+        QGraphicsItem* parent = nullptr,
+        bool needSoftwareTriggers = true);
     ~QnCrossSystemCameraWidget() override;
 
 protected:
