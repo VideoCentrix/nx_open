@@ -46,9 +46,10 @@ QnCrossSystemCameraWidget::QnCrossSystemCameraWidget(
     nx::vms::client::desktop::SystemContext* systemContext,
     nx::vms::client::desktop::WindowContext* windowContext,
     QnWorkbenchItem* item,
-    QGraphicsItem* parent)
+    QGraphicsItem* parent,
+    bool needSoftwareTriggers)
     :
-    QnMediaResourceWidget(systemContext, windowContext, item, parent),
+    QnMediaResourceWidget(systemContext, windowContext, item, parent, needSoftwareTriggers),
     d(new Private{QnMediaResourceWidget::resource().dynamicCast<CrossSystemCameraResource>()})
 {
     NX_ASSERT(d->crossSystemCamera);
