@@ -671,7 +671,7 @@ void initialize(Manager* manager, Action* root)
         .separator();
 
     factory()
-        .flags(Main)
+        .flags(Main | Tree)
         .text(ContextMenu::tr("Video Centrix"));
 
     factory.beginSubMenu();
