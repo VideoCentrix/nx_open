@@ -27,13 +27,13 @@ TLevelExtended levelOf(const AbstractActionPtr &action) {
             if (iter != obj.end()) {
                 const auto& levelDesc = iter.value().toString();
                 if (levelDesc == QStringLiteral("Tier 1")) {
-                    return TLevelExtended{Level::common, 500, 1000};
+                    return TLevelExtended{Level::common, 500, 1'000};
                 }
                 if (levelDesc == QStringLiteral("Tier 2")) {
-                    return TLevelExtended{Level::important, 500, 10'000};
+                    return TLevelExtended{Level::important, 500, 2'000};
                 }
                 if (levelDesc == QStringLiteral("Tier 3")) {
-                    return TLevelExtended{Level::critical, 400, 60'000};
+                    return TLevelExtended{Level::critical, 400, 4'000};
                 }
             }
         }
