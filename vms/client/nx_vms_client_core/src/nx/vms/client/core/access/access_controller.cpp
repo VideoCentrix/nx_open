@@ -90,7 +90,9 @@ AccessController::~AccessController()
 
 QnUserResourcePtr AccessController::user() const
 {
-    return d->user;
+    if (d.get())
+        return d->user;
+    return {};
 }
 
 void AccessController::setUser(const QnUserResourcePtr& value)
