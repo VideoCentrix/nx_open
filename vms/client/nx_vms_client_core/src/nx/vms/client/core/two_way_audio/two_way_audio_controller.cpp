@@ -72,15 +72,21 @@ bool TwoWayAudioController::Private::setActive(bool active, OperationCallback&& 
     params.insert("resourceId", targetResource->getId().toString());
     params.insert("action", active ? "start" : "stop");
 
-    const auto requestCallback = nx::utils::guarded(q,
-        [this, active, callback](
-            bool success, rest::Handle /*handle*/, const nx::network::rest::JsonResult& result)
-        {
-            const bool ok = success && result.error == nx::network::rest::Result::NoError;
-            setStarted(active && ok);
-            if (callback)
-                callback(ok);
-        });
+    const auto requestCallback = nx::utils::guarded(q, [this, active, callback](bool success, rest::Handle /*handle*/,
+                                                                                const nx::network::rest::JsonResult &result) {
+        const bool ok = success && result.error == nx::network::rest::Result::NoError;
+        setStarted(active && ok);
+        if (callback)
+            callback(ok);
+    });
+
+    if (wasActive xor active) {
+        auto &cb = ::nx::vms::common::appContext()->vxCallback();
+        if (active)
+            cb.startTalkdown(targetResource);
+        else
+            cb.stopTalkdown();
+    }
 
     auto serverVersion = q->connection()->moduleInformation().version;
     if (serverVersion < nx::utils::SoftwareVersion(5, 0))
@@ -93,10 +99,6 @@ bool TwoWayAudioController::Private::setActive(bool active, OperationCallback&& 
         return orderedRequestsHelper.postJsonResult(q->connectedServerApi(),
             "/api/transmitAudio", params, requestCallback, QThread::currentThread());
     }
-    if (!wasActive && active)
-        ::nx::vms::common::appContext()->vxCallback().startTalkdown(targetResource);
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

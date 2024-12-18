@@ -35,6 +35,7 @@ public:
         virtual void init() {}
         virtual void deinit() {}
         virtual void startTalkdown(const QnResourcePtr & /*camera*/) {}
+        virtual void stopTalkdown() {}
     };
 
 protected:
