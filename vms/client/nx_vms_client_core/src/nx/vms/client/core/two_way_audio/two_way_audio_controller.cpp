@@ -98,6 +98,8 @@ bool TwoWayAudioController::Private::setActive(bool active, OperationCallback&& 
     }
     if (!wasActive && active)
         ::nx::vms::common::appContext()->vxCallback().startTalkdown(targetResource);
+    else if (wasActive && !active)
+        ::nx::vms::common::appContext()->vxCallback().stopTalkdown();
 
     return true;
 }
