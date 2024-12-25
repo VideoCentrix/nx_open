@@ -26,6 +26,7 @@ void TransactionMessageBusAdapter::reset()
 
 void TransactionMessageBusAdapter::initInternal()
 {
+    NX_ASSERT(valid());
     connect(m_bus.get(), &AbstractTransactionMessageBus::peerFound,
         this, &AbstractTransactionMessageBus::peerFound, Qt::DirectConnection);
     connect(m_bus.get(), &AbstractTransactionMessageBus::peerLost,
@@ -42,21 +43,25 @@ void TransactionMessageBusAdapter::initInternal()
 
 void TransactionMessageBusAdapter::start()
 {
+    NX_ASSERT(valid());
     m_bus->start();
 }
 
 void TransactionMessageBusAdapter::stop()
 {
+    NX_ASSERT(valid());
     m_bus->stop();
 }
 
 QSet<nx::Uuid> TransactionMessageBusAdapter::directlyConnectedClientPeers() const
 {
+    NX_ASSERT(valid());
     return m_bus->directlyConnectedClientPeers();
 }
 
 QSet<nx::Uuid> TransactionMessageBusAdapter::directlyConnectedServerPeers() const
 {
+    NX_ASSERT(valid());
     return m_bus->directlyConnectedServerPeers();
 }
 
@@ -65,11 +70,12 @@ nx::Uuid TransactionMessageBusAdapter::routeToPeerVia(
 {
     // This method can be called asynchronously after connection has been closed from the
     // QnRtspClientArchiveDelegate::checkMinTimeFromOtherServer (QtConcurrent call).
-    return m_bus ? m_bus->routeToPeerVia(dstPeer, distance, knownPeerAddress) : nx::Uuid();
+    return valid() ? m_bus->routeToPeerVia(dstPeer, distance, knownPeerAddress) : nx::Uuid();
 }
 
 int TransactionMessageBusAdapter::distanceToPeer(const nx::Uuid& dstPeer) const
 {
+    NX_ASSERT(valid());
     return m_bus->distanceToPeer(dstPeer);
 }
 
@@ -80,53 +86,63 @@ void TransactionMessageBusAdapter::addOutgoingConnectionToPeer(
     std::optional<nx::network::http::Credentials> credentials,
     nx::network::ssl::AdapterFunc adapterFunc)
 {
+    NX_ASSERT(valid());
     m_bus->addOutgoingConnectionToPeer(
         id, peerType, url, std::move(credentials), std::move(adapterFunc));
 }
 
 void TransactionMessageBusAdapter::removeOutgoingConnectionFromPeer(const nx::Uuid& id)
 {
+    NX_ASSERT(valid());
     m_bus->removeOutgoingConnectionFromPeer(id);
 }
 
 void TransactionMessageBusAdapter::updateOutgoingConnection(
     const nx::Uuid& id, nx::network::http::Credentials credentials)
 {
-    m_bus->updateOutgoingConnection(id, std::move(credentials));
+    NX_ASSERT(valid());
+    m_bus->updateOutgoingConnection(id, credentials);
 }
 
 void TransactionMessageBusAdapter::dropConnections()
 {
+    NX_ASSERT(valid());
     m_bus->dropConnections();
 }
 
 ConnectionInfos TransactionMessageBusAdapter::connectionInfos() const
 {
+    NX_ASSERT(valid());
     return m_bus->connectionInfos();
 }
 
 void TransactionMessageBusAdapter::setHandler(ECConnectionNotificationManager* handler)
 {
+    NX_ASSERT(valid());
     m_bus->setHandler(handler);
 }
 
 void TransactionMessageBusAdapter::removeHandler(ECConnectionNotificationManager* handler)
 {
+    NX_ASSERT(valid());
     m_bus->removeHandler(handler);
 }
 
 QnJsonTransactionSerializer* TransactionMessageBusAdapter::jsonTranSerializer() const
 {
+    NX_ASSERT(valid());
     return m_bus->jsonTranSerializer();
 }
 
 QnUbjsonTransactionSerializer* TransactionMessageBusAdapter::ubjsonTranSerializer() const
 {
+    NX_ASSERT(valid());
     return m_bus->ubjsonTranSerializer();
 }
 
 ConnectionGuardSharedState* TransactionMessageBusAdapter::connectionGuardSharedState()
 {
+    NX_ASSERT(valid());
     return m_bus->connectionGuardSharedState();
 }
 
