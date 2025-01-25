@@ -98,7 +98,7 @@ int QnCrossSystemCameraWidget::calculateButtonsVisibility() const
 
 Qn::ResourceStatusOverlay QnCrossSystemCameraWidget::calculateStatusOverlay() const
 {
-    if (NX_ASSERT(d->context) && d->context->needsCloudAuthorization())
+    if (d->context && d->context->valid() && d->context->needsCloudAuthorization())
         return Qn::ResourceStatusOverlay::RestrictedOverlay;
 
     if (d->crossSystemCamera && d->crossSystemCamera->hasFlags(Qn::fake))
@@ -110,7 +110,7 @@ Qn::ResourceStatusOverlay QnCrossSystemCameraWidget::calculateStatusOverlay() co
 Qn::ResourceOverlayButton QnCrossSystemCameraWidget::calculateOverlayButton(
     Qn::ResourceStatusOverlay statusOverlay) const
 {
-    if (NX_ASSERT(d->context) && d->context->needsCloudAuthorization())
+    if (d->context && d->context->valid() && d->context->needsCloudAuthorization())
         return Qn::ResourceOverlayButton::Authorize;
 
     if (statusOverlay == Qn::ResourceStatusOverlay::InformationRequiredOverlay)
