@@ -2044,6 +2044,8 @@ void QnWorkbenchDisplay::at_layout_itemAdded(QnWorkbenchItem *item)
 
         // Unzoom & fit in view on item addition except when item is added in zoomed state.
         workbench()->setItem(Qn::ZoomedRole, addInZoomedState ? item : nullptr);
+
+        return; // VX feature request: guards do not want new alerts to drop the zoom
         if (!item->data<bool>(Qn::ItemSkipFocusOnAdditionRole, false))
         {
             // Newly added item should become selected.
