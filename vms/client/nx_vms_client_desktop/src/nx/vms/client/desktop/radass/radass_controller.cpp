@@ -28,7 +28,8 @@ namespace {
 
 bool isForcedHqDisplay(AbstractVideoDisplay* display)
 {
-    return display->isFullScreen() || display->isZoomWindow() || display->isFisheyeEnabled();
+    // VideoCentrix fix: we don't want forced HQ streams, at all. HQ/LQ should follow whatever is set in the context menu.
+    return false; // display->isFullScreen() || display->isZoomWindow() || display->isFisheyeEnabled();
 }
 
 bool isFastForwardOrRevMode(float speed)
