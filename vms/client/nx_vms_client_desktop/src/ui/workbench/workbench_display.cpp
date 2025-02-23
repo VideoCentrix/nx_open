@@ -882,10 +882,11 @@ void QnWorkbenchDisplay::setWidget(Qn::ItemRole role, QnResourceWidget *widget)
             if (QnMediaResourceWidget *newMediaWidget = dynamic_cast<QnMediaResourceWidget *>(newWidget))
             {
                 newMediaWidget->display()->camDisplay()->setFullScreen(true);
-                if (newMediaWidget->display()->archiveReader())
-                {
-                    newMediaWidget->display()->archiveReader()->setQuality(MEDIA_Quality_High, true);
-                }
+                // VideoCentrix fix: we don't want forced HQ streams, at all. HQ/LQ should follow whatever is set in the context menu.
+                // if (newMediaWidget->display()->archiveReader())
+                // {
+                //     newMediaWidget->display()->archiveReader()->setQuality(MEDIA_Quality_High, true);
+                // }
             }
 
             if (oldWidget)
