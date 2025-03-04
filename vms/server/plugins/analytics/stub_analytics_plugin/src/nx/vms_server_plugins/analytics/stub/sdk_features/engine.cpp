@@ -18,9 +18,12 @@ namespace sdk_features {
 using namespace nx::sdk;
 using namespace nx::sdk::analytics;
 
-Engine::Engine(Integration* integration):
-    nx::sdk::analytics::Engine(NX_DEBUG_ENABLE_OUTPUT, integration->instanceId()),
-    m_integration(integration)
+using namespace std::chrono;
+using namespace std::literals;
+
+Engine::Engine(Plugin* plugin):
+    nx::sdk::analytics::Engine(NX_DEBUG_ENABLE_OUTPUT, plugin->instanceId()),
+    m_plugin(plugin)
 {
     obtainServerSdkVersion();
     obtainPluginHomeDir();
@@ -37,7 +40,7 @@ void Engine::doObtainDeviceAgent(Result<IDeviceAgent*>* outResult, const IDevice
 
 void Engine::obtainServerSdkVersion()
 {
-    const auto utilityProvider = m_integration->utilityProvider();
+    const auto utilityProvider = m_plugin->utilityProvider();
     if (!NX_KIT_ASSERT(utilityProvider))
         return;
 
@@ -47,16 +50,16 @@ void Engine::obtainServerSdkVersion()
 
 void Engine::obtainPluginHomeDir()
 {
-    const auto utilityProvider = m_integration->utilityProvider();
+    const auto utilityProvider = m_plugin->utilityProvider();
     if (!NX_KIT_ASSERT(utilityProvider))
         return;
 
-    m_integrationHomeDir = utilityProvider->homeDir();
+    m_pluginHomeDir = utilityProvider->homeDir();
 
-    if (m_integrationHomeDir.empty())
+    if (m_pluginHomeDir.empty())
         NX_PRINT << "Plugin home dir: absent";
     else
-        NX_PRINT << "Plugin home dir: " << nx::kit::utils::toString(m_integrationHomeDir);
+        NX_PRINT << "Plugin home dir: " << nx::kit::utils::toString(m_pluginHomeDir);
 }
 
 static std::string buildCapabilities()

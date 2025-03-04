@@ -5,7 +5,7 @@
 #include <chrono>
 
 using std::chrono::milliseconds;
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 
 milliseconds QnBookmarkCluster::endTime() const
 {

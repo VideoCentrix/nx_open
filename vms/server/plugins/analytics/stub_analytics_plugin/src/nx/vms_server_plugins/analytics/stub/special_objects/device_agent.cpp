@@ -36,7 +36,7 @@ namespace special_objects {
 using namespace nx::sdk;
 using namespace nx::sdk::analytics;
 using namespace std::chrono;
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 using Uuid = nx::sdk::Uuid;
 
 DeviceAgent::DeviceAgent(Engine* engine, const nx::sdk::IDeviceInfo* deviceInfo):

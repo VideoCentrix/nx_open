@@ -11,7 +11,7 @@
 #include "../utils.h"
 
 #include "device_agent.h"
-#include "stub_analytics_integration_diagnostic_events_ini.h"
+#include "stub_analytics_plugin_diagnostic_events_ini.h"
 
 #undef NX_PRINT_PREFIX
 #define NX_PRINT_PREFIX (this->logUtils.printPrefix)
@@ -27,10 +27,11 @@ using namespace nx::sdk;
 using namespace nx::sdk::analytics;
 
 using namespace std::chrono;
+using namespace std::literals;
 
-Engine::Engine(Integration* integration):
-    nx::sdk::analytics::Engine(NX_DEBUG_ENABLE_OUTPUT, integration->instanceId()),
-    m_integration(integration)
+Engine::Engine(Plugin* plugin):
+    nx::sdk::analytics::Engine(NX_DEBUG_ENABLE_OUTPUT, plugin->instanceId()),
+    m_plugin(plugin)
 {
     startEventThread();
 }
@@ -66,8 +67,8 @@ R"json(
         [
             {
                 "type": "CheckBox",
-                "name": ")json" + kGenerateIntegrationDiagnosticEventsFromDeviceAgentSetting + R"json(",
-                "caption": "Generate Integration Diagnostic Events from the DeviceAgent",
+                "name": ")json" + kGeneratePluginDiagnosticEventsFromDeviceAgentSetting + R"json(",
+                "caption": "Generate Plugin Diagnostic Events from the DeviceAgent",
                 "defaultValue": false
             }
         ]
@@ -81,18 +82,12 @@ R"json(
 Result<const ISettingsResponse*> Engine::settingsReceived()
 {
     m_engineSettings.generateEvents =
-        toBool(settingValue(kGenerateIntegrationDiagnosticEventsFromEngineSetting));
+        toBool(settingValue(kGeneratePluginDiagnosticEventsFromEngineSetting));
 
     if (m_engineSettings.generateEvents)
-    {
-        NX_PRINT << __func__
-            << "(): Integration Diagnostic Event generation enabled via settings.";
-    }
+        NX_PRINT << __func__ << "(): Plugin Diagnostic Event generation enabled via settings.";
     else
-    {
-        NX_PRINT << __func__
-            << "(): Integration Diagnostic Event generation disabled via settings.";
-    }
+        NX_PRINT << __func__ << "(): Plugin Diagnostic Event generation disabled via settings.";
 
     m_eventThreadCondition.notify_all();
 
@@ -105,18 +100,18 @@ void Engine::eventThreadLoop()
     {
         if (m_engineSettings.generateEvents)
         {
-            pushIntegrationDiagnosticEvent(
-                IIntegrationDiagnosticEvent::Level::info,
+            pushPluginDiagnosticEvent(
+                IPluginDiagnosticEvent::Level::info,
                 "Info message from Engine",
                 "Info message description");
 
-            pushIntegrationDiagnosticEvent(
-                IIntegrationDiagnosticEvent::Level::warning,
+            pushPluginDiagnosticEvent(
+                IPluginDiagnosticEvent::Level::warning,
                 "Warning message from Engine",
                 "Warning message description");
 
-            pushIntegrationDiagnosticEvent(
-                IIntegrationDiagnosticEvent::Level::error,
+            pushPluginDiagnosticEvent(
+                IPluginDiagnosticEvent::Level::error,
                 "Error message from Engine",
                 "Error message description");
         }

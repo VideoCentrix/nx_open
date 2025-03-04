@@ -18,7 +18,7 @@
 namespace nx {
 namespace appserver {
 
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 static const std::chrono::milliseconds kDefaultUpdateInterval = 15min;
 
 OrphanCameraWatcher::OrphanCameraWatcher(nx::vms::common::SystemContext* systemContext):
