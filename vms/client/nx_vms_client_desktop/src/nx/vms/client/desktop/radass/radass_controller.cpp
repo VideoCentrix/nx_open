@@ -26,10 +26,8 @@ using namespace radass;
 
 namespace {
 
-bool isForcedHqDisplay(AbstractVideoDisplay* display)
-{
-    // VideoCentrix fix: we don't want forced HQ streams, at all. HQ/LQ should follow whatever is set in the context menu.
-    return false; // display->isFullScreen() || display->isZoomWindow() || display->isFisheyeEnabled();
+bool isForcedHqDisplay(AbstractVideoDisplay *display) {
+    return display->isFullScreen() || display->isZoomWindow() || display->isFisheyeEnabled();
 }
 
 bool isFastForwardOrRevMode(float speed)
@@ -431,7 +429,7 @@ struct RadassController::Private
             lastModeChangeTimer->restart();
         }
 
-        consumer->display->setQuality(MEDIA_Quality_High, true);
+        consumer->display->setQuality(MEDIA_Quality_High, false);
     }
 
     bool existsBufferingDisplay() const
