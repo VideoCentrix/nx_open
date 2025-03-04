@@ -11,7 +11,7 @@
 #include <utils/common/long_runable_cleanup.h>
 #include <utils/common/synctime.h>
 
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 
 namespace {
 

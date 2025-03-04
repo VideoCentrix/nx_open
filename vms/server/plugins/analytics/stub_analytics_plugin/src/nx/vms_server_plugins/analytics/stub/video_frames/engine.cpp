@@ -18,9 +18,12 @@ namespace video_frames {
 using namespace nx::sdk;
 using namespace nx::sdk::analytics;
 
-Engine::Engine(Integration* integration):
-    nx::sdk::analytics::Engine(NX_DEBUG_ENABLE_OUTPUT, integration->instanceId()),
-    m_integration(integration)
+using namespace std::chrono;
+using namespace std::literals;
+
+Engine::Engine(Plugin* plugin):
+    nx::sdk::analytics::Engine(NX_DEBUG_ENABLE_OUTPUT, plugin->instanceId()),
+    m_plugin(plugin)
 {
     initCapabilities();
 }

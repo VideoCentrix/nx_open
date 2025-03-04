@@ -18,9 +18,11 @@ namespace custom_metadata {
 
 using namespace nx::sdk;
 using namespace nx::sdk::analytics;
+using namespace std::chrono;
+using namespace std::literals;
 
 DeviceAgent::DeviceAgent(Engine* engine, const nx::sdk::IDeviceInfo* deviceInfo):
-    ConsumingDeviceAgent(deviceInfo, NX_DEBUG_ENABLE_OUTPUT, engine->integration()->instanceId()),
+    ConsumingDeviceAgent(deviceInfo, NX_DEBUG_ENABLE_OUTPUT, engine->plugin()->instanceId()),
     m_engine(engine)
 {
 }
@@ -40,7 +42,7 @@ std::string DeviceAgent::manifestString() const
 }
 
 bool DeviceAgent::pushCustomMetadataPacket(
-    Ptr<const nx::sdk::analytics::ICustomMetadataPacket> customMetadataPacket)
+    const nx::sdk::analytics::ICustomMetadataPacket* customMetadataPacket)
 {
     if (!ini().needMetadata)
     {
@@ -54,6 +56,11 @@ bool DeviceAgent::pushCustomMetadataPacket(
         customMetadataPacket->dataSize(), customMetadataPacket->timestampUs());
 
     return true;
+}
+
+void DeviceAgent::doSetNeededMetadataTypes(
+    Result<void>* /*outResult*/, const IMetadataTypes* neededMetadataTypes)
+{
 }
 
 } // namespace custom_metadata

@@ -26,12 +26,13 @@ namespace special_objects {
 
 using namespace nx::sdk;
 using namespace nx::sdk::analytics;
-
+using namespace std::chrono;
+using namespace std::literals;
 using Uuid = nx::sdk::Uuid;
 
-Engine::Engine(Integration* integration):
-    nx::sdk::analytics::Engine(NX_DEBUG_ENABLE_OUTPUT, integration->instanceId()),
-    m_integration(integration)
+Engine::Engine(Plugin* plugin):
+    nx::sdk::analytics::Engine(NX_DEBUG_ENABLE_OUTPUT, plugin->instanceId()),
+    m_plugin(plugin)
 {
 }
 
@@ -72,21 +73,6 @@ std::string Engine::manifestString() const
             {
                 "id": ")json" + kFixedObjectType + R"json(",
                 "name": "Fixed object"
-            },
-            {
-                "id": ")json" + kPointObjectType + R"json(",
-                "name": "Point-like object",
-                "attributes":
-                [
-                    {
-                        "name": "nx.sys.showAsPoint",
-                        "type": "Boolean"
-                    }
-                ]
-            },
-            {
-                "id": ")json" + kEmptyNameObjectType + R"json(",
-                "name": ""
             }
         ]
     },

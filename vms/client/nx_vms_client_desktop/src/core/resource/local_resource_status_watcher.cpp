@@ -53,7 +53,7 @@ QnLocalResourceStatusWatcher::QnLocalResourceStatusWatcher(
     QObject(parent),
     nx::vms::common::SystemContextAware(systemContext)
 {
-    using namespace std::literals::chrono_literals;
+    using namespace std::literals;
 
     connect(resourcePool(), &QnResourcePool::resourceAdded,
         this, &QnLocalResourceStatusWatcher::onResourceAdded);
