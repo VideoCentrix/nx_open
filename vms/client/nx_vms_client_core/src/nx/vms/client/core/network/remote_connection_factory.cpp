@@ -2,6 +2,7 @@
 
 #include "remote_connection_factory.h"
 
+#include <chrono>
 #include <memory>
 
 #include <QtCore/QPointer>
@@ -189,7 +190,7 @@ struct RemoteConnectionFactory::Private
         ContextPtr context,
         std::function<bool(AbstractRemoteConnectionUserInteractionDelegate* delegate)> handler)
     {
-        using namespace std::chrono_literals;
+        using namespace std::literals::chrono_literals;
 
         auto isAccepted = std::make_shared<std::promise<bool>>();
         auto delegate = context->customUserInteractionDelegate

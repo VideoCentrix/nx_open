@@ -16,7 +16,7 @@
 
 namespace nx::vms::api {
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 const std::string kLdapScheme{"ldap"};
 constexpr const int kLdapDefaultPort{389};
