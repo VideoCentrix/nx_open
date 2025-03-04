@@ -16,7 +16,7 @@
 #include <nx/vms/client/desktop/common/utils/validators.h>
 
 using std::chrono::milliseconds;
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 
 namespace {
     const int defaultTimeoutIdx = 0;

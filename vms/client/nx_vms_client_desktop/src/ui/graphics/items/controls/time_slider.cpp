@@ -62,7 +62,7 @@
 #include <utils/math/color_transformations.h>
 
 using std::chrono::milliseconds;
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 using namespace nx::vms::client;
 using namespace nx::vms::client::desktop;
 using namespace nx::vms::client::desktop::workbench::timeline;

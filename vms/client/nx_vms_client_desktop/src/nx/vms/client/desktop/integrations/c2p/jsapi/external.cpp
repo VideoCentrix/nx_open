@@ -22,7 +22,7 @@ namespace nx::vms::client::desktop::integrations::c2p::jsapi {
 
 namespace {
 
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 
 static const std::chrono::minutes kSliderWindow = 10min;
 

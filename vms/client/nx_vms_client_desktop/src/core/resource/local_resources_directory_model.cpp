@@ -14,7 +14,7 @@
 #include <nx/utils/qt_helpers.h>
 #include <nx/vms/common/system_context.h>
 
-using namespace std::literals::chrono_literals;
+using namespace std::literals;
 
 namespace {
 
