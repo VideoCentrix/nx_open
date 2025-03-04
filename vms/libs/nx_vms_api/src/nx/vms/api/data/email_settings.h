@@ -14,7 +14,7 @@
 
 namespace nx::vms::api {
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 struct NX_VMS_API EmailSettings
 {

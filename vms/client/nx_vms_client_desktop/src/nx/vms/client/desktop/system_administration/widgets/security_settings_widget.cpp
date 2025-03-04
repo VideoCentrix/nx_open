@@ -29,7 +29,7 @@
 
 using namespace nx::vms::common;
 using namespace std::chrono;
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 namespace {
 
