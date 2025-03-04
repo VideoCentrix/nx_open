@@ -20,7 +20,7 @@ namespace nx::vms::client::desktop {
 namespace {
 
 using namespace std::chrono;
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 static constexpr milliseconds kStatePollPeriod = 2s;
 

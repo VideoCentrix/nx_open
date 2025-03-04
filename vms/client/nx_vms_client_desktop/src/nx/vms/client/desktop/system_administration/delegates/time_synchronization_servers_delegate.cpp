@@ -2,6 +2,7 @@
 
 #include "time_synchronization_servers_delegate.h"
 
+#include <chrono>
 #include <cmath>
 
 #include <QtGui/QGuiApplication>
@@ -24,7 +25,7 @@ using Model = TimeSynchronizationServersModel;
 
 namespace {
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 static constexpr int kMinimumDateWidth = 84;
 static constexpr int kMinimumTimeWidth = 128;

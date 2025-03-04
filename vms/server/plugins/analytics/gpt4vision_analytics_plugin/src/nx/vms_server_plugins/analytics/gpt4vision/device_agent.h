@@ -13,7 +13,7 @@ namespace nx::network::http { class AsyncClient; }
 
 namespace nx::vms_server_plugins::analytics::gpt4vision {
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 class Engine;
 

@@ -17,7 +17,7 @@
 #include <ui/workbench/workbench_context.h>
 #include <utils/common/synctime.h>
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 using namespace nx::vms::text;
 
 namespace nx::vms::client::desktop {

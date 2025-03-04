@@ -44,7 +44,7 @@ using namespace nx::core;
 
 namespace {
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 using std::chrono::milliseconds;
 using std::chrono::seconds;
 using std::chrono::minutes;

@@ -4,12 +4,13 @@
 
 #include <QtCore/QThread>
 
+#include <chrono>
 #include <limits>
 
 namespace nx::utils {
 
 using namespace std::chrono;
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 EventLoopTimer::EventLoopTimer(milliseconds checkPeriod):
     m_timer(this),

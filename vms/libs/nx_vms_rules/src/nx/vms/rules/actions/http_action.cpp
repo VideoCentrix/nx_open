@@ -13,7 +13,8 @@
 #include "../utils/field.h"
 #include "../utils/type.h"
 
-using namespace std::chrono_literals;
+#include <chrono>
+using namespace std::literals::chrono_literals;
 
 namespace nx::vms::rules {
 

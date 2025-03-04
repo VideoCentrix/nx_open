@@ -5,6 +5,7 @@
 #include <QtCore/QMetaEnum>
 #include <QtQml/QJSValueIterator>
 #include <QtWidgets/QApplication>
+#include <chrono>
 
 #include <core/resource/resource.h>
 #include <core/resource_management/resource_pool.h>
@@ -21,7 +22,7 @@ namespace nx::vms::client::desktop {
 
 namespace {
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 std::chrono::milliseconds kQuitDelay = 2s;
 
 const QString kItemsProperty = "items";

@@ -31,7 +31,7 @@
 namespace {
 
 using namespace std::chrono;
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 static const int kStartProgress = 25;
 static const int kHalfProgress = 50;
