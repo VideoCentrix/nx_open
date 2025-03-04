@@ -2,6 +2,8 @@
 
 #include "p2p_http_client_transport.h"
 
+#include <chrono>
+
 #include <nx/utils/byte_stream/custom_output_stream.h>
 #include <nx/utils/log/log.h>
 #include <nx/network/http/custom_headers.h>
@@ -38,7 +40,7 @@ P2PHttpClientTransport::P2PHttpClientTransport(
     m_additionalRequestHeaders(additionalRequestHeaders),
     m_pingTimeout(pingTimeout)
 {
-    using namespace std::chrono_literals;
+    using namespace std::literals::chrono_literals;
 
     using namespace nx::network::http;
     for (const auto& httpClient: { m_readHttpClient.get(), m_writeHttpClient.get() })

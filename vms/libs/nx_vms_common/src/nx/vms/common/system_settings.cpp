@@ -32,6 +32,7 @@
 #include <utils/email/email.h>
 
 using namespace std::chrono;
+using namespace std::literals::chrono_literals;
 
 namespace {
 
