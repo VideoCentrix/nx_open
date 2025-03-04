@@ -906,7 +906,7 @@ void QnWorkbenchDisplay::setWidget(Qn::ItemRole role, QnResourceWidget *widget)
                 // if (newMediaWidget->display())
                 // {
                 //     if (auto archiveReader = newMediaWidget->display()->archiveReader())
-                //         archiveReader->setQuality(MEDIA_Quality_High, true);
+                //         archiveReader->setQuality(MEDIA_Quality_High, false);
                 // }
             }
 
