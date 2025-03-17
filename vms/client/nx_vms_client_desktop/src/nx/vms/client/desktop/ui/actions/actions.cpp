@@ -672,7 +672,6 @@ void initialize(Manager* manager, Action* root)
     factory.beginSubMenu();
     {
         vx::registerVxGlobalSystemHealth(factory);
-        vx::registerVxReportTemplates(factory);
     }
     factory.endSubMenu();
 

@@ -1354,8 +1354,6 @@ enum IDType {
 
     VxGlobalSystemHealth,
 
-    VxReportTemplates,
-
     /**
      * Opens the Audit Log dialog.
      */
