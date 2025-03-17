@@ -14,6 +14,7 @@ typedef QList<QnWorkbenchLayout *> QnWorkbenchLayoutList;
 
 namespace vx {
 class MonitoringActionHandler;
+class ReportUiHandler;
 } // namespace vx
 
 namespace nx::vms::client::desktop {
@@ -109,6 +110,7 @@ private:
     QString generateUniqueLayoutName(const QnUserResourcePtr& user) const;
 
     friend class vx::MonitoringActionHandler;
+    friend class vx::ReportUiHandler;
 };
 
 } // namespace nx::vms::client::desktop
