@@ -3,6 +3,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <thread>
 
 namespace nx::utils {
@@ -77,10 +78,7 @@ public:
     };
 
 private:
-    // Using basic_string but not vector because the number of elements in this array is
-    // very low (e.g., one) at most times. And basic_string stores the first 15 elements
-    // on stack, without allocating memory on heap.
-    std::basic_string<bool*> m_watcherStates;
+    std::vector<bool*> m_watcherStates;
     std::thread::id m_lastWatchingThreadId;
 
     void pushWatcherState(bool* watcherState);

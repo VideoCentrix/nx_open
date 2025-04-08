@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.20.0 FATAL_ERROR) #< This version is bundled wi
 add_definitions(-DBOOST_NO_CXX98_FUNCTION_BASE)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
     add_compile_options(-Wno-enum-constexpr-conversion)
+    add_compile_options(-Wno-deprecated-declarations) # clang chokes on std::aligned_storage_t.
 endif()
 
 set(open_source_root "${CMAKE_CURRENT_SOURCE_DIR}")
