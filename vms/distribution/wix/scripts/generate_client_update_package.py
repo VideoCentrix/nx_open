@@ -109,6 +109,22 @@ def create_client_update_file(config, output_file):
     quick_start_guide_destination_file_name = config['quick_start_guide_destination_file_name']
     asan_library_name = config['asan_library_name']
 
+    # ────────────────────────────────────────────────────────────────────────────────
+    #  ❶  Locate the official Redistributable folders (VS 2015‑2022 compatible CRT)
+    # ────────────────────────────────────────────────────────────────────────────────
+    arch = 'x64'                      # change to 'x86' for 32‑bit build
+
+    vctools_redist_dir = os.environ.get('VCToolsRedistDir')
+    if not vctools_redist_dir:
+        raise RuntimeError('VCToolsRedistDir env‑var not set – install VSBuild Tools or run from a Developer Prompt')
+    vcrt_dir = os.path.join(vctools_redist_dir, arch, 'Microsoft.VC143.CRT')
+
+    windows_sdk_dir  = os.environ.get('WindowsSdkDir')
+    windows_sdk_ver  = os.environ.get('WindowsSDKVersion')
+    if not windows_sdk_dir or not windows_sdk_ver:
+        raise RuntimeError('WindowsSdkDir / WindowsSDKVersion env‑vars not set – install the Windows 10/11 SDK')
+    ucrt_dir = os.path.join(windows_sdk_dir, 'Redist', windows_sdk_ver, 'ucrt', 'DLLs', arch)
+
     with zipfile.ZipFile(output_file, "w", zipfile.ZIP_DEFLATED) as zip:
         tools.zip_files_to(zip, tools.ffmpeg_files(binaries_dir), binaries_dir)
         tools.zip_files_to(zip, tools.openssl_files(binaries_dir), binaries_dir)
@@ -137,11 +153,16 @@ def create_client_update_file(config, output_file):
         tools.zip_files_to(zip, tools.qt_plugins_files(qt_plugins_dir, qt_plugins), qt_plugins_dir)
 
         tools.zip_all_files(zip, config['help_directory'])
-        # TODO(elric): we're disabling packaging the crt DLLs into an update package for now b/c
-        #              the version is conan is conflicting with the version we're building the binaries with.
-        #              This is a hack, and it's not applied to the installer package.
-        # tools.zip_all_files(zip, os.path.join(config['ucrt_directory'], 'bin'))
-        # tools.zip_all_files(zip, config['vcrt_directory'])
+        # ────────────────────────────────────────────────────────────────────────
+        #  ❷  Add Microsoft CRT & UCRT DLLs
+        #      *   vcruntime140.dll / 140_1.dll
+        #      *   msvcp140.dll / 140_1.dll / 140_2.dll / msvcp140_atomic_wait.dll
+        #      *   concrt140.dll
+        #      *   ucrtbase.dll  +  api‑ms‑win‑crt‑*.dll  shim set
+        # ────────────────────────────────────────────────────────────────────────
+        tools.zip_all_files(zip, vcrt_dir)
+        tools.zip_all_files(zip, ucrt_dir)
+
         tools.zip_all_files(zip, os.path.join(config['fonts_directory'], 'bin'))
 
         zip.write(os.path.join(binaries_dir, 'client_external.dat'), 'client_external.dat')
