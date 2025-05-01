@@ -670,15 +670,11 @@ void initialize(Manager* manager, Action* root)
         .flags(Main)
         .separator();
 
-    factory()
-        .flags(Main | Tree)
-        .text(ContextMenu::tr("Video Centrix"));
-
-    factory.beginSubMenu();
-    {
-        vx::registerVxGlobalSystemHealth(factory);
-    }
-    factory.endSubMenu();
+    // factory()
+    //    .flags(Main | Tree)
+    //    .text(ContextMenu::tr("Video Centrix"));
+    //factory.beginSubMenu();
+    // factory.endSubMenu();
 
     factory(LoginToCloud).flags(NoTarget).text(ContextMenu::tr("Log in to %1...", "Log in to Nx Cloud").arg(nx::branding::cloudName()));
 
