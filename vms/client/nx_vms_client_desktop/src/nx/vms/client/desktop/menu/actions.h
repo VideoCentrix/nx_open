@@ -1386,7 +1386,7 @@ enum IDType {
 
     VxGlobalDebugAction,
 
-    VxGlobalSystemHealth,
+    Vx_UNUSED,
 
     /**
      * Opens the Audit Log dialog.
@@ -1597,10 +1597,10 @@ enum IDType {
 
 Q_ENUM_NS(IDType)
 
-void initialize(Manager* manager, Action* root);
+void initialize(Manager *manager, Action *root);
 
 std::string toString(IDType id);
-bool fromString(const std::string_view& str, IDType* id);
+bool fromString(const std::string_view &str, IDType *id);
 
 NX_REFLECTION_TAG_TYPE(IDType, useStringConversionForSerialization)
 
