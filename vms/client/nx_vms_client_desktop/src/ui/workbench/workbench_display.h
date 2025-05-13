@@ -274,6 +274,7 @@ public:
 
     QTimer* playbackPositionBlinkTimer() const;
 
+    void showMultiSplashOnResource(const QnResourcePtr &resource, const nx::vms::event::TLevelExtended &levelExt);
     void showMultiSplashOnResource(const QnResourcePtr &resource, const nx::vms::event::AbstractActionPtr &businessAction);
 
 public slots:

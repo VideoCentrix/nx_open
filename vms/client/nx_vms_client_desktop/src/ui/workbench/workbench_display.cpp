@@ -2614,9 +2614,11 @@ void QnWorkbenchDisplay::showSplashOnResource(
     }
 }
 
-void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const vms::event::AbstractActionPtr &businessAction)
-{
-    const auto levelExt = nx::vms::event::levelOf(businessAction);
+void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const vms::event::AbstractActionPtr &businessAction) {
+    showMultiSplashOnResource(resource, nx::vms::event::levelOf(businessAction));
+}
+
+void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const nx::vms::event::TLevelExtended &levelExt) {
     const auto callback = [this, resource, level = QnNotificationLevel::convert(levelExt)] {
         showSplashOnResource(resource, level);
     };

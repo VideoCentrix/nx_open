@@ -7,10 +7,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-namespace {
-static const QString _alertLevelTag = "al";
-}
-
 namespace nx::vms::event {
 
 TLevelExtended levelOf(const AbstractActionPtr &action) {
@@ -19,26 +15,6 @@ TLevelExtended levelOf(const AbstractActionPtr &action) {
         return {Level::common};
     case ActionType::showOnAlarmLayoutAction:
         return {Level::critical};
-    case ActionType::vxMonitoringAction: {
-        auto json = QJsonDocument::fromJson(action->getParams().tags.toLocal8Bit());
-        if (json.isObject()) {
-            const auto& obj = json.object();
-            const auto iter = obj.find(_alertLevelTag);
-            if (iter != obj.end()) {
-                const auto& levelDesc = iter.value().toString();
-                if (levelDesc == QStringLiteral("Tier 1")) {
-                    return TLevelExtended{Level::common, 500, 1'000};
-                }
-                if (levelDesc == QStringLiteral("Tier 2")) {
-                    return TLevelExtended{Level::important, 500, 2'000};
-                }
-                if (levelDesc == QStringLiteral("Tier 3")) {
-                    return TLevelExtended{Level::critical, 400, 4'000};
-                }
-            }
-        }
-        // fall-through
-    }
     default:
         return {levelOf(action->getRuntimeParams())};
     }
