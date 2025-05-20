@@ -2483,7 +2483,13 @@ void SystemSettings::update(const vms::api::SystemSettings& value)
     d->useStorageEncryptionAdaptor->setValue(value.storageEncryption);
     d->showServersInTreeForNonAdminsAdaptor->setValue(value.showServersInTreeForNonAdmins);
     d->updateNotificationsEnabledAdaptor->setValue(value.updateNotificationsEnabled);
-    d->emailSettingsAdaptor->setValue(value.emailSettings);
+
+    // VX fix: we moved from alphavs customization to videocentrix, and support address changed. And it's already saved in system info, and is considered
+    // invalid by the checks in setValue. So we work just hack it here.
+    auto emailSettings = value.emailSettings;
+    emailSettings.supportAddress = nx::branding::supportAddress();
+
+    d->emailSettingsAdaptor->setValue(emailSettings);
     d->timeSynchronizationEnabledAdaptor->setValue(value.timeSynchronizationEnabled);
     d->primaryTimeServerAdaptor->setValue(value.primaryTimeServer);
     d->customReleaseListUrlAdaptor->setValue(value.customReleaseListUrl);
