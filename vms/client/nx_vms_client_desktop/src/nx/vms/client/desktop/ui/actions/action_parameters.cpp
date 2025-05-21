@@ -195,6 +195,24 @@ QString Parameters::toString() const
     return arguments.empty() ? "[]" : arguments.join('\n');
 }
 
+void Parameters::replaceUnsafeParameters(QnResourceWidget *oldWidget, QnResourceWidget *newWidget)
+{
+    for (QVariant &parameter : m_arguments)
+    {
+        if (ParameterTypes::type(parameter) == WidgetType)
+        {
+            QnResourceWidgetList widgets = ParameterTypes::widgets(parameter);
+            for (QnResourceWidget *&widget : widgets)
+                if (widget == oldWidget)
+                    widget = newWidget;
+            widgets.removeAll(nullptr);
+
+            parameter = QVariant::fromValue<QnResourceWidgetList>(widgets);
+        }
+    }
+}
+
+
 } // namespace action
 } // namespace ui
 } // namespace nx::vms::client::desktop

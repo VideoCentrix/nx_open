@@ -169,6 +169,8 @@ public:
 
     QString toString() const;
 
+    void replaceUnsafeParameters(QnResourceWidget *oldWidget, QnResourceWidget *newWidget);
+
 private:
     void init(const QVariant& items, const ArgumentHash& arguments);
 
