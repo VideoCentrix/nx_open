@@ -12,6 +12,52 @@ set(unsigned_msi_filename ${CMAKE_CURRENT_BINARY_DIR}/client-unsigned.msi)
 set(signed_msi_filename ${CMAKE_CURRENT_BINARY_DIR}/client-signed.msi)
 set(signed_distribution_path "${distribution_output_dir}/${client_distribution_name}.exe")
 
+# Download latest MSVC redistributable from Microsoft
+# This downloads the Visual C++ Redistributable for Visual Studio 2022 (x64)
+# from Microsoft's official distribution URL. The redistributable will be
+# packaged into the installer as a standalone executable.
+
+# Always include MSVC redistributable
+set(msvc_redist_directory "${CMAKE_CURRENT_BINARY_DIR}/msvc_redist")
+
+# Allow overriding the MSVC redistributable URL via cache variable
+set(MSVC_REDIST_URL "https://aka.ms/vs/17/release/vc_redist.x64.exe" 
+    CACHE STRING "URL to download MSVC redistributable from")
+set(msvc_redist_file "${msvc_redist_directory}/VC_redist.x64.exe")
+
+file(MAKE_DIRECTORY ${msvc_redist_directory})
+
+# Download the MSVC redistributable if it doesn't exist
+if(NOT EXISTS ${msvc_redist_file})
+    message(STATUS "Downloading MSVC redistributable from ${MSVC_REDIST_URL}")
+    file(DOWNLOAD ${MSVC_REDIST_URL} ${msvc_redist_file}
+        SHOW_PROGRESS
+        STATUS download_status
+        LOG download_log
+        TIMEOUT 300)  # 5 minute timeout
+        
+    list(GET download_status 0 status_code)
+    if(NOT status_code EQUAL 0)
+        list(GET download_status 1 error_message)
+        message(FATAL_ERROR "Failed to download MSVC redistributable: ${error_message}\nLog: ${download_log}")
+    endif()
+        
+    # Verify the downloaded file is valid (basic check)
+    file(SIZE ${msvc_redist_file} file_size)
+    if(file_size LESS 1000000)  # Less than 1MB is suspicious for MSVC redist
+        message(FATAL_ERROR "Downloaded MSVC redistributable file seems too small (${file_size} bytes). Download may have failed.")
+    endif()
+        
+    message(STATUS "Successfully downloaded MSVC redistributable to ${msvc_redist_file} (${file_size} bytes)")
+else()
+    message(STATUS "Using existing MSVC redistributable: ${msvc_redist_file}")
+endif()
+
+# Create a custom target for the MSVC redistributable download
+add_custom_target(download_msvc_redist
+    DEPENDS ${msvc_redist_file}
+    COMMENT "Ensuring MSVC redistributable is available"
+)
 
 nx_wix_heat(${CMAKE_CURRENT_BINARY_DIR}/client_webengine_resources.wixobj
     SOURCE_DIR ${QT_DIR}/resources
@@ -100,7 +146,9 @@ nx_wix_candle_ext(${client_package_wixobject_filename}
     SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/client_package.wxs
     EXTENSIONS
         WixBalExtension
-        WixUtilExtension)
+        WixUtilExtension
+    DEPENDS
+        download_msvc_redist)
 
 add_custom_target(distribution_wix_client_msi ALL
     COMMENT "[Wix] Building client msi"
