@@ -3171,6 +3171,7 @@ QRect Style::subControlRect(ComplexControl control,
                                     / (range + scrollBar->pageStep)
                                 + 0.5);
 
+			if (minLength > maxLength) std::swap(minLength, maxLength);
                         sliderLength = qBound(minLength, sliderLength, maxLength);
 
                         int pos = sliderPositionFromValue(scrollBar->minimum,
