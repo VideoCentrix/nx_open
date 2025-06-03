@@ -211,7 +211,8 @@ QRectF ViewportAnimator::adjustedToReal(const QGraphicsView *view, const QRectF 
         realCenter = Geometry::dilated(fixedAdjustedRect, Geometry::cwiseMul(fixedAdjustedRect.size(), inverseRelativeMargins)).center();
 
         /* Adjust so that adjusted rect lies inside the real one. */
-        realCenter.rx() = qBound(adjustedRect.right()  - realSize.width()  / 2, realCenter.x(), adjustedRect.left() + realSize.width()  / 2);
+        // VX change: we had qBound asserting, so using min-max.
+        realCenter.rx() = std::min(std::max(adjustedRect.right()  - realSize.width()  / 2, realCenter.x()), adjustedRect.left() + realSize.width()  / 2);
         auto max = adjustedRect.top() + realSize.height() / 2;
         if (qFuzzyEquals(max, adjustedRect.bottom() - realSize.height() / 2))
             max = adjustedRect.bottom() - realSize.height() / 2;
