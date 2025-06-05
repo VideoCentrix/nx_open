@@ -63,7 +63,7 @@
         {
           "qtdir": "${env.USERPROFILE}/.conan/data/qt/5.15.2/_/_/package/189784f1080359e8f6d1dfd7e8aa7dccd1cbae4c/bin"
         } ]
-    }
+    },
     {
       "name": "RelWithDebInfo+ut+distrib",
       "cmakeExecutable": "@CMAKE_EXECUTABLE@",
