@@ -62,6 +62,7 @@ private:
     union {
         sockaddr_in v4;
         sockaddr_in6 v6;
+        sockaddr_storage vv; // VX addition: this seems to fix random crashes.
     } m_address;
 
     socklen_t m_length;
