@@ -1949,6 +1949,7 @@ void SystemSettings::setEdgeRecordingEnabled(bool enabled)
 
 nx::utils::Url SystemSettings::customReleaseListUrl() const
 {
+    return {};
     return d->customReleaseListUrlAdaptor->value();
 }
 
