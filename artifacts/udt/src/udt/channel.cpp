@@ -253,9 +253,6 @@ std::optional<detail::SocketAddress> UdpChannel::recvfrom(CPacket* packet)
 {
     assert(m_iSocket != INVALID_UDP_SOCKET);
 
-    char lolkek[2000]; // VX addition: fuck you, buffer overflows.
-    detail::escape(lolkek); // Keep the array alive.
-
     detail::SocketAddress addr(AF_INET6);
     int res = ::recvfrom(
         m_iSocket,

@@ -393,8 +393,4 @@ namespace OsErrorCode
 #endif
 }
 
-namespace detail {
-void escape(void *);
-}
-
 #endif
