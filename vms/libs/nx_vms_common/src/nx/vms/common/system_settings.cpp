@@ -1522,6 +1522,7 @@ bool SystemSettings::takeFromSettings(QSettings* settings, const QnResourcePtr& 
 
 bool SystemSettings::isUpdateNotificationsEnabled() const
 {
+    return true;
     return d->updateNotificationsEnabledAdaptor->value();
 }
 
@@ -2022,7 +2023,9 @@ void SystemSettings::setdDownloaderPeers(const FileToPeerList& downloaderPeers)
 
 api::ClientUpdateSettings SystemSettings::clientUpdateSettings() const
 {
-    return d->clientUpdateSettingsAdaptor->value();
+    auto res = d->clientUpdateSettingsAdaptor->value();
+    res.enabled = true;
+    return res;
 }
 
 void SystemSettings::setClientUpdateSettings(const api::ClientUpdateSettings& settings)
