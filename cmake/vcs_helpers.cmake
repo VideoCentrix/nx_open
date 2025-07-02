@@ -303,7 +303,7 @@ function(nx_vcs_get_meta_release_build_suffix suffix_variable)
         RESULT_VARIABLE _return_code
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    if(_return_code EQUAL 0 AND _git_tag MATCHES ${META_RELEASE_TAG_REGEX} AND CMAKE_MATCH_2)
+    if(_return_code EQUAL 0 AND _git_tag MATCHES ${META_RELEASE_TAG_REGEX} AND CMAKE_MATCH_3)
         string(REPLACE "_" "-" _suffix_variable ${CMAKE_MATCH_3})
         set(${suffix_variable} ${_suffix_variable} PARENT_SCOPE)
     else()
