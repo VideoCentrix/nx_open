@@ -83,7 +83,7 @@ bool TwoWayAudioController::Private::setActive(bool active, OperationCallback&& 
     if (wasActive xor active) {
         auto &cb = ::nx::vms::common::appContext()->vxCallback();
         if (active)
-            cb.startTalkdown(targetResource);
+            cb.startTalkdown(availabilityWatcher->camera());
         else
             cb.stopTalkdown();
     }
