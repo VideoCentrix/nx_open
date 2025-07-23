@@ -8,7 +8,7 @@ class VxMonitoringBusinessActionWidget;
 
 namespace nx::vms::client::desktop {
 
-class VxMonitoringBusinessActionWidget : public QnAbstractBusinessParamsWidget {
+class VxMonitoringBusinessActionWidget final : public QnAbstractBusinessParamsWidget {
     Q_OBJECT
     typedef QnAbstractBusinessParamsWidget base_type;
 
@@ -19,7 +19,7 @@ public:
     void updateTabOrder(QWidget *before, QWidget *after) override;
 
 protected:
-    virtual void at_model_dataChanged(Fields fields) override;
+    void at_model_dataChanged(Fields fields) override;
     void setParamsToModel();
     void setModelToParams();
 
