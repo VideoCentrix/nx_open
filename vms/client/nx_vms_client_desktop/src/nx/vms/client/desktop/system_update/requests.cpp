@@ -66,14 +66,14 @@ UpdateContents getUpdateContents(
 {
     using common::update::InformationError;
 
-    const bool skipDirectCheck = !url.isValid()
-       || std::holds_alternative<common::update::TargetVersionParams>(params)
-       || std::holds_alternative<common::update::InstalledVersionParams>(params);
+    // const bool skipDirectCheck = !url.isValid()
+    //    || std::holds_alternative<common::update::TargetVersionParams>(params)
+    //    || std::holds_alternative<common::update::InstalledVersionParams>(params);
+    const bool skipDirectCheck = false; // NB: for VX, always do direct check
 
     UpdateContents contents;
 
-    if (!skipDirectCheck)
-    {
+    if (!skipDirectCheck) {
         const bool certainVersionRequested = std::holds_alternative<CertainVersionParams>(params);
         if (certainVersionRequested)
             contents.sourceType = UpdateSourceType::internetSpecific;
@@ -116,6 +116,7 @@ UpdateContents getUpdateContents(
         if (contents.error != InformationError::networkError)
             return contents;
     }
+    return contents; // NB: for VX, disabling updates from VMS
 
     NX_WARNING(NX_SCOPE_TAG, "Checking for updates using mediaserver as proxy");
 
