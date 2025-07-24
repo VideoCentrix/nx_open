@@ -9,7 +9,8 @@ namespace nx::vms::client::desktop {
 
 namespace {
 
-const QString _alertLevelTag = "al";
+const QString _alertLevelTag = "al"; // legacy
+const QString _alertLevelIntTag = "ali";
 
 const QStringList alertLevels{
     "Tier 1",
@@ -57,13 +58,14 @@ void VxMonitoringBusinessActionWidget::setModelToParams() {
     if (!tags.isObject())
         return;
     const auto &tagsJson = tags.object();
-    const auto iter = tagsJson.find(_alertLevelTag);
-    if (iter == tagsJson.end())
-        return;
 
-    const auto idx = std::ranges::find(alertLevels, iter.value().toString());
-    if (idx != alertLevels.end())
-        ui->alertLevelComboBox->setCurrentIndex(std::distance(alertLevels.begin(), idx));
+    if (const auto iterI = tagsJson.find(_alertLevelIntTag); iterI != tagsJson.end())
+        ui->alertLevelComboBox->setCurrentIndex(iterI.value().toInt(1) - 1);
+    else if (const auto iter = tagsJson.find(_alertLevelTag); iter != tagsJson.end()) {
+        const auto idx = std::ranges::find(alertLevels, iter.value().toString());
+        if (idx != alertLevels.end())
+            ui->alertLevelComboBox->setCurrentIndex(std::distance(alertLevels.begin(), idx));
+    }
 }
 
 void VxMonitoringBusinessActionWidget::setParamsToModel() {
@@ -74,7 +76,8 @@ void VxMonitoringBusinessActionWidget::setParamsToModel() {
     auto actionParams = model()->actionParams();
 
     auto obj = QJsonDocument::fromJson(actionParams.tags.toLocal8Bit()).object();
-    obj[_alertLevelTag] = ui->alertLevelComboBox->currentText();
+    const auto alertLevel = ui->alertLevelComboBox->currentIndex() + 1;
+    obj[_alertLevelIntTag] = alertLevel;
     actionParams.tags = QJsonDocument(obj).toJson(QJsonDocument::JsonFormat::Compact);
 
     model()->setActionParams(actionParams);

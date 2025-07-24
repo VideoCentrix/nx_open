@@ -18,6 +18,7 @@ NX_REFLECTION_ENUM_CLASS(Level,
     success,
     important,
     critical,
+    special,
     count
 );
 
