@@ -38,8 +38,8 @@
             <ExePackage Id="VcRedist"
                         SourceFile="${msvc_redist_file}"
                         DisplayName="Microsoft Visual C++ Redistributable"
-                        InstallCommand="/norestart"
-                        RepairCommand="/norestart"
+                        InstallCommand="/quiet /norestart"
+                        RepairCommand="/quiet /norestart"
                         Permanent="yes"
                         Vital="no"/>
             
