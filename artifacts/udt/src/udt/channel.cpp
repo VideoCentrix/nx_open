@@ -255,6 +255,12 @@ std::optional<detail::SocketAddress> UdpChannel::recvfrom(CPacket* packet)
 {
     assert(m_iSocket != INVALID_UDP_SOCKET);
 
+    // VX addition.
+    // Something very fishy is happening here. We're getting stack ovewritten, but ASAN and stack protection cookies can't catch it.
+    // It's likely being written to from another thread. Adding a 2Kb stack protector somehow fixes this. At least we stop crashing.
+    char lolkek[2000];
+    detail::escape(lolkek); // Keep the array alive.
+
     sockaddr_storage addr;  // Large enough for both IPv4 and IPv6
     socklen_t addr_len = sizeof(addr);
 
