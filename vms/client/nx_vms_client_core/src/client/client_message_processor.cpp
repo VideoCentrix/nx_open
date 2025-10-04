@@ -232,10 +232,11 @@ void QnClientMessageProcessor::onGotInitialNotification(const nx::vms::api::Full
     base_type::onGotInitialNotification(fullData);
     m_status.setState(QnConnectionState::Ready);
 
-    auto currentServer = resourcePool()->getResourceById<QnMediaServerResource>(
-        connection()->moduleInformation().id);
-
-    NX_ASSERT(currentServer);
+    // VX change: this crashed once for me with connection() == nullptr. Commenting out.
+    //
+    // auto currentServer = resourcePool()->getResourceById<QnMediaServerResource>(
+    //    connection()->moduleInformation().id);
+    // NX_ASSERT(currentServer);
 
     /* Get server time as soon as we setup connection. */
     qnSyncTime->resync();
