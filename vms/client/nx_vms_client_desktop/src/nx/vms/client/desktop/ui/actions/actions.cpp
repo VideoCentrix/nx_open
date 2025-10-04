@@ -2323,7 +2323,7 @@ void initialize(Manager* manager, Action* root)
     vx::registerDebugVxActions(factory);
     vx::registerDismissSystemAlertAction(factory);
     vx::registerPrioritizeAlertAction(factory);
-    vx::registerOpenReportLayoutAction(factory);
+    vx::registerOpenReportLayoutAction(factory); // This one is only ever called from other actions.
 
     // -- Developer mode actions end. Please do not add real actions afterwards.
 }
