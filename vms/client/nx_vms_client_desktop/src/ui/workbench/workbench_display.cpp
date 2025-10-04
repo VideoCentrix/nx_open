@@ -2012,8 +2012,12 @@ void QnWorkbenchDisplay::at_layout_itemAdded(QnWorkbenchItem *item)
         synchronizeSceneBounds();
         fitInView(animate);
 
-        // Unzoom & fit in view on item addition except when item is added in zoomed state.
-        workbench()->setItem(Qn::ZoomedRole, addInZoomedState ? item : nullptr);
+        // VX change: don't unzoom when new items are added. This happens all the time on monitoring layout
+        // b/c we replace items.
+        //
+        // We used to set zoomed item to null here on all item additions, except when addInZoomedState==true.
+        if (addInZoomedState)
+            workbench()->setItem(Qn::ZoomedRole, item);
 
         return; // VX feature request: guards do not want new alerts to drop the zoom
         if (!item->data<bool>(Qn::ItemSkipFocusOnAdditionRole, false))
