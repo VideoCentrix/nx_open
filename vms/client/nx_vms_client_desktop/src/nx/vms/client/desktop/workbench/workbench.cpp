@@ -746,8 +746,16 @@ void Workbench::update(const WorkbenchState& state)
 {
     clear();
 
+    // VX change: don't restore current layout on load, this blows up if current layout is a
+    // cloud layout (we're getting empty systemId strings from resources), and especially if
+    // it's a monitoring / report layout (don't even make me start on what we're getting).
+    //
+    // See the actual changes below.
+
     for (const auto& id: state.layoutUuids)
     {
+        continue; // VX change.
+
         if (const auto layout = resourcePool()->getResourceById<LayoutResource>(id))
         {
             addLayout(layout);
@@ -789,6 +797,8 @@ void Workbench::update(const WorkbenchState& state)
         const auto userId = context()->user()->getId();
         for (const auto& stateLayout: state.unsavedLayouts)
         {
+            continue; // VX change.
+
             LayoutResourcePtr layoutResource;
             if (stateLayout.isCrossSystem)
             {
@@ -835,7 +845,7 @@ void Workbench::update(const WorkbenchState& state)
         }
     }
 
-    if (!state.currentLayoutId.isNull())
+    if (!state.currentLayoutId.isNull() && false) // VX change.
     {
         auto restoreCurrentLayout =
             [this](const QnResourcePool* pool, const nx::Uuid id)
