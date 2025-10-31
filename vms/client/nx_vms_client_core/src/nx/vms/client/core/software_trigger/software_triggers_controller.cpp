@@ -133,8 +133,9 @@ bool SoftwareTriggersController::Private::setEventTriggerState(
     QnResourcePool *pool = q->systemContext()->resourcePool();
     auto resource = pool->getResourceById<QnVirtualCameraResource>(resourceId);
 
-    params.insert("eventResourceId",
-        resource && !resource->audioOutputDeviceId().isNull() ? resource->audioOutputDeviceId().toString() : resourceId.toString());
+    constexpr std::array audioActions{nx::vms::event::ActionType::playSoundAction, nx::vms::event::ActionType::playSoundOnceAction};
+    const bool replaceDeviceId = resource && !resource->audioOutputDeviceId().isNull() && std::ranges::contains(audioActions, rule->actionType());
+    params.insert("eventResourceId", replaceDeviceId ? resource->audioOutputDeviceId().toString() : resourceId.toString());
     params.insert("caption", eventParams.getTriggerName());
     params.insert("description", eventParams.getTriggerIcon());
 
