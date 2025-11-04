@@ -776,14 +776,12 @@ bool MainWindow::handleKeyPress(int key)
 
     if (!isTourRunning)
     {
-        // VX change: space doesn't trigger play/pause.
-        //
-        // if (key == Qt::Key_Space)
-        // {
-        //    menu()->triggerIfPossible(action::PlayPauseAction,
-        //        navigator()->currentParameters(action::TimelineScope));
-        //    return true;
-        // }
+        if (key == Qt::Key_Space)
+        {
+            menu()->triggerIfPossible(action::PlayPauseAction,
+                navigator()->currentParameters(action::TimelineScope));
+            return true;
+        }
 
         // Only running tours are handled further.
         return false;
