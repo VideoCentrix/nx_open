@@ -39,6 +39,8 @@ public:
     /** Everything under title bar. */
     QnViewportBoundWidget* content() const;
 
+    QnViewportBoundWidget* bottom() const;
+
     /** Resource details text item. */
     QnHtmlTextItem* details() const;
 

@@ -41,6 +41,12 @@ QnViewportBoundWidget* QnHudOverlayWidget::content() const
     return d->content;
 }
 
+QnViewportBoundWidget* QnHudOverlayWidget::bottom() const
+{
+    Q_D(const QnHudOverlayWidget);
+    return d->bottomHolder;
+}
+
 QnHtmlTextItem* QnHudOverlayWidget::details() const
 {
     Q_D(const QnHudOverlayWidget);
