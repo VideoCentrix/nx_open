@@ -1196,11 +1196,12 @@ Result<> CUDTUnited::updateMux(
 {
     std::lock_guard<std::mutex> lock(m_ControlLock);
 
-    if ((s->m_pUDT->reuseAddr()) && addr)
-    {
-        const auto port = addr->port();
+    // Port 0 means any port is acceptable (typical for outbound client connections)
+    const int requiredPort = addr ? addr->port() : 0;
 
-        // find a reusable address
+    if (s->m_pUDT->reuseAddr())
+    {
+        // find a reusable multiplexer
         for (auto i = m_multiplexers.begin(); i != m_multiplexers.end(); ++i)
         {
             auto& multiplexer = i->second;
@@ -1208,7 +1209,9 @@ Result<> CUDTUnited::updateMux(
             if ((multiplexer->ipVersion == s->m_pUDT->ipVersion()) &&
                 (multiplexer->maximumSegmentSize == s->m_pUDT->mss()) && multiplexer->reusable)
             {
-                if (multiplexer->udpPort() == port)
+                // If no specific port required (client connection), reuse any compatible multiplexer.
+                // If specific port required (server/bound socket), only reuse if port matches.
+                if (requiredPort == 0 || multiplexer->udpPort() == requiredPort)
                 {
                     // reuse the existing multiplexer
                     s->m_pUDT->setMultiplexer(multiplexer);
