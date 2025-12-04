@@ -685,6 +685,9 @@ void CRcvQueue::worker()
 {
     setCurrentThreadName(typeid(*this).name());
 
+    auto lastTimerCheck = CTimer::getTime();
+    static constexpr auto kTimerCheckInterval = std::chrono::milliseconds(10);
+
     while (!m_bClosing)
     {
 #ifdef NO_BUSY_WAITING
@@ -710,7 +713,14 @@ void CRcvQueue::worker()
             #endif
             processUnit(std::move(unit), *addr);
         }
-        timerCheck();
+
+        // Only run timer check periodically, not every loop iteration
+        const auto now = CTimer::getTime();
+        if (now - lastTimerCheck >= kTimerCheckInterval)
+        {
+            timerCheck();
+            lastTimerCheck = now;
+        }
     }
 }
 
