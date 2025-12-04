@@ -82,7 +82,10 @@ Result<int> EpollImpl::wait(
     if (areThereSignalledUdtSockets())
     {
         // Going through system poll call anyway to check state of system sockets.
-        timeout = std::chrono::microseconds::zero();
+        // Use a small timeout instead of zero to avoid busy-waiting on Windows
+        // where select() with zero timeout causes 100% CPU usage.
+        static constexpr auto kMinPollTimeout = std::chrono::microseconds(1000);
+        timeout = std::min(timeout, kMinPollTimeout);
     }
 
     auto result = m_systemEpoll->poll(systemReadFds, systemWriteFds, timeout);
