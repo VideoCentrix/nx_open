@@ -186,8 +186,8 @@ Result<> UdpChannel::setUDPSockOpt()
     if (-1 == ::fcntl(m_iSocket, F_SETFL, opts | O_NONBLOCK))
         return OsError();
 #elif _WIN32
-    DWORD ot = 100; //milliseconds
-    if (0 != ::setsockopt(m_iSocket, SOL_SOCKET, SO_RCVTIMEO, (char *)&ot, sizeof(DWORD)))
+    DWORD ot = 100; // 100ms timeout
+    if (0 != ::setsockopt(m_iSocket, SOL_SOCKET, SO_RCVTIMEO, (char *) &ot, sizeof(DWORD)))
         return OsError();
 #else
     // Set receiving time-out value
@@ -260,22 +260,6 @@ std::optional<detail::SocketAddress> UdpChannel::recvfrom(CPacket* packet)
     // It's likely being written to from another thread. Adding a 2Kb stack protector somehow fixes this. At least we stop crashing.
     char lolkek[2000];
     detail::escape(lolkek); // Keep the array alive.
-
-#ifdef _WIN32
-    // Use select() to wait for data efficiently instead of relying on SO_RCVTIMEO.
-    // This prevents busy-waiting when no data is available.
-    fd_set readfds;
-    FD_ZERO(&readfds);
-    FD_SET(m_iSocket, &readfds);
-
-    timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = 100000; // 100ms timeout
-
-    int selectResult = ::select(0, &readfds, nullptr, nullptr, &tv);
-    if (selectResult <= 0)
-        return std::nullopt; // Timeout or error
-#endif
 
     sockaddr_storage addr;  // Large enough for both IPv4 and IPv6
     socklen_t addr_len = sizeof(addr);
