@@ -272,6 +272,9 @@ public:
     bool forceNoAnimation() const;
     void setForceNoAnimation(bool noAnimation);
 
+    bool forceNoItemDropAnimation() const;
+    void setForceNoItemDropAnimation(bool noAnimation);
+
     QTimer* playbackPositionBlinkTimer() const;
 
     void showMultiSplashOnResource(const QnResourcePtr &resource, const nx::vms::event::TLevelExtended &levelExt);
@@ -460,4 +463,6 @@ private:
     QTimer* m_playbackPositionBlinkTimer = nullptr;
 
     bool m_forceNoAnimation = false;
+
+    bool m_forceNoItemDropAnimations = false;
 };

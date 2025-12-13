@@ -484,6 +484,15 @@ void QnWorkbenchDisplay::setForceNoAnimation(bool noAnimation)
     m_forceNoAnimation = noAnimation;
 }
 
+bool QnWorkbenchDisplay::forceNoItemDropAnimation() const
+{
+    return m_forceNoItemDropAnimations;
+}
+
+void QnWorkbenchDisplay::setForceNoItemDropAnimation(bool noAnimation)
+{
+    m_forceNoItemDropAnimations = noAnimation;
+}
 // ------------------------------------------------------------------------------------------------
 // #TODO: #FIXME: #vkutin THIS SHOULD BE REPLACED WITH A QT PATCH.
 class QnOpenGLTextureCache: public QOpenGLSharedResource
@@ -2007,7 +2016,7 @@ void QnWorkbenchDisplay::at_layout_itemAdded(QnWorkbenchItem *item)
     const bool addInZoomedState = item->data<bool>(Qn::ItemAddInZoomedStateRole, false);
     const bool animate = animationAllowed() && !addInZoomedState;
     static const bool kStartDisplay = true;
-    if (addItemInternal(item, animate, kStartDisplay))
+    if (addItemInternal(item, animate && !m_forceNoItemDropAnimations, kStartDisplay))
     {
         synchronizeSceneBounds();
         fitInView(animate);
