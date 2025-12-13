@@ -106,6 +106,9 @@ public:
     /** Whether notification pane is pinned. */
     bool isNotificationsPinned() const;
 
+    /** Whether notifications panel should stay visible when zoomed. */
+    void setKeepNotificationsPanelWhenZoomed(bool keep);
+
     /** Whether the calendar is pinned */
     bool isCalendarPinned() const;
 
@@ -258,6 +261,7 @@ private:
     QPointer<TitleWorkbenchPanel> m_title;
 
     bool m_titleIsUsed = false;
+    bool m_keepNotificationsPanelWhenZoomed = false;
 
     QPointer<ui::workbench::SpecialLayoutPanel> m_layoutPanel;
 

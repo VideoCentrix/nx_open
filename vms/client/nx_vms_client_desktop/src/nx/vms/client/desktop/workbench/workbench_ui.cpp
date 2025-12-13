@@ -978,7 +978,9 @@ void WorkbenchUi::at_display_widgetChanged(Qn::ItemRole role)
                 showTimeline |= forceTimelineVisibility(mediaWidget);
             }
 
-            const auto panels = showTimeline ? TimelinePanel : NoPanel;
+            Panels panels = showTimeline ? TimelinePanel : NoPanel;
+            if (m_keepNotificationsPanelWhenZoomed && (m_unzoomedOpenedPanels & NotificationsPanel))
+                panels |= NotificationsPanel;
             setOpenedPanels(panels, true);
         }
         else
@@ -1344,6 +1346,11 @@ bool WorkbenchUi::isNotificationsOpened() const
 bool WorkbenchUi::isNotificationsPinned() const
 {
     return m_notifications && m_notifications->isPinned();
+}
+
+void WorkbenchUi::setKeepNotificationsPanelWhenZoomed(bool keep)
+{
+    m_keepNotificationsPanelWhenZoomed = keep;
 }
 
 void WorkbenchUi::setNotificationsOpened(bool opened, bool animate)
