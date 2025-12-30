@@ -11,6 +11,14 @@
 
 namespace nx::vms::api {
 
+// VX: Service offset for custom action types
+constexpr uint32_t ActionTypeServiceOffset = 1000;
+
+enum class EServiceOffset
+{
+    VX = ActionTypeServiceOffset * 1,
+};
+
 NX_REFLECTION_ENUM_CLASS(EventReason,
     none = 0,
 
@@ -290,7 +298,10 @@ NX_REFLECTION_ENUM(ActionType,
     buzzerAction = 20,
 
     /** Send push notification using cloud. */
-    pushNotificationAction = 21
+    pushNotificationAction = 21,
+
+    /** VX: Show on monitoring layout action. */
+    vxMonitoringAction = uint64_t(EServiceOffset::VX) + showPopupAction
 )
 
 enum class EventLevel
