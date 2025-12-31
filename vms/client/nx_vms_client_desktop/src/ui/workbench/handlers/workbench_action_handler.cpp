@@ -1780,7 +1780,7 @@ void ActionHandler::at_dropResourcesAction_triggered()
             if (parameters.widgets().isEmpty()) //< Triggered by resources tree view
                 parameters.setResources(resources);
 
-            if (!vx::overrideDropIntoCurrentLayoutAction(parameters, context()))
+            if (!vx::overrideDropIntoCurrentLayoutAction(parameters, windowContext()))
                 if (!menu()->triggerIfPossible(menu::OpenInCurrentLayoutAction, parameters))
                     menu()->triggerIfPossible(menu::OpenInNewTabAction, parameters);
         }
