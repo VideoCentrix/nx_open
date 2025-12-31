@@ -19,7 +19,6 @@
 #include <nx/vms/client/core/two_way_audio/two_way_audio_availability_watcher.h>
 #include <nx/vms/client/core/two_way_audio/two_way_audio_streamer.h>
 #include <nx/vms/common/application_context.h>
-#include <plugins/resource/desktop_camera/desktop_resource_base.h>
 
 namespace nx::vms::client::core {
 
