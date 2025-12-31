@@ -2590,10 +2590,10 @@ void QnWorkbenchDisplay::showSplashOnResource(
     }
 }
 
-void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, const vms::event::AbstractActionPtr &businessAction)
+void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, QnNotificationLevel::Value level)
 {
     const auto callback =
-        [this, resource, level = QnNotificationLevel::valueOf(businessAction)]
+        [this, resource, level]
         {
             showSplashOnResource(resource, level);
         };
