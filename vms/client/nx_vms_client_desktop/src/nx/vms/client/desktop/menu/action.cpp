@@ -328,7 +328,7 @@ ActionVisibility Action::checkCondition(ActionScopes scope, const Parameters& pa
     if (parametersCopy.scope() == InvalidScope)
         parametersCopy.setScope(scope);
 
-    if (auto result = vx::overrideActionVisibility(m_id, parametersCopy, context()))
+    if (auto result = vx::overrideActionVisibility(m_id, parametersCopy, windowContext()))
         return *result;
 
     if (hasCondition())
