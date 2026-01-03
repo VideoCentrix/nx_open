@@ -444,12 +444,6 @@ private:
         const QRectF& sourceSubRect,
         const QRectF& targetRect);
 
-protected:
-    virtual bool capabilityButtonsAreVisible() const;
-    void updateCapabilityButtons() const;
-    virtual void updateTwoWayAudioButton() const;
-    void updateIntercomButtons();
-
 private:
     struct SoftwareTriggerInfo
     {

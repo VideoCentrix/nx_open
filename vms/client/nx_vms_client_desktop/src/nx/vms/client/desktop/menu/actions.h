@@ -1150,7 +1150,7 @@ enum IDType {
      */
     VxDismissSystemAlertAction,
 
-    VxLocationPropertiesAction, // UNUSED
+    VxPrioritizeAlertAction,
 
     /**
      * Sets spacing of current layout's cells to None.
