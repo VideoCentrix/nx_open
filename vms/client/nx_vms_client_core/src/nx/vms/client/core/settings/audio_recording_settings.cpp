@@ -90,10 +90,19 @@ AudioRecordingSettings::AudioRecordingSettings():
     Storage(new nx::utils::property_storage::FileSystemBackend(
         QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation).first()
             + "/settings/screen_recording")),
-    m_devices(fetchDevicesList())
+    m_notifier(std::make_unique<QMediaDevices>())
 {
     load();
+
+    auto refreshDevices = [this] {
+        m_devices = fetchDevicesList();
+        emit availableDevicesChanged();
+    };
+    connect(m_notifier.get(), &QMediaDevices::audioInputsChanged, this, refreshDevices);
+    refreshDevices();
 }
+
+AudioRecordingSettings::~AudioRecordingSettings() = default;
 
 QList<AudioDeviceInfo> AudioRecordingSettings::availableDevices() const
 {
