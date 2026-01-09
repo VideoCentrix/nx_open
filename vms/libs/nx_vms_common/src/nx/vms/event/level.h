@@ -19,4 +19,12 @@ NX_REFLECTION_ENUM_CLASS(Level,
     count
 );
 
+struct TLevelExtended {
+    operator Level() const noexcept { return level; }
+
+    Level level = Level::none;
+    int splashPeriodMs = 500;
+    int splashTotalLengthMs = 1000;
+};
+
 } // namespace nx::vms::event

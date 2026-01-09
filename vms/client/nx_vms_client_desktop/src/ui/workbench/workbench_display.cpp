@@ -2602,6 +2602,18 @@ void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource
         executeDelayedParented(callback, timeMs, this);
 }
 
+void QnWorkbenchDisplay::showMultiSplashOnResource(const QnResourcePtr &resource, nx::vms::event::TLevelExtended levelExt)
+{
+    const auto callback =
+        [this, resource, level = QnNotificationLevel::convert(levelExt)]
+        {
+            showSplashOnResource(resource, level);
+        };
+
+    for (int timeMs = 0; timeMs <= levelExt.splashTotalLengthMs; timeMs += levelExt.splashPeriodMs)
+        executeDelayedParented(callback, timeMs, this);
+}
+
 bool QnWorkbenchDisplay::canShowLayoutBackground() const
 {
     if (qnRuntime->isAcsMode())
