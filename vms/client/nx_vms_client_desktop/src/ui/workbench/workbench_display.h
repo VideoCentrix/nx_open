@@ -14,6 +14,7 @@
 #include <nx/vms/client/desktop/resource/resource_fwd.h>
 #include <nx/vms/client/desktop/workbench/timeline/thumbnail.h>
 #include <nx/vms/event/event_fwd.h>
+#include <nx/vms/event/level.h>
 #include <ui/animation/animation_timer_listener.h>
 #include <ui/common/notification_levels.h>
 #include <ui/common/scene_transformations.h>
@@ -273,6 +274,7 @@ public:
 
     void showNotificationSplash(const QnResourceList& resources, QnNotificationLevel::Value level);
     void showMultiSplashOnResource(const QnResourcePtr &resource, QnNotificationLevel::Value level);
+    void showMultiSplashOnResource(const QnResourcePtr &resource, nx::vms::event::TLevelExtended level);
 
 public slots:
     void fitInView(bool animate);
