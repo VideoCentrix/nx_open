@@ -358,7 +358,8 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     nx::vms::client::desktop::SystemContext* systemContext,
     WindowContext* windowContext,
     QnWorkbenchItem* item,
-    QGraphicsItem* parent)
+    QGraphicsItem* parent,
+    bool needSoftwareTriggers)
     :
     base_type(systemContext, windowContext, item, parent),
     d(new MediaResourceWidgetPrivate(base_type::resource())),
@@ -366,7 +367,8 @@ QnMediaResourceWidget::QnMediaResourceWidget(
     m_posUtcMs(DATETIME_INVALID),
     m_watermarkPainter(new WatermarkPainter),
     m_itemId(item->uuid()),
-    m_toggleImageEnhancementAction(new QAction(this))
+    m_toggleImageEnhancementAction(new QAction(this)),
+    m_needSoftwareTriggers(needSoftwareTriggers)
 {
     NX_ASSERT(d->mediaResource, "Media resource widget was created with a non-media resource.");
     d->isExportedLayout = layoutResource()->isFile();
@@ -386,7 +388,7 @@ QnMediaResourceWidget::QnMediaResourceWidget(
         && !d->isPreviewSearchLayout
         && !qnRuntime->isVideoWallMode())
     {
-        m_buttonManager = std::make_unique<CameraButtonManager>(this);
+        m_buttonManager = std::make_unique<CameraButtonManager>(this, nullptr, m_needSoftwareTriggers);
     }
 
     initRenderer();

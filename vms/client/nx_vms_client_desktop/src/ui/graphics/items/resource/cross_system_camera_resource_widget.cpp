@@ -68,9 +68,10 @@ QnCrossSystemCameraWidget::QnCrossSystemCameraWidget(
     desktop::SystemContext* systemContext,
     desktop::WindowContext* windowContext,
     QnWorkbenchItem* item,
-    QGraphicsItem* parent)
+    QGraphicsItem* parent,
+    bool needSoftwareTriggers)
     :
-    QnMediaResourceWidget(systemContext, windowContext, item, parent),
+    QnMediaResourceWidget(systemContext, windowContext, item, parent, needSoftwareTriggers),
     d(new Private{QnMediaResourceWidget::resource().dynamicCast<
         core::CrossSystemCameraResource>()})
 {
