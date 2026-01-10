@@ -152,7 +152,7 @@ private:
         const QnVirtualCameraResourcePtr& camera,
         const QnMediaServerResourcePtr& server,
         qint64* result);
-    void checkMinTimeFromOtherServer(const QnVirtualCameraResourcePtr& camera);
+    void checkMinTimeFromOtherServer(const QnVirtualCameraResourcePtr camera);
     bool setupRtspSession(
         const QnVirtualCameraResourcePtr& camera,
         const QnMediaServerResourcePtr& server,

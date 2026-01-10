@@ -150,7 +150,9 @@ void updateTooltip(CameraButton* button, const QString& tooltip)
         NX_ASSERT(false, "Unexpected button type");
 }
 
-AggregatedControllerPtr createController(QnMediaResourceWidget* mediaResourceWidget)
+AggregatedControllerPtr createController(
+    QnMediaResourceWidget* mediaResourceWidget,
+    bool needSoftwareTriggers)
 {
     auto result = std::make_unique<core::AggregatedCameraButtonController>();
 
@@ -159,9 +161,12 @@ AggregatedControllerPtr createController(QnMediaResourceWidget* mediaResourceWid
     if (mediaResourceWidget->resource()->hasFlags(Qn::cross_system))
         return result;
 
-    using HintStyle = core::SoftwareTriggerCameraButtonController::HintStyle;
-    result->addController<core::SoftwareTriggerCameraButtonController>(
-        ButtonGroup::softwareTriggers, HintStyle::desktop);
+    if (needSoftwareTriggers)
+    {
+        using HintStyle = core::SoftwareTriggerCameraButtonController::HintStyle;
+        result->addController<core::SoftwareTriggerCameraButtonController>(
+            ButtonGroup::softwareTriggers, HintStyle::desktop);
+    }
 
     const auto commonOutputs =
         api::ExtendedCameraOutputs(api::ExtendedCameraOutput::heater)
@@ -188,7 +193,8 @@ struct CameraButtonManager::Private: public QObject
 
     Private(
         CameraButtonManager* q,
-        QnMediaResourceWidget* mediaResourceWidget);
+        QnMediaResourceWidget* mediaResourceWidget,
+        bool needSoftwareTriggers);
 
     void addObjectTrackingButton(const CameraButtonData& data);
 
@@ -210,11 +216,12 @@ struct CameraButtonManager::Private: public QObject
 
 CameraButtonManager::Private::Private(
     CameraButtonManager* q,
-    QnMediaResourceWidget* mediaResourceWidget)
+    QnMediaResourceWidget* mediaResourceWidget,
+    bool needSoftwareTriggers)
     :
     q(q),
     mediaResourceWidget(mediaResourceWidget),
-    controller(createController(mediaResourceWidget)),
+    controller(createController(mediaResourceWidget, needSoftwareTriggers)),
     container(createContainer(mediaResourceWidget)),
     objectTrackingContainer(createObjectTrackingContainer(mediaResourceWidget))
 {
@@ -464,11 +471,12 @@ bool CameraButtonManager::Private::isTwoWayAudioButton(const core::CameraButtonD
 
 CameraButtonManager::CameraButtonManager(
     QnMediaResourceWidget* mediaResourceWidget,
-    QObject* parent)
+    QObject* parent,
+    bool needSoftwareTriggers)
     :
     base_type(parent),
     WindowContextAware(mediaResourceWidget),
-    d(new Private(this, mediaResourceWidget))
+    d(new Private(this, mediaResourceWidget, needSoftwareTriggers))
 {
     NX_ASSERT(mediaResourceWidget->resource().dynamicCast<QnVirtualCameraResource>(),
         "Manager must not be created for non-camera resources");

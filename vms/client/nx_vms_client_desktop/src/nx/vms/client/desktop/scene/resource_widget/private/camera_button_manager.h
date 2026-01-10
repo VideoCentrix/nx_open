@@ -22,7 +22,8 @@ class CameraButtonManager: public QObject,
 public:
     CameraButtonManager(
         QnMediaResourceWidget* mediaResourceWidget,
-        QObject* parent = nullptr);
+        QObject* parent = nullptr,
+        bool needSoftwareTriggers = true);
 
     virtual ~CameraButtonManager() override;
 

@@ -281,7 +281,7 @@ bool QnRtspClientArchiveDelegate::checkGlobalTimeAsync(
 }
 
 void QnRtspClientArchiveDelegate::checkMinTimeFromOtherServer(
-    const QnVirtualCameraResourcePtr& camera)
+    const QnVirtualCameraResourcePtr camera)
 {
     if (!camera || !camera->resourcePool())
     {
