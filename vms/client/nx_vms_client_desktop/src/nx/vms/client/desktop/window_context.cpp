@@ -209,7 +209,7 @@ Workbench* WindowContext::workbench() const
 
 QnWorkbenchContext* WindowContext::workbenchContext() const
 {
-    return d->workbenchContext.get();
+    return d.get() ? d->workbenchContext.get() : nullptr;
 }
 
 QnWorkbenchDisplay* WindowContext::display() const

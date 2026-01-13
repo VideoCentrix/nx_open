@@ -112,8 +112,8 @@ ServerUpdateTool::~ServerUpdateTool()
 void ServerUpdateTool::onConnectToSystem(nx::Uuid systemId)
 {
     m_systemId = systemId;
-    if (!branding::customReleaseListUrl().isEmpty())
-    {
+    // VX customization: do not annoy users with password, we always pull updates through the upate server anyway
+    if (false && !branding::customReleaseListUrl().isEmpty()) {
         auto callback =
             [this](bool /*success*/, rest::Handle requestId, rest::ServerConnection::ErrorOrEmpty)
             {
