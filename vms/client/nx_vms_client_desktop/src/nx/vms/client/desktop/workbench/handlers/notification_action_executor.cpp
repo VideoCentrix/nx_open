@@ -236,7 +236,7 @@ void NotificationActionExecutor::onNotificationActionReceived(
     if (!cloudSystemId.isEmpty())
     {
         auto systemContext = appContext()->systemContextByCloudSystemId(cloudSystemId);
-        if (NX_ASSERT(systemContext))
+        if (/*NX_ASSERT*/ (systemContext)) // on program shutdown, it becomes null
             resourcePool = systemContext->resourcePool();
     }
 
