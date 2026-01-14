@@ -62,7 +62,8 @@ Workbench* WindowContextAware::workbench() const
 
 QnWorkbenchDisplay* WindowContextAware::display() const
 {
-    return windowContext()->workbenchContext()->display();
+    const auto ctx = windowContext()->workbenchContext();
+    return ctx ? ctx->display() : nullptr;
 }
 
 QnWorkbenchNavigator* WindowContextAware::navigator() const
