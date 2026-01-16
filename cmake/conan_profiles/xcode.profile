@@ -4,4 +4,6 @@
 # installs an Xcode update. Conan should look for packages built with Xcode version on the CI
 # builders, not local version.
 [settings]
+compiler=apple-clang
 compiler.version=17
+compiler.libcxx=libc++
