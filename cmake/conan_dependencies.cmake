@@ -57,6 +57,14 @@ elseif(targetDevice MATCHES "^macos|^ios")
     list(APPEND _additional_conan_parameters
         "--profile:build ${open_source_root}/cmake/conan_profiles/xcode.profile"
         "--profile:host ${open_source_root}/cmake/conan_profiles/xcode.profile"
+        "-s:b" "compiler=apple-clang"
+        "-s:b" "compiler.version=17"
+        "-s:b" "compiler.libcxx=libc++"
+    )
+elseif(targetDevice MATCHES "^windows")
+    list(APPEND _additional_conan_parameters
+        "-s:b" "compiler=Visual\\ Studio"
+        "-s:b" "compiler.version=17"
     )
 endif()
 
