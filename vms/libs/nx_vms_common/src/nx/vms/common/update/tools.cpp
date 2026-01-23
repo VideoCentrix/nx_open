@@ -8,24 +8,11 @@
 #include <nx/vms/common/update/nx_system_updates_ini.h>
 
 namespace nx::vms::common::update {
-
-nx::Url releaseListUrl(SystemContext* context)
+    
+nx::Url releaseListUrl(SystemContext* /*context*/)
 {
-    QString value = ini().releaseListUrl;
-
-    if (value.isEmpty())
-    {
-        if (context && !context->globalSettings()->customReleaseListUrl().isEmpty())
-            return context->globalSettings()->customReleaseListUrl();
-
-        if (!branding::customReleaseListUrl().isEmpty())
-            return branding::customReleaseListUrl();
-
-        value = "https://updates.vmsproxy.com/{customization}/releases.json";
-    }
-
-    value.replace("{customization}", branding::customization());
-    return value;
+    NX_ASSERT(!branding::customReleaseListUrl().isEmpty());
+    return branding::customReleaseListUrl();
 }
 
 nx::Url updateGeneratorUrl()
