@@ -194,6 +194,7 @@ QList<ActionType> userAvailableActions()
         ActionType::fullscreenCameraAction,
         ActionType::exitFullscreenAction,
         ActionType::buzzerAction,
+        ActionType::vxMonitoringAction,
     };
 
     return result;
@@ -235,6 +236,7 @@ bool requiresUserResource(ActionType actionType)
         case ActionType::fullscreenCameraAction:
         case ActionType::exitFullscreenAction:
         case ActionType::buzzerAction:
+        case ActionType::vxMonitoringAction:
             return false;
 
         case ActionType::acknowledgeAction:
@@ -265,6 +267,7 @@ bool hasToggleState(ActionType actionType)
         case ActionType::openLayoutAction:
         case ActionType::fullscreenCameraAction:
         case ActionType::exitFullscreenAction:
+        case ActionType::vxMonitoringAction:
             return false;
 
         case ActionType::bookmarkAction:

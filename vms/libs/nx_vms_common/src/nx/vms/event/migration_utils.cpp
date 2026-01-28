@@ -53,6 +53,8 @@ static const QMap<ActionType, QString> actionTypesMap = {
     {ActionType::showOnAlarmLayoutAction, QStringLiteral("showOnAlarmLayout")},
     {ActionType::showPopupAction, QStringLiteral("desktopNotification")},
     {ActionType::showTextOverlayAction, QStringLiteral("textOverlay")},
+    // VX: Custom VideoCentrix action type
+    {ActionType::vxMonitoringAction, QStringLiteral("vxMonitoringAction")},
 };
 
 } // namespace

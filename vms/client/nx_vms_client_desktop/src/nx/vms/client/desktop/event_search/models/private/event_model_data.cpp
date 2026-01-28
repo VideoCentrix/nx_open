@@ -2,6 +2,8 @@
 
 #include "event_model_data.h"
 
+#include <iostream>
+#include <nx/utils/log/log.h>
 #include <nx/vms/api/rules/event_log.h>
 #include <nx/vms/client/desktop/application_context.h>
 #include <nx/vms/client/desktop/event_search/utils/event_data.h>
@@ -11,6 +13,7 @@
 #include <nx/vms/rules/basic_action.h>
 #include <nx/vms/rules/engine.h>
 #include <nx/vms/rules/utils/event_log.h>
+#include <nx/vms/rules/utils/field.h>
 #include <nx/vms/rules/utils/type.h>
 
 namespace nx::vms::client::desktop {
@@ -65,7 +68,22 @@ QString EventLogModelData::actionType() const
     if (m_action)
         return m_action->type();
 
-    return m_record.actionData.value(nx::vms::rules::utils::kType).toString();
+    const QString type = m_record.actionData.value(nx::vms::rules::utils::kType).toString();
+
+    // VX DEBUG: Log all action data fields to understand the structure
+    if (type == QLatin1String("desktopNotification"))
+    {
+        QStringList keys;
+        for (auto it = m_record.actionData.begin(); it != m_record.actionData.end(); ++it)
+            keys << it.key();
+        std::cout << "VX DEBUG actionType: type=" << type.toStdString() << ", keys=" << keys.join(", ").toStdString();
+        for (auto it = m_record.actionData.begin(); it != m_record.actionData.end(); ++it)
+        {
+            std::cout << "VX DEBUG actionType: field[" << it.key().toStdString() << "]=%2" << it.value().toString().toStdString();
+        }
+    }
+
+    return type;
 }
 
 void EventLogModelData::setCompareString(const QString& str)

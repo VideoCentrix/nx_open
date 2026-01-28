@@ -3,6 +3,7 @@
 #include "engine.h"
 
 #include <chrono>
+#include <iostream>
 
 #include <QtCore/QMetaProperty>
 #include <QtCore/QThread>
@@ -523,6 +524,15 @@ EventPtr Engine::cloneEvent(const EventPtr& event) const
 ActionPtr Engine::buildAction(const EventData& data) const
 {
     const QString type = data.value(utils::kType).toString();
+
+    // VX DEBUG: Log all action data fields to understand the structure
+    if (type == QLatin1String("desktopNotification"))
+    {
+        std::cout << "VX DEBUG buildAction: type=" << type.toStdString() << ", keys=" << data.keys().join(", ").toStdString();
+        for (auto it = data.begin(); it != data.end(); ++it)
+            std::cout << "VX DEBUG buildAction: field[" << it.key().toStdString() << "]=%2" << it.value().toString().toStdString();
+    }
+
     const auto ctor = m_actionTypes.value(type);
     if (!NX_ASSERT(ctor, "Unregistered action constructor: %1", type))
         return {};
@@ -634,6 +644,16 @@ std::unique_ptr<EventFilter> Engine::buildEventFilter(nx::Uuid id, const QString
 
 std::unique_ptr<ActionBuilder> Engine::buildActionBuilder(const api::ActionBuilder& serialized) const
 {
+    // VX DEBUG: Log action builder info
+    std::cout << "VX DEBUG buildActionBuilder: type=" << serialized.type.toStdString()
+              << ", id=" << serialized.id.toString().toStdString() << std::endl;
+    for (const auto& [fieldName, field]: serialized.fields)
+    {
+        std::cout << "VX DEBUG buildActionBuilder: field[" << fieldName.toStdString()
+                  << "] type=" << field.type.toStdString()
+                  << ", props=" << QJson::serialized(field.props).toStdString() << std::endl;
+    }
+
     const auto descriptor = actionDescriptor(serialized.type);
     if (!NX_ASSERT(descriptor, "Descriptor for the '%1' type is not registered", serialized.type))
         return {};

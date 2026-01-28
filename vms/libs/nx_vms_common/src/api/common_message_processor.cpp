@@ -69,6 +69,58 @@ using namespace nx;
 using namespace nx::vms::api;
 using namespace nx::vms::common;
 
+namespace {
+
+// VX: Helper function to extract VX monitoring action markers from old rules.
+// Returns a set of rule IDs that should be treated as vxMonitoringAction.
+QSet<nx::Uuid> extractVxMonitoringRuleIds(const nx::vms::api::EventRuleDataList& oldRules)
+{
+    QSet<nx::Uuid> vxMonitoringIds;
+    for (const auto& rule : oldRules)
+    {
+        // Check if this is a showPopupAction (base type for vxMonitoringAction)
+        if (rule.actionType == nx::vms::api::ActionType::showPopupAction)
+        {
+            // Deserialize actionParams to check for the "1008" marker in text field
+            const auto actionParams = QJson::deserialized<nx::vms::event::ActionParameters>(rule.actionParams);
+            if (!actionParams.text.isEmpty())
+            {
+                bool ok = false;
+                const auto value = actionParams.text.toUInt(&ok);
+                if (ok && value == static_cast<uint>(nx::vms::api::ActionType::vxMonitoringAction))
+                {
+                    vxMonitoringIds.insert(rule.id);
+                    NX_DEBUG(NX_SCOPE_TAG, "VX: Found vxMonitoringAction marker in old rule %1", rule.id);
+                }
+            }
+        }
+    }
+    return vxMonitoringIds;
+}
+
+// VX: Apply vxMonitoringAction type substitution to new rules based on markers from old rules.
+void applyVxMonitoringSubstitution(
+    nx::vms::api::rules::RuleList& newRules,
+    const QSet<nx::Uuid>& vxMonitoringIds)
+{
+    for (auto& rule : newRules)
+    {
+        if (vxMonitoringIds.contains(rule.id))
+        {
+            for (auto& action : rule.actionList)
+            {
+                if (action.type == QLatin1String("desktopNotification"))
+                {
+                    action.type = QLatin1String("vxMonitoringAction");
+                    NX_DEBUG(NX_SCOPE_TAG, "VX: Substituted desktopNotification -> vxMonitoringAction for rule %1", rule.id);
+                }
+            }
+        }
+    }
+}
+
+} // namespace
+
 struct QnCommonMessageProcessor::Private
 {
     std::unordered_map<nx::Uuid, CameraAttributesData> cameraUserAttributesCache;
@@ -1101,7 +1153,16 @@ void QnCommonMessageProcessor::onGotInitialNotification(const FullInfoData& full
 
     // TODO: #sivanov Logic is not perfect, who will clean them on disconnect?
     resetEventRules(fullData.rules);
-    resetVmsRules(fullData.vmsRules);
+
+    // VX: Apply vxMonitoringAction substitution before resetting new rules.
+    // Extract markers from old rules (which have params.text = "1008") and apply to new rules.
+    auto vmsRules = fullData.vmsRules;
+    const auto vxMonitoringIds = extractVxMonitoringRuleIds(fullData.rules);
+    if (!vxMonitoringIds.isEmpty())
+    {
+        applyVxMonitoringSubstitution(vmsRules, vxMonitoringIds);
+    }
+    resetVmsRules(vmsRules);
 
     showreelManager()->resetShowreels(fullData.showreels);
 
