@@ -97,6 +97,7 @@ void Initializer::registerActions() const
     registerAction<ShowOnAlarmLayoutAction>();
     registerAction<SpeakAction>();
     registerAction<TextOverlayAction>();
+    registerAction<VxMonitoringAction>();
     registerAction<WriteToLogAction>();
 }
 

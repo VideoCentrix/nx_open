@@ -23,4 +23,5 @@
 #include "site_http_action.h"
 #include "speak_action.h"
 #include "text_overlay_action.h"
+#include "vx_monitoring_action.h"
 #include "write_to_log_action.h"

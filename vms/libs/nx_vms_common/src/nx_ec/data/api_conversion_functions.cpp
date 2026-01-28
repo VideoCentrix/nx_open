@@ -103,11 +103,17 @@ void fromApiToResource(const EventRuleData& src, vms::event::RulePtr& dst)
     dst->setEventParams(QJson::deserialized<vms::event::EventParameters>(src.eventCondition));
 
     dst->setEventState(src.eventState);
-    dst->setActionType(src.actionType);
+
+    // VX fix: deserialize virtual action types (like vxMonitoringAction) that are stored
+    // as showPopupAction with the actual type in the text field.
+    auto actionType = src.actionType;
+    const auto actionParams = QJson::deserialized<vms::event::ActionParameters>(src.actionParams);
+    deserializeVirtualActionType(actionType, actionParams);
+    dst->setActionType(actionType);
 
     dst->setActionResources(fromStdVector(src.actionResourceIds));
 
-    dst->setActionParams(QJson::deserialized<vms::event::ActionParameters>(src.actionParams));
+    dst->setActionParams(actionParams);
 
     dst->setAggregationPeriod(src.aggregationPeriod);
     dst->setDisabled(src.disabled);
@@ -125,10 +131,16 @@ void fromResourceToApi(const vms::event::RulePtr& src, EventRuleData& dst)
     dst.actionResourceIds = nx::toStdVector(src->actionResources());
 
     dst.eventCondition = QJson::serialized(src->eventParams());
-    dst.actionParams = QJson::serialized(src->actionParams());
+
+    // VX fix: serialize virtual action types (like vxMonitoringAction) by storing
+    // the actual type in the text field and converting to the base type (showPopupAction).
+    auto actionType = src->actionType();
+    auto actionParams = src->actionParams();
+    serializeVirtualActionType(actionType, actionParams);
+    dst.actionParams = QJson::serialized(actionParams);
+    dst.actionType = actionType;
 
     dst.eventState = src->eventState();
-    dst.actionType = src->actionType();
     dst.aggregationPeriod = src->aggregationPeriod();
     dst.disabled = src->isDisabled();
     dst.comment = src->comment();
