@@ -9,23 +9,11 @@
 
 namespace nx::vms::common::update {
 
-nx::utils::Url releaseListUrl(SystemContext* context)
+nx::utils::Url releaseListUrl(SystemContext* /*context*/)
 {
-    if (!branding::customReleaseListUrl().isEmpty())
-        return branding::customReleaseListUrl();
-
-    QString value = ini().releaseListUrl;
-
-    if (value.isEmpty())
-    {
-        if (context && !context->globalSettings()->customReleaseListUrl().isEmpty())
-            return context->globalSettings()->customReleaseListUrl();
-
-        value = "https://updates.vmsproxy.com/{customization}/releases.json";
-    }
-
-    value.replace("{customization}", branding::customization());
-    return value;
+    const auto url = branding::customReleaseListUrl();
+    NX_ASSERT(!url.isEmpty());
+    return url;
 }
 
 nx::utils::Url updateGeneratorUrl()
