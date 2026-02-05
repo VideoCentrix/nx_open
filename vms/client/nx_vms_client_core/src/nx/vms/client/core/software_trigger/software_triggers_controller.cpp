@@ -11,6 +11,9 @@
 #include <core/resource_access/resource_access_manager.h>
 #include <core/resource_access/resource_access_subject.h>
 #include <core/resource_management/resource_pool.h>
+#include <nx/network/http/buffer_source.h>
+#include <nx/network/http/http_async_client.h>
+#include <nx/network/ssl/helpers.h>
 #include <nx/reflect/string_conversion.h>
 #include <nx/utils/guarded_callback.h>
 #include <nx/vms/client/core/common/utils/ordered_requests_helper.h>
@@ -43,6 +46,70 @@ struct TriggerInfo
 
     bool isValid() const { return !ruleId.isNull(); }
 };
+
+// Executes HTTP request directly from the client instead of via server's createEvent API.
+// Returns true if the request was initiated, false if it failed immediately.
+static bool executeHttpRequestAction(
+    const nx::vms::event::ActionParameters& actionParams,
+    std::function<void(bool success)> callback)
+{
+    if (actionParams.url.isEmpty())
+    {
+        NX_WARNING(NX_SCOPE_TAG, "execHttpRequestAction: URL is empty");
+        return false;
+    }
+
+    nx::utils::Url url(actionParams.url);
+
+    // Determine HTTP method (default to POST if body present, GET otherwise).
+    nx::network::http::Method method = nx::network::http::Method::get;
+    if (!actionParams.httpMethod.isEmpty())
+        method = actionParams.httpMethod.toStdString();
+    else if (!actionParams.text.isEmpty())
+        method = nx::network::http::Method::post;
+
+    auto httpClient = std::make_unique<nx::network::http::AsyncClient>(
+        nx::network::ssl::kAcceptAnyCertificate);
+
+    // Set credentials from URL if present.
+    if (!url.userName().isEmpty())
+    {
+        httpClient->setCredentials(nx::network::http::PasswordCredentials(
+            url.userName().toStdString(), url.password().toStdString()));
+        url.setUserName(QString());
+        url.setPassword(QString());
+    }
+
+    httpClient->setAuthType(actionParams.authType);
+
+    // Set request body if present.
+    if (!actionParams.text.isEmpty())
+    {
+        std::string contentType = actionParams.contentType.isEmpty()
+            ? "application/json"
+            : actionParams.contentType.toStdString();
+        httpClient->setRequestBody(std::make_unique<nx::network::http::BufferSource>(
+            std::move(contentType),
+            nx::Buffer(actionParams.text.toStdString())));
+    }
+
+    auto* clientPtr = httpClient.get();
+    clientPtr->setOnDone(
+        [callback = std::move(callback), client = std::move(httpClient)]() mutable
+        {
+            const bool success = client->hasRequestSucceeded();
+            if (!success)
+            {
+                NX_WARNING(NX_SCOPE_TAG, "execHttpRequestAction failed: %1",
+                    client->lastSysErrorCode());
+            }
+            callback(success);
+            client.reset();
+        });
+
+    clientPtr->doRequest(method, url);
+    return true;
+}
 
 } // namespace
 
@@ -114,6 +181,17 @@ bool SoftwareTriggersController::Private::setEventTriggerState(
         NX_ASSERT(rule, "Trigger does not exist");
         return false;
     }
+
+    // Special case: execute HTTP request directly when action type is execHttpRequestAction.
+    if (rule->actionType() == nx::vms::api::ActionType::execHttpRequestAction)
+        return executeHttpRequestAction(
+            rule->actionParams(),
+            nx::utils::guarded(q,
+                [this, state, ruleId = trigger.ruleId](bool success)
+                {
+                    setActiveTrigger(ruleId, state, success);
+                }));
+
 
     const auto callback = nx::utils::guarded(q,
         [this, state, ruleId = trigger.ruleId](
