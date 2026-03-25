@@ -10,7 +10,8 @@
     #include <X11/Xlib.h>
 #endif
 
-#if defined(Q_OS_MACOS)
+#if defined(__APPLE__)
+    #include <sys/types.h>
     #include <sys/sysctl.h>
 #endif
 
