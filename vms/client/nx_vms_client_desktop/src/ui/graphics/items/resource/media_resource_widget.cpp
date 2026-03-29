@@ -3542,6 +3542,17 @@ void QnMediaResourceWidget::createTrigger(const SoftwareTriggerInfo& info)
     const auto lowerBoundPredicate =
         [](const SoftwareTriggerInfo& left, const SoftwareTriggerInfo& right)
         {
+            auto triggerSortPriority = [](const SoftwareTriggerInfo& info)
+            {
+                if (info.icon == "_lock_locked" || info.icon == "_lock_unlocked")
+                    return 0;
+                return 1;
+            };
+
+            const int lp = triggerSortPriority(left);
+            const int rp = triggerSortPriority(right);
+            if (lp != rp)
+                return lp < rp;
             return left.name < right.name
                 || (left.name == right.name
                     && left.icon < right.icon);
