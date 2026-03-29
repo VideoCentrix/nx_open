@@ -5,6 +5,14 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 
+#if defined(Q_OS_MAC) || defined(Q_OS_IOS)
+    using ALCdevice = struct ALCdevice_struct;
+    using ALCcontext = struct ALCcontext_struct;
+#else
+    struct ALCdevice;
+    struct ALCcontext;
+#endif
+
 namespace nx::media::audio { struct Format; }
 
 namespace nx::audio {
@@ -21,6 +29,8 @@ public:
     AudioDevice(QObject* parent = nullptr);
     ~AudioDevice();
 
+    void deinitialize();
+
     Sound* createSound(const nx::media::audio::Format& format) const;
 
     /**
@@ -34,7 +44,7 @@ public:
     void setVolume(float value);
 
     /**
-     * @return True if audio is mutted.
+     * @return True if audio is muted.
      */
     bool isMute() const;
 
@@ -49,15 +59,22 @@ public:
 private:
     friend class Sound;
 
-    static int internalBufferInSamples(void* device);
-    void initDeviceInternal();
+    #if defined(Q_OS_ANDROID)
+        static int internalBufferInSamples(ALCdevice* device);
+        void initDeviceInternal();
+    #endif
+
+private:
+    #if defined(Q_OS_WINDOWS)
+        void setupReopenCallback();
+    #endif
 
 signals:
     void volumeChanged(float value);
 
 private:
-    void* m_device = nullptr;
-    void* m_context = nullptr;
+    ALCdevice* m_device = nullptr;
+    ALCcontext* m_context = nullptr;
     float m_volume = 1.0;
 };
 

@@ -377,6 +377,7 @@ int runApplicationInternal(QApplication* application, const QnStartupParameters&
 
     /* Write out settings. */
     appContext()->localSettings()->audioVolume = nx::audio::AudioDevice::instance()->volume();
+    nx::audio::AudioDevice::instance()->deinitialize();
 
     // Wait while deleteLater objects will be freed
     WaitingForQThreadToEmptyEventQueue waitingForObjectsToBeFreed(QThread::currentThread(), 3);
