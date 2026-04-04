@@ -1351,6 +1351,9 @@ bool WorkbenchUi::isNotificationsPinned() const
 void WorkbenchUi::setKeepNotificationsPanelWhenZoomed(bool keep)
 {
     m_keepNotificationsPanelWhenZoomed = keep;
+    display()->setZoomedMarginFlags(keep
+        ? Qn::MarginsAffectSize | Qn::MarginsAffectPosition
+        : Qn::MarginFlags{});
 }
 
 void WorkbenchUi::setNotificationsOpened(bool opened, bool animate)

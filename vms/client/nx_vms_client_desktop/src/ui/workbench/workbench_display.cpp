@@ -1842,8 +1842,7 @@ void QnWorkbenchDisplay::synchronizeSceneBoundsExtension()
 {
     QMarginsF marginsExtension(0.0, 0.0, 0.0, 0.0);
 
-    /* If an item is zoomed then the margins should be null because all panels are hidden. */
-    if (currentMarginFlags() != 0 && !m_widgetByRole[Qn::ZoomedRole])
+    if (currentMarginFlags() != 0)
     {
         marginsExtension = Geometry::cwiseDiv(
             m_viewportAnimator->viewportMargins(), m_view->viewport()->size());
