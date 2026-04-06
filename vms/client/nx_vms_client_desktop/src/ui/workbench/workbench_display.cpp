@@ -1875,6 +1875,10 @@ void QnWorkbenchDisplay::synchronizeSceneBoundsExtension()
         if (!m_widgetByRole[Qn::ZoomedRole])
             m_boundingInstrument->stickScale(m_view);
     }
+    else
+    {
+        m_boundingInstrument->setSizeBoundsExtension(m_view, QSizeF(0, 0), QSizeF(0, 0));
+    }
 }
 
 void QnWorkbenchDisplay::synchronizeRaisedGeometry()
