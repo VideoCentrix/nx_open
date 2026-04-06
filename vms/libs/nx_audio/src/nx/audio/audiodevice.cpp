@@ -223,9 +223,9 @@ Sound* AudioDevice::createSound(const nx::media::audio::Format& format) const
         alcReopenDeviceSOFT = reinterpret_cast<LPALCREOPENDEVICESOFT>(
             alcGetProcAddress(m_device, "alcReopenDeviceSOFT"));
         alcEventControlSOFT = reinterpret_cast<LPALCEVENTCONTROLSOFT>(
-            alGetProcAddress("alcEventControlSOFT"));
+            alcGetProcAddress(m_device, "alcEventControlSOFT"));
         alcEventCallbackSOFT = reinterpret_cast<LPALCEVENTCALLBACKSOFT>(
-            alGetProcAddress("alcEventCallbackSOFT"));
+            alcGetProcAddress(m_device, "alcEventCallbackSOFT"));
 
         if (alcReopenDeviceSOFT && alcEventControlSOFT && alcEventCallbackSOFT)
         {
