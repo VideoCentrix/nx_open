@@ -606,10 +606,12 @@ void WorkbenchUi::updateControlsVisibility(bool animate)
     if (m_inactive)
     {
         bool hovered = isHovered();
+        const bool keepNotifications = m_keepNotificationsPanelWhenZoomed
+            && m_widgetByRole[Qn::ZoomedRole];
         setTimelineVisible(timelineVisible && hovered, animate);
         setLeftPanelVisible(hovered, animate);
         setTitleVisible(hovered && m_titleIsUsed, animate);
-        setNotificationsVisible(notificationsAllowed && hovered, animate);
+        setNotificationsVisible(notificationsAllowed && (hovered || keepNotifications), animate);
     }
     else
     {
