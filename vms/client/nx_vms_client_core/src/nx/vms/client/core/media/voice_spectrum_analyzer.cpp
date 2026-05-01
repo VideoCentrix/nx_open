@@ -121,6 +121,12 @@ bool VoiceSpectrumAnalyzer::processData(
 template<class T>
 bool VoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampleCount)
 {
+    // VX: VoiceSpectrumAnalyzer is a process-wide singleton (appContext()->voiceSpectrumAnalyzer()).
+    // When multiple DesktopAudioOnlyDataProvider instances run simultaneously (one per system at
+    // a cross-system location, plus the connected system's own searcher-created desktop camera),
+    // we're getting heap corruption. So need to lock the whole function.
+    NX_MUTEX_LOCKER lock(&m_mutex);
+
     // Max volume amplification for input data.
     static const double kBoostLevel = 10 * log10(kBoostLevelDb);
     T maxAmplifier = std::numeric_limits<T>::max() / kBoostLevel;
@@ -147,12 +153,10 @@ bool VoiceSpectrumAnalyzer::processDataInternal(const T* sampleData, int sampleC
         {
             performFft();
 
-            const SpectrumData spectrumData = fillSpectrumData(
+            // VX: outer lock at function entry already covers m_spectrumData; the original
+            // inner mini-scope is now redundant (and would deadlock on the non-recursive mutex).
+            m_spectrumData = fillSpectrumData(
                 m_fftData, m_windowSize, m_srcSampleRate);
-            {
-                NX_MUTEX_LOCKER lock(&m_mutex);
-                m_spectrumData = spectrumData;
-            }
 
             updated = true;
             m_fftDataSize = 0;
