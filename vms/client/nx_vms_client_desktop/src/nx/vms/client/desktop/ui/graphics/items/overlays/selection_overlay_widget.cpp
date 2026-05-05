@@ -132,7 +132,7 @@ void SelectionWidget::paintInnerFrame(QPainter* painter)
         }
     }
 
-    static const int kInnerBorderWidth = 2;
+    static const int kInnerBorderWidth = 4;
     const auto effectiveOpacity = painter->opacity() * m_widget->frameOpacity();
     QnScopedPainterOpacityRollback opacityRollback(painter, effectiveOpacity);
     Style::paintCosmeticFrame(painter, rect(), calculateFrameColor(),
@@ -154,7 +154,7 @@ void SelectionWidget::paintOuterFrame(QPainter* painter)
         }
     }
 
-    int mainBorderWidth = 1;
+    int mainBorderWidth = 3;
 
     // Increase border width for focused widgets.
     switch (m_widget->selectionState())
@@ -162,7 +162,7 @@ void SelectionWidget::paintOuterFrame(QPainter* painter)
         case QnResourceWidget::SelectionState::inactiveFocused:
         case QnResourceWidget::SelectionState::focused:
         case QnResourceWidget::SelectionState::focusedAndSelected:
-            mainBorderWidth = 2;
+            mainBorderWidth = 4;
             break;
         default:
             break;
